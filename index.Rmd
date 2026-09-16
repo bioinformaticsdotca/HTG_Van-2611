@@ -1,6 +1,6 @@
 --- 
 title: "High-Throughput Genomics 2026 2026"
-author: "Faculty: Erin Pleasance {{FACULTY}} Ido Hatam"
+author: "Faculty: Erin Pleasance & Ido Hatam"
 date: "November 4-6, 2026"
 site: bookdown::bookdown_site
 documentclass: book
@@ -21,6 +21,8 @@ favicon: img/favicon.ico
 Welcome to the 2026 High-Throughput Genomics 2026 Canadian Bioinformatics Workshop webpage!  
 
 ## Pre-work
+
+Coming soon!
 
 <!--[You can find your pre-work here.](LINK TO PREWORK)-->
 

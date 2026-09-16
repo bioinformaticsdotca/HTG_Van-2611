@@ -1,5 +1,5 @@
 --- 
-title: "High-Throughput Genomics 2026 2026"
+title: "High-Throughput Genomics 2026"
 author: "Faculty: Erin Pleasance & Ido Hatam"
 date: "November 4-6, 2026"
 site: bookdown::bookdown_site

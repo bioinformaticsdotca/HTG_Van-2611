@@ -8,12 +8,33 @@ IF YOUR WORKSHOP INCLUDES COMPUTE:
 - IF IT IS MORE APPROPRIATE, YOU CAN INCLUDE THE DATA DOWNLOAD LINKS IN EACH OF THE MODULES.
 -->
 
-# Data and Compute Setup
+# (PART) DRAC Primer Session {-}
+
+# Data and Compute Setup <br> (For Modules 3-6)
 
 #### Course data downloads
 Coming soon!
 
 #### Compute setup
 Coming soon!
+
+## 1. Logging into DRAC
+
+
+
+## 2. Introduction to the command line
+
+
+
+## 3. File manipulation
+
+
+
+## 4. Searching and sorting through files
+
+
+
+## 5. Putting it all together
+
 
 

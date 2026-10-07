@@ -1,14 +1,39 @@
 # Meet Your Faculty
 
-<!--#### NAME
+#### Ido Hatam
 
-<img src="./img/faculty/MISSINGHEADSHOT.PNG" width="200" alt="Photo of NAME">
+<img src="./img/faculty/MISSINGHEADSHOT.png" width="200" alt="Photo of Erin Pleasance">
 
->JOB TITLE <br>
-INSTITUTION <br>
-LOCATION
+>Principal Investigator <br>
+Langara College <br>
+Vancouver, BC, Canada
 >
-> --- CONTACT INFO, IF PROVIDED
+> --- ihatam@langara.ca
 
-BIO GOES HERE-->
+Dr. Ido Hatam holds a PhD in microbiology and biotechnology from the University of Alberta and serves as an Instructor in the Department of Biology and Bioinformatics program at Langara College, where he is also a Principal Investigator at the College's Applied Research Center. Dr. Hatam has developed multiple courses for the College's Bioinformatics program focused on using R-based tools to analyze high-throughput biological data. His research group uses bioinformatics tools to construct and analyze synthetic microbial communities, and specializes in "Guerrilla Bioinformatics" - generating value-added knowledge through meta-analysis of large, publicly available biological datasets.
 
+
+#### Erin Pleasance
+
+<img src="./img/faculty/Erin_Pleasance.jpg" width="200" alt="Photo of Erin Pleasance">
+
+>Group Leader, Clinical Informatics <br>
+Canada’s Michael Smith Genome Sciences Centre (GSC) <br> 
+Provincial Health Services Authority (PHSA) <br>
+Vancouver, BC, Canada
+>
+
+Dr. Erin Pleasance is a Staff Scientist and Group Leader at Canada's Michael Smith Genome Sciences Centre at the Provincial Health Services Authority in BC. She completed her PhD in Medical Genetics at UBC in Vancouver, and a postdoctoral fellowship at the Wellcome Trust Sanger Institute, Cambridge, UK. Dr. Pleasance is currently involved in the Personalized OncoGenomics (POG) project, a multidisciplinary collaboration that integrates genomics and bioinformatics into personalized cancer care at BC Cancer. She has previously contributed to The Cancer Genome Atlas (TCGA), other National Cancer Institute sequencing initiatives, and the Cancer Genome Project in the UK, where she analysed some of the first cancer genomes.
+
+
+#### Johnathan Wong
+
+<img src="./img/faculty/DSC05980.jpg" width="200" alt="Photo of Erin Pleasance">
+
+>PhD Candidate/Sessional Lecturer <br>
+The University of British Columbia, BC Cancer Research Institute <br>
+Richmond, BC, Canada
+>
+> --- johnathanwong4@gmail.com
+
+Johnathan Wong is a PhD candidate in Bioinformatics and a Sessional Lecturer at the University of British Columbia. His research interests focus on genomics, genome assembly, and epigenomics. Outside of research, he is passionate about teaching, solving puzzles, and exploring hiking trails.

@@ -12,29 +12,4 @@ IF YOUR WORKSHOP INCLUDES COMPUTE:
 
 # Data and Compute Setup <br> (For Modules 3-6)
 
-#### Course data downloads
-Coming soon!
-
-#### Compute setup
-Coming soon!
-
-## 1. Logging into DRAC
-
-
-
-## 2. Introduction to the command line
-
-
-
-## 3. File manipulation
-
-
-
-## 4. Searching and sorting through files
-
-
-
-## 5. Putting it all together
-
-
-
+Information for DRAC/Compute setup and using the command line can be found here: https://bioinformaticsdotca.github.io/DRAC_2026/

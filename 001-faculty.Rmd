@@ -1,5 +1,8 @@
 # Meet Your Faculty
 
+
+### Instructors
+
 #### Ido Hatam
 
 <img src="./img/faculty/MISSINGHEADSHOT.png" width="200" alt="Photo of Erin Pleasance">
@@ -15,7 +18,7 @@ Dr. Ido Hatam holds a PhD in microbiology and biotechnology from the University 
 
 #### Erin Pleasance
 
-<img src="./img/faculty/Erin_Pleasance.jpg" width="200" alt="Photo of Erin Pleasance">
+<img src="./img/faculty/Erin_Pleasance.jpg" width="300" alt="Photo of Erin Pleasance">
 
 >Group Leader, Clinical Informatics <br>
 Canada’s Michael Smith Genome Sciences Centre (GSC) <br> 
@@ -26,9 +29,12 @@ Vancouver, BC, Canada
 Dr. Erin Pleasance is a Staff Scientist and Group Leader at Canada's Michael Smith Genome Sciences Centre at the Provincial Health Services Authority in BC. She completed her PhD in Medical Genetics at UBC in Vancouver, and a postdoctoral fellowship at the Wellcome Trust Sanger Institute, Cambridge, UK. Dr. Pleasance is currently involved in the Personalized OncoGenomics (POG) project, a multidisciplinary collaboration that integrates genomics and bioinformatics into personalized cancer care at BC Cancer. She has previously contributed to The Cancer Genome Atlas (TCGA), other National Cancer Institute sequencing initiatives, and the Cancer Genome Project in the UK, where she analysed some of the first cancer genomes.
 
 
+
+### Teaching Assistant
+
 #### Johnathan Wong
 
-<img src="./img/faculty/DSC05980.jpg" width="200" alt="Photo of Erin Pleasance">
+<img src="./img/faculty/DSC05980.jpg" width="250" alt="Photo of Erin Pleasance">
 
 >PhD Candidate/Sessional Lecturer <br>
 The University of British Columbia, BC Cancer Research Institute <br>
@@ -37,3 +43,21 @@ Richmond, BC, Canada
 > --- johnathanwong4@gmail.com
 
 Johnathan Wong is a PhD candidate in Bioinformatics and a Sessional Lecturer at the University of British Columbia. His research interests focus on genomics, genome assembly, and epigenomics. Outside of research, he is passionate about teaching, solving puzzles, and exploring hiking trails.
+
+
+
+### Facilitator
+
+#### Tian Rabbani
+
+<img src="./img/faculty/tian-rabbani.png" width="350" alt="Photo of Tian Rabbani">
+
+>Regional Coordinator, CBH British Columbia <br>
+Canadian Bioinformatics Hub, Simon Fraser University <br>
+Vancouver, BC,  Canada 
+>
+> --- bc@bioinformatics.ca 
+
+Tian completed her Master of Public Health in 2022 from Simon Fraser University and is currently a researcher and project lead at the Center for Infectious Disease Genomics and One Health (CIDGOH). She has been extensively involved in researching SARS-CoV-2 data-sharing through the Canadian COVID-19 Genomics Network (CanCOGeN), alongside leading efforts to understand metadata reporting in genomic epidemiology studies for outbreak and surveillance investigation. Her background in public health and knowledge in contextual data reporting intersect harmoniously to help inform current and future emergency response initiatives.
+
+As British Columbia’s regional coordinator for the Canadian Bioinformatics Hub, Tian is passionate about and dedicated to connecting bioinformatics communities and groups across the province. She aims to grow, develop, and expand data science and bioinformatics tools and training materials for prospective or new professionals, as well as for those looking to advance in their current careers. Tian believes accessibility, access, and availability of these tools and training opportunities are the cornerstone of growing our bioinformatics communities across the region.

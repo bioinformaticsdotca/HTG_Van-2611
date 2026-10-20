@@ -5,7 +5,7 @@
 
 #### Ido Hatam
 
-<img src="./img/faculty/MISSINGHEADSHOT.png" width="200" alt="Photo of Erin Pleasance">
+<img src="./img/faculty/IdoHatam.png" width="200" alt="Photo of Erin Pleasance">
 
 >Principal Investigator <br>
 Langara College <br>
@@ -16,7 +16,7 @@ Vancouver, BC, Canada
 Dr. Ido Hatam holds a PhD in microbiology and biotechnology from the University of Alberta and serves as an Instructor in the Department of Biology and Bioinformatics program at Langara College, where he is also a Principal Investigator at the College's Applied Research Center. Dr. Hatam has developed multiple courses for the College's Bioinformatics program focused on using R-based tools to analyze high-throughput biological data. His research group uses bioinformatics tools to construct and analyze synthetic microbial communities, and specializes in "Guerrilla Bioinformatics" - generating value-added knowledge through meta-analysis of large, publicly available biological datasets.
 
 
-#### Erin Pleasance
+#### Erin Pleasance (She/Her)
 
 <img src="./img/faculty/Erin_Pleasance.jpg" width="300" alt="Photo of Erin Pleasance">
 
@@ -30,9 +30,9 @@ Dr. Erin Pleasance is a Staff Scientist and Group Leader at Canada's Michael Smi
 
 
 
-### Teaching Assistant
+### Teaching Assistants
 
-#### Johnathan Wong
+#### Johnathan Wong (He/Him)
 
 <img src="./img/faculty/DSC05980.jpg" width="250" alt="Photo of Erin Pleasance">
 
@@ -45,10 +45,23 @@ Richmond, BC, Canada
 Johnathan Wong is a PhD candidate in Bioinformatics and a Sessional Lecturer at the University of British Columbia. His research interests focus on genomics, genome assembly, and epigenomics. Outside of research, he is passionate about teaching, solving puzzles, and exploring hiking trails.
 
 
+#### Miguel Prieto (He/Him)
+
+<img src="./img/faculty/headshot_miguel.JPG" width="250" alt="Photo of Miguel Prieto">
+
+>PhD Candidate in Health Sciences <br>
+Center for Infectious Disease Genomics and One Health, Simon Fraser University <br>
+Vancouver, B.C., Canada
+>
+> --- mprietog@sfu.ca
+
+Miguel Prieto is a PhD candidate in Health Sciences at Simon Fraser University. He is a Medical Doctor trained in Colombia and has experience in public health and epidemiology, including an MSc in Experimental Medicine at UBC. His current research combines clinical data analysis with microbiome sequencing data analysis applied to chronic respiratory diseases.
+
+
 
 ### Facilitator
 
-#### Tian Rabbani
+#### Tian Rabbani (She/Her)
 
 <img src="./img/faculty/tian-rabbani.png" width="350" alt="Photo of Tian Rabbani">
 

@@ -22,9 +22,7 @@ Welcome to the 2026 High-Throughput Genomics 2026 Canadian Bioinformatics Worksh
 
 ## Pre-work
 
-Coming soon!
-
-<!--[You can find your pre-work here.](LINK TO PREWORK)-->
+Before you begin the workshop, you must complete some pre-workshop materials. You can find your pre-work [here.](https://docs.google.com/forms/d/e/1FAIpQLSdosBtCb29BnAgnUxySHbZjMA0Rx1AuTS1hQdd1BRc9_ltNtQ/viewform?usp=sharing&ouid=107546803551319039624)
 
 ## Class Photo
 

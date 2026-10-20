@@ -59,6 +59,22 @@ Miguel Prieto is a PhD candidate in Health Sciences at Simon Fraser University. 
 
 
 
+### Sysadmin
+
+#### Jiarui (Jerry) Li (He/Him)
+
+<img src="./img/faculty/jiarui-li.png" width="225" alt="Photo of Jerry Li">
+
+>Research Support Analyst and Lead of Bioinformatics National Team (BNT) <br>
+University of Alberta & Digital Research Alliance of Canada (DRAC) <br>
+Edmonton, Alberta, Canada
+>
+> --- jiarui.li@ualberta.ca
+
+Jiarui (Jerry) Li is a Research Support Analyst at the University of Alberta and the Lead of the Bioinformatics National Team (BNT) at the Digital Research Alliance of Canada (DRAC). He received his bachelor’s degree and Ph.D. in Genetics from Fudan University, China. Before joining the University of Alberta, he worked as a postdoctoral fellow and lecturer at Simon Fraser University, a lecturer at Shanghai University, Manager of the NGS Department at Applied Biological Materials Inc., and a Life Science Specialist at the University of British Columbia. He has broad experience in genetics, genomics, molecular biology, bioinformatics, and high-performance computing across both academic and industry settings.
+
+
+
 ### Facilitator
 
 #### Tian Rabbani (She/Her)

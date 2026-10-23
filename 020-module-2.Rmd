@@ -1,6 +1,10 @@
-# Module 2: Data Visualization with IGV
+# Module 2: Data Visualization
 
 ## Lecture
+
+<object data="content-files/Module 2 HTG_Van-2611.pdf" type="application/pdf" width="100%" height="600px">
+  <p>Your browser does not support PDFs. <a href="content-files/Module 2 HTG_Van-2611.pdf">Download the PDF</a>.</p>
+</object>
 
 ## Lab
 
@@ -8,12 +12,12 @@
 
 ##### Description of the lab
 
-Welcome to the lab for **Genome Visualization**! This lab will introduce you to the [Integrative Genomics Viewer](https://igv.org/doc/desktop/), a powerful desktop application for viewing many kinds of genomic data, including data for DNA sequencing, RNA sequencing, microarrays, epigenetics, and copy number alteration. It is one of the most popular visualization tools for **high throughput sequencing (HTS)** data. Many thanks to Dr. Rob Syme and previous instructors for their material for this lab.
+Welcome to the lab for **Genome Visualization**! This lab will introduce you to the [Integrative Genomics Viewer](https://igv.org/doc/desktop/), a powerful desktop application for viewing many kinds of genomic data, including data for DNA sequencing, RNA sequencing, microarrays, epigenetics, and copy number alteration. You will also get an introduction to the [UCSC Genome Browser](https://genome.ucsc.edu/), a full featured web application integrating rich annotation sources. Many thanks to Dr. Rob Syme and previous instructors for their material for this lab.
 
 After this lab, you will be able to:
 
 - Visualize a variety of genomic data
-- Very quickly navigate around the genome
+- Quickly navigate around the genome
 - Visualize HTS read alignments
 - Validate SNP calls and structural re-arrangements by eye
 
@@ -305,7 +309,7 @@ Navigate to region “chr21:19,089,694-19,095,362”
 
 ::::
 
-## A note about automating Tasks in IGV
+#### A note about automating Tasks in IGV
 
 We can use the Tools menu to invoke running a batch script. Using a batch script, you can automatically load your data, go to a particular location, set some display options and take a snapshot. This can be useful when you want to inspect many variant calls.
 
@@ -331,7 +335,7 @@ To run the file from the Tools menu:
 
 The IGV screenshots are in the screenshots output directory you set. Have a look!
 
-### Visualization Part 4: Visualizing Long Reads
+### Visualization Part 3: Visualizing Long Reads
 
 Long reads aligned to a reference genome can be visualized like short reads, but true variants might be hard to find among the noise from increased sequencing error rates in long-read sequencing technologies. We will view some reads obtained from Oxford Nanopore sequencing provided by [Miten Jain](https://github.com/mitenjain/NA12878/blob/master/nanopore-human-genome/rel_3_4.md) from this publication [Nanopore sequencing and assembly of a human genome with ultra-long reads](https://www.nature.com/articles/nbt.4060). 
 
@@ -415,17 +419,46 @@ If your bam file contains phasing data, distinguishing the two parental haplotyp
 
 <img src="./img/IGV_haplotypes.png" width="1000" alt="IGV by haplotype.">
 
+### Visualization Part 4: UCSC Genome Browser
+
+#### UCSC tracks example
+
+Take a look at an example of the UCSC browser with many data types, and then
+[Try browsing this yourself](https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&lastVirtModeType=default&lastVirtModeExtraState=&virtModeType=default&virtMode=0&nonVirtPosition=&position=chr7%3A140830167%2D140838943&hgsid=4211513649_kwTmlOpMRpfQIP17KRKQotMQA8H4)
+
+<img src="./img/UCSC_example.png" width="1000" alt="UCSC browser example.">
+
+
+#### UCSC Genome Browser tutorial
+
+Go through as much of the UCSC genome browser tutorial as you find relevant. There are many different features to explore:
+
+[UCSC genome browser tutorial](https://genome.ucsc.edu/docs/slideDecks/tutorial1-basics/presentation/)
+
+
+:::: {.callout type="blue" title="Note"}
+
+Use the links in the tutorial's green boxes to try it yourself
+
+::::
+
+Some notes on tutorial examples:
+
+- In the Clinvar demo (slide 21), try filtering to benign instead of pathogenic
+- In the RNAseq demo (slide 32), zoom out 3X to see the RNAseq peaks
+- In the Track Hubs demo (slide 35), try the "Blueprint Epigenomics Data Hub"
+- Table browser is also a great source for reference files like genome gaps
 
 
 :::: {.callout type="green" title="Lab Complete!" icon="fas fa-party-horn" center_title="true"}
 
-You’re done Module 2! We hope that you enjoyed the lab and that you continue to enjoy IGV.
+You’re done Module 2! We hope that you enjoyed the lab and that you continue to enjoy IGV and UCSC.
 
 ::::
 
 #### Resources
-- [Suggested answers to the questions from this lab]()
 - [IGV user manual](https://igv.org/doc/desktop/)
+- [More UCSC tutorials](https://genome.ucsc.edu/training/)
 
 ## Lab Answers
 

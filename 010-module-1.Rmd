@@ -1,13 +1,15 @@
 # (PART) Modules {-}
 
-# Module 1
+# Module 1: Intro to Sequencing Technologies
 
-## Lecture
+## Lecture (1a)
 
-<!--<iframe width="640" height="360" src="YOUTUBE EMBED LINK" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
--->
+<object data="content-files/Module_1a_HTG_Van-2611.pdf" type="application/pdf" width="100%" height="600px">
+  <p>Your browser does not support PDFs. <a href="content-files/Module_1a_HTG_Van-2611.pdf">Download the PDF</a>.</p>
+</object>
 
-<!--<iframe src="GOOGLE SLIDES LINK/preview" width="640" height="480" allow="autoplay"></iframe>  
--->
+## Tutorial (1b)
 
-## Lab
+<object data="content-files/Module_1b_HTG_Van-2611.pdf" type="application/pdf" width="100%" height="600px">
+  <p>Your browser does not support PDFs. <a href="content-files/Module_1b_HTG_Van-2611.pdf">Download the PDF</a>.</p>
+</object>

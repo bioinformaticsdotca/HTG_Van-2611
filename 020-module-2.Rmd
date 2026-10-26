@@ -2,7 +2,7 @@
 
 ## Lecture
 
-<object data="content-files/Module 2 HTG_Van-2611.pdf" type="application/pdf" width="100%" height="600px">
+<object data="content-files/Module 2 HTG_Van-2611.pdf#toolbar=0navpanes=0" type="application/pdf" width="100%" height="600px">
   <p>Your browser does not support PDFs. <a href="content-files/Module 2 HTG_Van-2611.pdf">Download the PDF</a>.</p>
 </object>
 
@@ -505,7 +505,7 @@ Below are suggested answers to the questions from lab 2. You might have thought 
 1. What other track provides evidence of a deletion at this location?
     - The coverage track drops down to zero at the same location as the gap in sequencing reads.
 
-### Visualization Part 4: Visualizing Long Reads
+### Visualization Part 3: Visualizing Long Reads
 
 ##### Cleaning up Sequencing Error Noise
 

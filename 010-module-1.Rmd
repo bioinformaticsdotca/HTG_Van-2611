@@ -4,12 +4,12 @@
 
 ## Lecture (1a)
 
-<object data="content-files/Module_1a_HTG_Van-2611.pdf" type="application/pdf" width="100%" height="600px">
-  <p>Your browser does not support PDFs. <a href="content-files/Module_1a_HTG_Van-2611.pdf">Download the PDF</a>.</p>
+<object data="content-files/Module_1a_HTG_Van-2611.pdf#toolbar=0navpanes=0" type="application/pdf" width="100%" height="600px">
+  <p>Unable to render PDF. <a href="content-files/Module_1a_HTG_Van-2611.pdf">Download the PDF</a>.</p>
 </object>
 
 ## Tutorial (1b)
 
-<object data="content-files/Module_1b_HTG_Van-2611.pdf" type="application/pdf" width="100%" height="600px">
-  <p>Your browser does not support PDFs. <a href="content-files/Module_1b_HTG_Van-2611.pdf">Download the PDF</a>.</p>
+<object data="content-files/Module_1b_HTG_Van-2611.pdf#toolbar=0navpanes=0" type="application/pdf" width="100%" height="600px">
+  <p>Unable to render PDF. <a href="content-files/Module_1b_HTG_Van-2611.pdf">Download the PDF</a>.</p>
 </object>

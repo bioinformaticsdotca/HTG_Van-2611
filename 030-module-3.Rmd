@@ -2,5 +2,12 @@
 
 ## Lecture
 
+<object data="content-files/Module_3_HTG_Van-2611.pdf#toolbar=0navpanes=0" type="application/pdf" width="100%" height="600px">
+  <p>Unable to render PDF. <a href="content-files/Module_3_HTG_Van-2611.pdf">Download the PDF</a>.</p>
+</object>
+
+<a href="content-files/Module_3_HTG_Van-2611.pdf" target="_blank" rel="noopener">Open slides in a new tab</a>
 
 ## Lab
+
+[Open the Module 3 lab](content-files/Module_3_lab_HTG_Van-2611.html)

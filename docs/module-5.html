@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Module 5 | High-Throughput Genomics 2026</title>
   <meta name="description" content="Workshop website for the 2026 High-Throughput Genomics 2026 Canadian Bioinformatics Workshop" />
-  <meta name="generator" content="bookdown 0.45 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.48 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Module 5 | High-Throughput Genomics 2026" />
   <meta property="og:type" content="book" />
@@ -446,7 +446,7 @@ Unable to render PDF. <a href="content-files/Module_5_HTG_Van-2611.pdf">Download
 </div>
 <p>Your Lab 3 downloads must exist. Type this in the terminal. You should see the reads file (about 400 MB) and the reference <code>.fa</code> file (about 12 MB).</p>
 <p><strong><code>check the inputs (type in the terminal)</code></strong></p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb37-1"><a href="module-5.html#cb37-1" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> /scratch/<span class="va">$USER</span>/yeast_workshop/data/</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb38-1"><a href="module-5.html#cb38-1" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> /scratch/<span class="va">$USER</span>/yeast_workshop/data/</span></code></pre></div>
 <p>If a file is missing, ask an instructor.</p>
 </div>
 </div>
@@ -465,39 +465,39 @@ Unable to render PDF. <a href="content-files/Module_5_HTG_Van-2611.pdf">Download
 <p>A <strong>BAM</strong> file is the binary file that stores an alignment (reads placed on reference coordinates). The script runs <code>rm -rf</code> and <code>mkdir -p</code> on the output folder first, so that a rerun starts clean. On a first run medaka will still print <code>Warning: Output … already exists, may use old results.</code>; that is expected and harmless, because the script creates the folder first and it is empty.</p>
 <p>Save as <code>10_medaka_variant.sh</code> with <code>nano</code> in your <code>scripts/</code> folder, as in Lab 3, and submit it.</p>
 <p><strong><code>10_medaka_variant.sh</code></strong></p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb38-1"><a href="module-5.html#cb38-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb38-2"><a href="module-5.html#cb38-2" tabindex="-1"></a><span class="co">#SBATCH --job-name=medaka_variant</span></span>
-<span id="cb38-3"><a href="module-5.html#cb38-3" tabindex="-1"></a><span class="co">#SBATCH --account=def-sponsor00</span></span>
-<span id="cb38-4"><a href="module-5.html#cb38-4" tabindex="-1"></a><span class="co">#SBATCH --cpus-per-task=4</span></span>
-<span id="cb38-5"><a href="module-5.html#cb38-5" tabindex="-1"></a><span class="co">#SBATCH --mem=12000M</span></span>
-<span id="cb38-6"><a href="module-5.html#cb38-6" tabindex="-1"></a><span class="co">#SBATCH --time=0:30:00</span></span>
-<span id="cb38-7"><a href="module-5.html#cb38-7" tabindex="-1"></a><span class="co">#SBATCH --output=/scratch/%u/yeast_workshop/logs/%x_%j.out</span></span>
-<span id="cb38-8"><a href="module-5.html#cb38-8" tabindex="-1"></a><span class="co">#SBATCH --error=/scratch/%u/yeast_workshop/logs/%x_%j.err</span></span>
-<span id="cb38-9"><a href="module-5.html#cb38-9" tabindex="-1"></a><span class="bu">set</span> <span class="at">-e</span></span>
-<span id="cb38-10"><a href="module-5.html#cb38-10" tabindex="-1"></a><span class="va">WORK</span><span class="op">=</span>/scratch/<span class="va">$USER</span>/yeast_workshop</span>
-<span id="cb38-11"><a href="module-5.html#cb38-11" tabindex="-1"></a><span class="bu">cd</span> <span class="st">&quot;</span><span class="va">$WORK</span><span class="st">&quot;</span></span>
-<span id="cb38-12"><a href="module-5.html#cb38-12" tabindex="-1"></a></span>
-<span id="cb38-13"><a href="module-5.html#cb38-13" tabindex="-1"></a><span class="co"># Activate the conda environment that contains medaka</span></span>
-<span id="cb38-14"><a href="module-5.html#cb38-14" tabindex="-1"></a><span class="bu">source</span> /project/60004/shared/conda/bin/activate medaka_env</span>
-<span id="cb38-15"><a href="module-5.html#cb38-15" tabindex="-1"></a></span>
-<span id="cb38-16"><a href="module-5.html#cb38-16" tabindex="-1"></a><span class="co"># Start with a clean output folder</span></span>
-<span id="cb38-17"><a href="module-5.html#cb38-17" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-rf</span> <span class="st">&quot;</span><span class="va">$WORK</span><span class="st">/results/ERR8562432/variants&quot;</span></span>
-<span id="cb38-18"><a href="module-5.html#cb38-18" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> <span class="st">&quot;</span><span class="va">$WORK</span><span class="st">/results/ERR8562432/variants&quot;</span></span>
-<span id="cb38-19"><a href="module-5.html#cb38-19" tabindex="-1"></a></span>
-<span id="cb38-20"><a href="module-5.html#cb38-20" tabindex="-1"></a><span class="co"># medaka_variant: align reads to a reference and call variants</span></span>
-<span id="cb38-21"><a href="module-5.html#cb38-21" tabindex="-1"></a><span class="co"># -i : the reads</span></span>
-<span id="cb38-22"><a href="module-5.html#cb38-22" tabindex="-1"></a><span class="co"># -r : the reference genome</span></span>
-<span id="cb38-23"><a href="module-5.html#cb38-23" tabindex="-1"></a><span class="co"># -o : the folder for the results</span></span>
-<span id="cb38-24"><a href="module-5.html#cb38-24" tabindex="-1"></a><span class="co"># -t : number of CPUs (the number Slurm gave us)</span></span>
-<span id="cb38-25"><a href="module-5.html#cb38-25" tabindex="-1"></a><span class="ex">medaka_variant</span> <span class="dt">\</span></span>
-<span id="cb38-26"><a href="module-5.html#cb38-26" tabindex="-1"></a>  <span class="at">-i</span> <span class="st">&quot;</span><span class="va">$WORK</span><span class="st">/data/ERR8562432.fastq.gz&quot;</span> <span class="dt">\</span></span>
-<span id="cb38-27"><a href="module-5.html#cb38-27" tabindex="-1"></a>  <span class="at">-r</span> <span class="st">&quot;</span><span class="va">$WORK</span><span class="st">/data/Saccharomyces_cerevisiae.R64-1-1.dna.toplevel.fa&quot;</span> <span class="dt">\</span></span>
-<span id="cb38-28"><a href="module-5.html#cb38-28" tabindex="-1"></a>  <span class="at">-o</span> <span class="st">&quot;</span><span class="va">$WORK</span><span class="st">/results/ERR8562432/variants&quot;</span> <span class="dt">\</span></span>
-<span id="cb38-29"><a href="module-5.html#cb38-29" tabindex="-1"></a>  <span class="at">-t</span> <span class="va">$SLURM_CPUS_PER_TASK</span></span>
-<span id="cb38-30"><a href="module-5.html#cb38-30" tabindex="-1"></a></span>
-<span id="cb38-31"><a href="module-5.html#cb38-31" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Variant calling finished. Main outputs:&quot;</span></span>
-<span id="cb38-32"><a href="module-5.html#cb38-32" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$WORK</span><span class="st">/results/ERR8562432/variants/medaka.vcf&quot;</span></span>
-<span id="cb38-33"><a href="module-5.html#cb38-33" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$WORK</span><span class="st">/results/ERR8562432/variants/calls_to_ref.bam&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb39-1"><a href="module-5.html#cb39-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb39-2"><a href="module-5.html#cb39-2" tabindex="-1"></a><span class="co">#SBATCH --job-name=medaka_variant</span></span>
+<span id="cb39-3"><a href="module-5.html#cb39-3" tabindex="-1"></a><span class="co">#SBATCH --account=def-sponsor00</span></span>
+<span id="cb39-4"><a href="module-5.html#cb39-4" tabindex="-1"></a><span class="co">#SBATCH --cpus-per-task=4</span></span>
+<span id="cb39-5"><a href="module-5.html#cb39-5" tabindex="-1"></a><span class="co">#SBATCH --mem=12000M</span></span>
+<span id="cb39-6"><a href="module-5.html#cb39-6" tabindex="-1"></a><span class="co">#SBATCH --time=0:30:00</span></span>
+<span id="cb39-7"><a href="module-5.html#cb39-7" tabindex="-1"></a><span class="co">#SBATCH --output=/scratch/%u/yeast_workshop/logs/%x_%j.out</span></span>
+<span id="cb39-8"><a href="module-5.html#cb39-8" tabindex="-1"></a><span class="co">#SBATCH --error=/scratch/%u/yeast_workshop/logs/%x_%j.err</span></span>
+<span id="cb39-9"><a href="module-5.html#cb39-9" tabindex="-1"></a><span class="bu">set</span> <span class="at">-e</span></span>
+<span id="cb39-10"><a href="module-5.html#cb39-10" tabindex="-1"></a><span class="va">WORK</span><span class="op">=</span>/scratch/<span class="va">$USER</span>/yeast_workshop</span>
+<span id="cb39-11"><a href="module-5.html#cb39-11" tabindex="-1"></a><span class="bu">cd</span> <span class="st">&quot;</span><span class="va">$WORK</span><span class="st">&quot;</span></span>
+<span id="cb39-12"><a href="module-5.html#cb39-12" tabindex="-1"></a></span>
+<span id="cb39-13"><a href="module-5.html#cb39-13" tabindex="-1"></a><span class="co"># Activate the conda environment that contains medaka</span></span>
+<span id="cb39-14"><a href="module-5.html#cb39-14" tabindex="-1"></a><span class="bu">source</span> /project/60004/shared/conda/bin/activate medaka_env</span>
+<span id="cb39-15"><a href="module-5.html#cb39-15" tabindex="-1"></a></span>
+<span id="cb39-16"><a href="module-5.html#cb39-16" tabindex="-1"></a><span class="co"># Start with a clean output folder</span></span>
+<span id="cb39-17"><a href="module-5.html#cb39-17" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-rf</span> <span class="st">&quot;</span><span class="va">$WORK</span><span class="st">/results/ERR8562432/variants&quot;</span></span>
+<span id="cb39-18"><a href="module-5.html#cb39-18" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> <span class="st">&quot;</span><span class="va">$WORK</span><span class="st">/results/ERR8562432/variants&quot;</span></span>
+<span id="cb39-19"><a href="module-5.html#cb39-19" tabindex="-1"></a></span>
+<span id="cb39-20"><a href="module-5.html#cb39-20" tabindex="-1"></a><span class="co"># medaka_variant: align reads to a reference and call variants</span></span>
+<span id="cb39-21"><a href="module-5.html#cb39-21" tabindex="-1"></a><span class="co"># -i : the reads</span></span>
+<span id="cb39-22"><a href="module-5.html#cb39-22" tabindex="-1"></a><span class="co"># -r : the reference genome</span></span>
+<span id="cb39-23"><a href="module-5.html#cb39-23" tabindex="-1"></a><span class="co"># -o : the folder for the results</span></span>
+<span id="cb39-24"><a href="module-5.html#cb39-24" tabindex="-1"></a><span class="co"># -t : number of CPUs (the number Slurm gave us)</span></span>
+<span id="cb39-25"><a href="module-5.html#cb39-25" tabindex="-1"></a><span class="ex">medaka_variant</span> <span class="dt">\</span></span>
+<span id="cb39-26"><a href="module-5.html#cb39-26" tabindex="-1"></a>  <span class="at">-i</span> <span class="st">&quot;</span><span class="va">$WORK</span><span class="st">/data/ERR8562432.fastq.gz&quot;</span> <span class="dt">\</span></span>
+<span id="cb39-27"><a href="module-5.html#cb39-27" tabindex="-1"></a>  <span class="at">-r</span> <span class="st">&quot;</span><span class="va">$WORK</span><span class="st">/data/Saccharomyces_cerevisiae.R64-1-1.dna.toplevel.fa&quot;</span> <span class="dt">\</span></span>
+<span id="cb39-28"><a href="module-5.html#cb39-28" tabindex="-1"></a>  <span class="at">-o</span> <span class="st">&quot;</span><span class="va">$WORK</span><span class="st">/results/ERR8562432/variants&quot;</span> <span class="dt">\</span></span>
+<span id="cb39-29"><a href="module-5.html#cb39-29" tabindex="-1"></a>  <span class="at">-t</span> <span class="va">$SLURM_CPUS_PER_TASK</span></span>
+<span id="cb39-30"><a href="module-5.html#cb39-30" tabindex="-1"></a></span>
+<span id="cb39-31"><a href="module-5.html#cb39-31" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Variant calling finished. Main outputs:&quot;</span></span>
+<span id="cb39-32"><a href="module-5.html#cb39-32" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$WORK</span><span class="st">/results/ERR8562432/variants/medaka.vcf&quot;</span></span>
+<span id="cb39-33"><a href="module-5.html#cb39-33" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$WORK</span><span class="st">/results/ERR8562432/variants/calls_to_ref.bam&quot;</span></span></code></pre></div>
 <details class="callout-dropdown callout-blue"><summary class="callout-dropdown-summary"><span class="callout-icon"><i class="fas fa-circle-info" aria-hidden="true"></i></span><span class="callout-dropdown-title">What each argument does</span> <span class="callout-dropdown-caret"><i class="fas fa-chevron-right" aria-hidden="true"></i></span></summary><div class="callout-dropdown-content"><p><code>#SBATCH</code> lines and set-up: see Lab 3, script 04. Only new
 arguments are listed here.</p>
 <table>
@@ -575,9 +575,9 @@ the log said it failed to detect a model version and used the default
 </tbody>
 </table></div></details>
 <p><strong><code>submit and check (type in the terminal)</code></strong></p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb39-1"><a href="module-5.html#cb39-1" tabindex="-1"></a><span class="bu">cd</span> /scratch/<span class="va">$USER</span>/yeast_workshop/scripts</span>
-<span id="cb39-2"><a href="module-5.html#cb39-2" tabindex="-1"></a><span class="ex">sbatch</span> 10_medaka_variant.sh</span>
-<span id="cb39-3"><a href="module-5.html#cb39-3" tabindex="-1"></a><span class="ex">squeue</span> <span class="at">-u</span> <span class="va">$USER</span></span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb40-1"><a href="module-5.html#cb40-1" tabindex="-1"></a><span class="bu">cd</span> /scratch/<span class="va">$USER</span>/yeast_workshop/scripts</span>
+<span id="cb40-2"><a href="module-5.html#cb40-2" tabindex="-1"></a><span class="ex">sbatch</span> 10_medaka_variant.sh</span>
+<span id="cb40-3"><a href="module-5.html#cb40-3" tabindex="-1"></a><span class="ex">squeue</span> <span class="at">-u</span> <span class="va">$USER</span></span></code></pre></div>
 <p>If the state is <code>PD</code> (pending), your job is waiting for a free node; this is normal. While it runs, go on to Step 2. Check the log later with <code>less /scratch/$USER/yeast_workshop/logs/medaka_variant_&lt;jobid&gt;.out</code>.</p>
 <div class="callout-red">
 <span class="callout-icon"><i class="fas fa-triangle-exclamation" aria-hidden="true"></i></span>
@@ -587,7 +587,7 @@ the log said it failed to detect a model version and used the default
 </div>
 <p>Tell an instructor. You can copy a finished set of results from the fallback location (the workshop’s shared project folder) and carry on:</p>
 <p><strong><code>copy the fallback variant results</code></strong></p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb40-1"><a href="module-5.html#cb40-1" tabindex="-1"></a><span class="fu">cp</span> <span class="at">-r</span> /project/60004/shared/fallback/variants /scratch/<span class="va">$USER</span>/yeast_workshop/results/ERR8562432/</span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb41-1"><a href="module-5.html#cb41-1" tabindex="-1"></a><span class="fu">cp</span> <span class="at">-r</span> /project/60004/shared/fallback/variants /scratch/<span class="va">$USER</span>/yeast_workshop/results/ERR8562432/</span></code></pre></div>
 </div>
 </div>
 </div>
@@ -663,11 +663,11 @@ the log said it failed to detect a model version and used the default
 <p><code>GT</code> is the <strong>genotype</strong>: the alleles that the sample carries. <code>GT=0</code> would mean the reference allele, <code>GT=1</code> the alternate allele. <code>GQ</code> is the confidence in the genotype.</p>
 <p>While your job runs, look at a finished VCF from the fallback location. These commands only read a file, so they are safe on the login node. <code>grep '^##'</code> keeps the header lines; <code>grep -v '^##'</code> removes them; <code>head -n 4</code> shows the first four lines.</p>
 <p><strong><code>read the first VCF records (type in the terminal)</code></strong></p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb41-1"><a href="module-5.html#cb41-1" tabindex="-1"></a><span class="co"># 1. A few header lines (they describe the fields)</span></span>
-<span id="cb41-2"><a href="module-5.html#cb41-2" tabindex="-1"></a><span class="fu">grep</span> <span class="st">&#39;^##&#39;</span> /project/60004/shared/fallback/variants/medaka.vcf <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 6</span>
-<span id="cb41-3"><a href="module-5.html#cb41-3" tabindex="-1"></a></span>
-<span id="cb41-4"><a href="module-5.html#cb41-4" tabindex="-1"></a><span class="co"># 2. The column names line and the first three variants</span></span>
-<span id="cb41-5"><a href="module-5.html#cb41-5" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-v</span> <span class="st">&#39;^##&#39;</span> /project/60004/shared/fallback/variants/medaka.vcf <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 4</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb42-1"><a href="module-5.html#cb42-1" tabindex="-1"></a><span class="co"># 1. A few header lines (they describe the fields)</span></span>
+<span id="cb42-2"><a href="module-5.html#cb42-2" tabindex="-1"></a><span class="fu">grep</span> <span class="st">&#39;^##&#39;</span> /project/60004/shared/fallback/variants/medaka.vcf <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 6</span>
+<span id="cb42-3"><a href="module-5.html#cb42-3" tabindex="-1"></a></span>
+<span id="cb42-4"><a href="module-5.html#cb42-4" tabindex="-1"></a><span class="co"># 2. The column names line and the first three variants</span></span>
+<span id="cb42-5"><a href="module-5.html#cb42-5" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-v</span> <span class="st">&#39;^##&#39;</span> /project/60004/shared/fallback/variants/medaka.vcf <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 4</span></code></pre></div>
 <p><strong>Question 1:</strong> Take the first variant under the column names line. What are its position, REF base, ALT base and QUAL? What does <code>GT</code> say, and what does QUAL tell you about how much to trust it?</p>
 <details class="callout-dropdown callout-blue"><summary class="callout-dropdown-summary"><span class="callout-icon"><i class="fas fa-circle-info" aria-hidden="true"></i></span><span class="callout-dropdown-title">Answer</span> <span class="callout-dropdown-caret"><i class="fas fa-chevron-right" aria-hidden="true"></i></span></summary><div class="callout-dropdown-content"><p>Your values are read from your screen. As an example, the first
 variant under the column names line in the workshop cluster test run is
@@ -709,7 +709,7 @@ both copies carry the same base, so <code>GT=1</code> is a fitting model
 <h4>Step 1: Filter with bcftools<a href="module-5.html#step-1-filter-with-bcftools" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Check that medaka finished before you continue: <code>squeue -u $USER</code> is empty, and this lists <code>medaka.vcf</code> and <code>calls_to_ref.bam</code>:</p>
 <p><strong><code>check the medaka outputs (type in the terminal)</code></strong></p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb42-1"><a href="module-5.html#cb42-1" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> /scratch/<span class="va">$USER</span>/yeast_workshop/results/ERR8562432/variants/</span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb43-1"><a href="module-5.html#cb43-1" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> /scratch/<span class="va">$USER</span>/yeast_workshop/results/ERR8562432/variants/</span></code></pre></div>
 <p>A raw VCF from nanopore reads contains weak calls. We keep the variants with <code>QUAL &gt;= 20</code> (at most about a 1% chance of being wrong) using <strong>bcftools</strong>, a standard toolkit for VCF files. <code>bcftools filter -i 'QUAL &gt;= 20'</code> <em>includes</em> only the records that pass this test. <code>bcftools stats</code> then writes a summary table that includes the counts of SNVs and indels, and the transition/transversion ratio (see Question 5).</p>
 <ul>
 <li><strong>What:</strong> filters <code>medaka.vcf</code> to the variants with QUAL of at least 20, and summarises the result.</li>
@@ -718,47 +718,47 @@ both copies carry the same base, so <code>GT=1</code> is a fitting model
 </ul>
 <p>The input must be named exactly: <code>medaka.vcf</code> is the file that medaka’s <code>medaka_variant</code> writes the variant calls to, before sorting and annotating them. The script checks that the file exists and stops with a message if it does not.</p>
 <p><strong><code>11_filter_variants.sh</code></strong></p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb43-1"><a href="module-5.html#cb43-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb43-2"><a href="module-5.html#cb43-2" tabindex="-1"></a><span class="co">#SBATCH --job-name=filter_variants</span></span>
-<span id="cb43-3"><a href="module-5.html#cb43-3" tabindex="-1"></a><span class="co">#SBATCH --account=def-sponsor00</span></span>
-<span id="cb43-4"><a href="module-5.html#cb43-4" tabindex="-1"></a><span class="co">#SBATCH --cpus-per-task=2</span></span>
-<span id="cb43-5"><a href="module-5.html#cb43-5" tabindex="-1"></a><span class="co">#SBATCH --mem=4000M</span></span>
-<span id="cb43-6"><a href="module-5.html#cb43-6" tabindex="-1"></a><span class="co">#SBATCH --time=0:10:00</span></span>
-<span id="cb43-7"><a href="module-5.html#cb43-7" tabindex="-1"></a><span class="co">#SBATCH --output=/scratch/%u/yeast_workshop/logs/%x_%j.out</span></span>
-<span id="cb43-8"><a href="module-5.html#cb43-8" tabindex="-1"></a><span class="co">#SBATCH --error=/scratch/%u/yeast_workshop/logs/%x_%j.err</span></span>
-<span id="cb43-9"><a href="module-5.html#cb43-9" tabindex="-1"></a><span class="bu">set</span> <span class="at">-e</span></span>
-<span id="cb43-10"><a href="module-5.html#cb43-10" tabindex="-1"></a><span class="va">WORK</span><span class="op">=</span>/scratch/<span class="va">$USER</span>/yeast_workshop</span>
-<span id="cb43-11"><a href="module-5.html#cb43-11" tabindex="-1"></a><span class="bu">cd</span> <span class="st">&quot;</span><span class="va">$WORK</span><span class="st">&quot;</span></span>
-<span id="cb43-12"><a href="module-5.html#cb43-12" tabindex="-1"></a></span>
-<span id="cb43-13"><a href="module-5.html#cb43-13" tabindex="-1"></a><span class="co"># bcftools is a cluster module</span></span>
-<span id="cb43-14"><a href="module-5.html#cb43-14" tabindex="-1"></a><span class="ex">module</span> purge</span>
-<span id="cb43-15"><a href="module-5.html#cb43-15" tabindex="-1"></a><span class="ex">module</span> load StdEnv/2023 gcc/12.3 bcftools/1.22</span>
-<span id="cb43-16"><a href="module-5.html#cb43-16" tabindex="-1"></a></span>
-<span id="cb43-17"><a href="module-5.html#cb43-17" tabindex="-1"></a><span class="va">VARDIR</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$WORK</span><span class="st">/results/ERR8562432/variants&quot;</span></span>
-<span id="cb43-18"><a href="module-5.html#cb43-18" tabindex="-1"></a><span class="va">IN</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$VARDIR</span><span class="st">/medaka.vcf&quot;</span></span>
-<span id="cb43-19"><a href="module-5.html#cb43-19" tabindex="-1"></a></span>
-<span id="cb43-20"><a href="module-5.html#cb43-20" tabindex="-1"></a><span class="co"># Stop with a clear message if the input is missing</span></span>
-<span id="cb43-21"><a href="module-5.html#cb43-21" tabindex="-1"></a><span class="cf">if</span> <span class="bu">[</span> <span class="ot">!</span> <span class="ot">-s</span> <span class="st">&quot;</span><span class="va">$IN</span><span class="st">&quot;</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
-<span id="cb43-22"><a href="module-5.html#cb43-22" tabindex="-1"></a>  <span class="bu">echo</span> <span class="st">&quot;ERROR: </span><span class="va">$IN</span><span class="st"> not found. These files exist:&quot;</span></span>
-<span id="cb43-23"><a href="module-5.html#cb43-23" tabindex="-1"></a>  <span class="fu">ls</span> <span class="st">&quot;</span><span class="va">$VARDIR</span><span class="st">&quot;</span></span>
-<span id="cb43-24"><a href="module-5.html#cb43-24" tabindex="-1"></a>  <span class="bu">exit</span> 1</span>
-<span id="cb43-25"><a href="module-5.html#cb43-25" tabindex="-1"></a><span class="cf">fi</span></span>
-<span id="cb43-26"><a href="module-5.html#cb43-26" tabindex="-1"></a></span>
-<span id="cb43-27"><a href="module-5.html#cb43-27" tabindex="-1"></a><span class="co"># bcftools filter: keep only the records that pass the test</span></span>
-<span id="cb43-28"><a href="module-5.html#cb43-28" tabindex="-1"></a><span class="co"># -i &#39;QUAL &gt;= 20&#39; : include variants with QUAL of at least 20</span></span>
-<span id="cb43-29"><a href="module-5.html#cb43-29" tabindex="-1"></a><span class="co"># -o              : the output file</span></span>
-<span id="cb43-30"><a href="module-5.html#cb43-30" tabindex="-1"></a><span class="ex">bcftools</span> filter <span class="at">-i</span> <span class="st">&#39;QUAL &gt;= 20&#39;</span> <span class="at">-o</span> <span class="st">&quot;</span><span class="va">$VARDIR</span><span class="st">/filtered.vcf&quot;</span> <span class="st">&quot;</span><span class="va">$IN</span><span class="st">&quot;</span></span>
-<span id="cb43-31"><a href="module-5.html#cb43-31" tabindex="-1"></a></span>
-<span id="cb43-32"><a href="module-5.html#cb43-32" tabindex="-1"></a><span class="co"># bcftools stats: a summary table of the filtered variants</span></span>
-<span id="cb43-33"><a href="module-5.html#cb43-33" tabindex="-1"></a><span class="ex">bcftools</span> stats <span class="st">&quot;</span><span class="va">$VARDIR</span><span class="st">/filtered.vcf&quot;</span> <span class="op">&gt;</span> <span class="st">&quot;</span><span class="va">$VARDIR</span><span class="st">/filtered_stats.txt&quot;</span></span>
-<span id="cb43-34"><a href="module-5.html#cb43-34" tabindex="-1"></a></span>
-<span id="cb43-35"><a href="module-5.html#cb43-35" tabindex="-1"></a><span class="co"># Count the records before and after filtering (lines that do not start with #)</span></span>
-<span id="cb43-36"><a href="module-5.html#cb43-36" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Records before filtering: </span><span class="va">$(</span><span class="fu">grep</span> <span class="at">-vc</span> <span class="st">&#39;^#&#39;</span> <span class="st">&quot;</span><span class="va">$IN</span><span class="st">&quot;</span><span class="va">)</span><span class="st">&quot;</span></span>
-<span id="cb43-37"><a href="module-5.html#cb43-37" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Records after filtering:  </span><span class="va">$(</span><span class="fu">grep</span> <span class="at">-vc</span> <span class="st">&#39;^#&#39;</span> <span class="st">&quot;</span><span class="va">$VARDIR</span><span class="st">/filtered.vcf&quot;</span><span class="va">)</span><span class="st">&quot;</span></span>
-<span id="cb43-38"><a href="module-5.html#cb43-38" tabindex="-1"></a></span>
-<span id="cb43-39"><a href="module-5.html#cb43-39" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Filtering finished. Main outputs:&quot;</span></span>
-<span id="cb43-40"><a href="module-5.html#cb43-40" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$VARDIR</span><span class="st">/filtered.vcf&quot;</span></span>
-<span id="cb43-41"><a href="module-5.html#cb43-41" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$VARDIR</span><span class="st">/filtered_stats.txt&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb44-1"><a href="module-5.html#cb44-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb44-2"><a href="module-5.html#cb44-2" tabindex="-1"></a><span class="co">#SBATCH --job-name=filter_variants</span></span>
+<span id="cb44-3"><a href="module-5.html#cb44-3" tabindex="-1"></a><span class="co">#SBATCH --account=def-sponsor00</span></span>
+<span id="cb44-4"><a href="module-5.html#cb44-4" tabindex="-1"></a><span class="co">#SBATCH --cpus-per-task=2</span></span>
+<span id="cb44-5"><a href="module-5.html#cb44-5" tabindex="-1"></a><span class="co">#SBATCH --mem=4000M</span></span>
+<span id="cb44-6"><a href="module-5.html#cb44-6" tabindex="-1"></a><span class="co">#SBATCH --time=0:10:00</span></span>
+<span id="cb44-7"><a href="module-5.html#cb44-7" tabindex="-1"></a><span class="co">#SBATCH --output=/scratch/%u/yeast_workshop/logs/%x_%j.out</span></span>
+<span id="cb44-8"><a href="module-5.html#cb44-8" tabindex="-1"></a><span class="co">#SBATCH --error=/scratch/%u/yeast_workshop/logs/%x_%j.err</span></span>
+<span id="cb44-9"><a href="module-5.html#cb44-9" tabindex="-1"></a><span class="bu">set</span> <span class="at">-e</span></span>
+<span id="cb44-10"><a href="module-5.html#cb44-10" tabindex="-1"></a><span class="va">WORK</span><span class="op">=</span>/scratch/<span class="va">$USER</span>/yeast_workshop</span>
+<span id="cb44-11"><a href="module-5.html#cb44-11" tabindex="-1"></a><span class="bu">cd</span> <span class="st">&quot;</span><span class="va">$WORK</span><span class="st">&quot;</span></span>
+<span id="cb44-12"><a href="module-5.html#cb44-12" tabindex="-1"></a></span>
+<span id="cb44-13"><a href="module-5.html#cb44-13" tabindex="-1"></a><span class="co"># bcftools is a cluster module</span></span>
+<span id="cb44-14"><a href="module-5.html#cb44-14" tabindex="-1"></a><span class="ex">module</span> purge</span>
+<span id="cb44-15"><a href="module-5.html#cb44-15" tabindex="-1"></a><span class="ex">module</span> load StdEnv/2023 gcc/12.3 bcftools/1.22</span>
+<span id="cb44-16"><a href="module-5.html#cb44-16" tabindex="-1"></a></span>
+<span id="cb44-17"><a href="module-5.html#cb44-17" tabindex="-1"></a><span class="va">VARDIR</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$WORK</span><span class="st">/results/ERR8562432/variants&quot;</span></span>
+<span id="cb44-18"><a href="module-5.html#cb44-18" tabindex="-1"></a><span class="va">IN</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$VARDIR</span><span class="st">/medaka.vcf&quot;</span></span>
+<span id="cb44-19"><a href="module-5.html#cb44-19" tabindex="-1"></a></span>
+<span id="cb44-20"><a href="module-5.html#cb44-20" tabindex="-1"></a><span class="co"># Stop with a clear message if the input is missing</span></span>
+<span id="cb44-21"><a href="module-5.html#cb44-21" tabindex="-1"></a><span class="cf">if</span> <span class="bu">[</span> <span class="ot">!</span> <span class="ot">-s</span> <span class="st">&quot;</span><span class="va">$IN</span><span class="st">&quot;</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb44-22"><a href="module-5.html#cb44-22" tabindex="-1"></a>  <span class="bu">echo</span> <span class="st">&quot;ERROR: </span><span class="va">$IN</span><span class="st"> not found. These files exist:&quot;</span></span>
+<span id="cb44-23"><a href="module-5.html#cb44-23" tabindex="-1"></a>  <span class="fu">ls</span> <span class="st">&quot;</span><span class="va">$VARDIR</span><span class="st">&quot;</span></span>
+<span id="cb44-24"><a href="module-5.html#cb44-24" tabindex="-1"></a>  <span class="bu">exit</span> 1</span>
+<span id="cb44-25"><a href="module-5.html#cb44-25" tabindex="-1"></a><span class="cf">fi</span></span>
+<span id="cb44-26"><a href="module-5.html#cb44-26" tabindex="-1"></a></span>
+<span id="cb44-27"><a href="module-5.html#cb44-27" tabindex="-1"></a><span class="co"># bcftools filter: keep only the records that pass the test</span></span>
+<span id="cb44-28"><a href="module-5.html#cb44-28" tabindex="-1"></a><span class="co"># -i &#39;QUAL &gt;= 20&#39; : include variants with QUAL of at least 20</span></span>
+<span id="cb44-29"><a href="module-5.html#cb44-29" tabindex="-1"></a><span class="co"># -o              : the output file</span></span>
+<span id="cb44-30"><a href="module-5.html#cb44-30" tabindex="-1"></a><span class="ex">bcftools</span> filter <span class="at">-i</span> <span class="st">&#39;QUAL &gt;= 20&#39;</span> <span class="at">-o</span> <span class="st">&quot;</span><span class="va">$VARDIR</span><span class="st">/filtered.vcf&quot;</span> <span class="st">&quot;</span><span class="va">$IN</span><span class="st">&quot;</span></span>
+<span id="cb44-31"><a href="module-5.html#cb44-31" tabindex="-1"></a></span>
+<span id="cb44-32"><a href="module-5.html#cb44-32" tabindex="-1"></a><span class="co"># bcftools stats: a summary table of the filtered variants</span></span>
+<span id="cb44-33"><a href="module-5.html#cb44-33" tabindex="-1"></a><span class="ex">bcftools</span> stats <span class="st">&quot;</span><span class="va">$VARDIR</span><span class="st">/filtered.vcf&quot;</span> <span class="op">&gt;</span> <span class="st">&quot;</span><span class="va">$VARDIR</span><span class="st">/filtered_stats.txt&quot;</span></span>
+<span id="cb44-34"><a href="module-5.html#cb44-34" tabindex="-1"></a></span>
+<span id="cb44-35"><a href="module-5.html#cb44-35" tabindex="-1"></a><span class="co"># Count the records before and after filtering (lines that do not start with #)</span></span>
+<span id="cb44-36"><a href="module-5.html#cb44-36" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Records before filtering: </span><span class="va">$(</span><span class="fu">grep</span> <span class="at">-vc</span> <span class="st">&#39;^#&#39;</span> <span class="st">&quot;</span><span class="va">$IN</span><span class="st">&quot;</span><span class="va">)</span><span class="st">&quot;</span></span>
+<span id="cb44-37"><a href="module-5.html#cb44-37" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Records after filtering:  </span><span class="va">$(</span><span class="fu">grep</span> <span class="at">-vc</span> <span class="st">&#39;^#&#39;</span> <span class="st">&quot;</span><span class="va">$VARDIR</span><span class="st">/filtered.vcf&quot;</span><span class="va">)</span><span class="st">&quot;</span></span>
+<span id="cb44-38"><a href="module-5.html#cb44-38" tabindex="-1"></a></span>
+<span id="cb44-39"><a href="module-5.html#cb44-39" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Filtering finished. Main outputs:&quot;</span></span>
+<span id="cb44-40"><a href="module-5.html#cb44-40" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$VARDIR</span><span class="st">/filtered.vcf&quot;</span></span>
+<span id="cb44-41"><a href="module-5.html#cb44-41" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$VARDIR</span><span class="st">/filtered_stats.txt&quot;</span></span></code></pre></div>
 <details class="callout-dropdown callout-blue"><summary class="callout-dropdown-summary"><span class="callout-icon"><i class="fas fa-circle-info" aria-hidden="true"></i></span><span class="callout-dropdown-title">What each argument does</span> <span class="callout-dropdown-caret"><i class="fas fa-chevron-right" aria-hidden="true"></i></span></summary><div class="callout-dropdown-content"><p><code>#SBATCH</code> lines and set-up: see Lab 3, script 04. Only new
 arguments are listed here.</p>
 <table>
@@ -857,17 +857,17 @@ of variant records (Part 2 text).</td>
 </tbody>
 </table></div></details>
 <p><strong><code>submit and check (type in the terminal)</code></strong></p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb44-1"><a href="module-5.html#cb44-1" tabindex="-1"></a><span class="bu">cd</span> /scratch/<span class="va">$USER</span>/yeast_workshop/scripts</span>
-<span id="cb44-2"><a href="module-5.html#cb44-2" tabindex="-1"></a><span class="ex">sbatch</span> 11_filter_variants.sh</span>
-<span id="cb44-3"><a href="module-5.html#cb44-3" tabindex="-1"></a><span class="ex">squeue</span> <span class="at">-u</span> <span class="va">$USER</span></span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb45-1"><a href="module-5.html#cb45-1" tabindex="-1"></a><span class="bu">cd</span> /scratch/<span class="va">$USER</span>/yeast_workshop/scripts</span>
+<span id="cb45-2"><a href="module-5.html#cb45-2" tabindex="-1"></a><span class="ex">sbatch</span> 11_filter_variants.sh</span>
+<span id="cb45-3"><a href="module-5.html#cb45-3" tabindex="-1"></a><span class="ex">squeue</span> <span class="at">-u</span> <span class="va">$USER</span></span></code></pre></div>
 </div>
 <div id="step-2-read-the-counts-and-the-stats" class="section level4 hasAnchor">
 <h4>Step 2: Read the counts and the stats<a href="module-5.html#step-2-read-the-counts-and-the-stats" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>When it finishes, read the two counts at the end of the log, and the summary lines of the stats file (<code>grep '^SN'</code> keeps the summary-number lines; the <code>grep -A1 '^# TSTV'</code> command prints the transition/transversion section, whose last line holds the numbers):</p>
 <p><strong><code>read the results (type in the terminal)</code></strong></p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb45-1"><a href="module-5.html#cb45-1" tabindex="-1"></a><span class="fu">tail</span> <span class="at">-n</span> 6 /scratch/<span class="va">$USER</span>/yeast_workshop/logs/filter_variants_<span class="pp">*</span>.out</span>
-<span id="cb45-2"><a href="module-5.html#cb45-2" tabindex="-1"></a><span class="fu">grep</span> <span class="st">&#39;^SN&#39;</span> /scratch/<span class="va">$USER</span>/yeast_workshop/results/ERR8562432/variants/filtered_stats.txt</span>
-<span id="cb45-3"><a href="module-5.html#cb45-3" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-A1</span> <span class="st">&#39;^# TSTV&#39;</span> /scratch/<span class="va">$USER</span>/yeast_workshop/results/ERR8562432/variants/filtered_stats.txt</span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb46-1"><a href="module-5.html#cb46-1" tabindex="-1"></a><span class="fu">tail</span> <span class="at">-n</span> 6 /scratch/<span class="va">$USER</span>/yeast_workshop/logs/filter_variants_<span class="pp">*</span>.out</span>
+<span id="cb46-2"><a href="module-5.html#cb46-2" tabindex="-1"></a><span class="fu">grep</span> <span class="st">&#39;^SN&#39;</span> /scratch/<span class="va">$USER</span>/yeast_workshop/results/ERR8562432/variants/filtered_stats.txt</span>
+<span id="cb46-3"><a href="module-5.html#cb46-3" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-A1</span> <span class="st">&#39;^# TSTV&#39;</span> /scratch/<span class="va">$USER</span>/yeast_workshop/results/ERR8562432/variants/filtered_stats.txt</span></code></pre></div>
 <p>The <code>SN</code> lines count the record types: <strong>SNPs</strong> (bcftools’ word for single-base changes; we call them SNVs), <strong>MNPs</strong> (multi-base substitutions, where adjacent bases change together; <strong>MNVs</strong>) and <strong>indels</strong> (small insertions or deletions, under 50 bp).</p>
 <div class="callout-red">
 <span class="callout-icon"><i class="fas fa-triangle-exclamation" aria-hidden="true"></i></span>
@@ -877,7 +877,7 @@ of variant records (Part 2 text).</td>
 </div>
 <p>Tell an instructor, then copy the finished files from the fallback location (the workshop’s shared project folder):</p>
 <p><strong><code>copy the fallback filtered files</code></strong></p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb46-1"><a href="module-5.html#cb46-1" tabindex="-1"></a><span class="fu">cp</span> /project/60004/shared/fallback/variants/filtered<span class="pp">*</span> /scratch/<span class="va">$USER</span>/yeast_workshop/results/ERR8562432/variants/</span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb47-1"><a href="module-5.html#cb47-1" tabindex="-1"></a><span class="fu">cp</span> /project/60004/shared/fallback/variants/filtered<span class="pp">*</span> /scratch/<span class="va">$USER</span>/yeast_workshop/results/ERR8562432/variants/</span></code></pre></div>
 </div>
 </div>
 <p><strong>Question 3:</strong> How many records were there before and after filtering? What fraction did the filter remove, and what does it tell you about the raw calls?</p>
@@ -967,40 +967,40 @@ of calls made up mostly of random sequencing errors would drift towards
 <li><strong>Expected output:</strong> <code>annotated.vcf</code> (the same variants, with an <code>ANN</code> field in the <code>INFO</code> column) in the <code>variants/</code> folder, and two summary files, <code>snpEff_summary.html</code> and <code>snpEff_genes.txt</code>. snpEff writes these two into the <strong>working directory</strong>; the script goes to <code>$WORK</code> first, so they appear directly in <code>/scratch/$USER/yeast_workshop/</code>. It takes under a minute.</li>
 </ul>
 <p><strong><code>12_snpeff.sh</code></strong></p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb47-1"><a href="module-5.html#cb47-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb47-2"><a href="module-5.html#cb47-2" tabindex="-1"></a><span class="co">#SBATCH --job-name=snpeff</span></span>
-<span id="cb47-3"><a href="module-5.html#cb47-3" tabindex="-1"></a><span class="co">#SBATCH --account=def-sponsor00</span></span>
-<span id="cb47-4"><a href="module-5.html#cb47-4" tabindex="-1"></a><span class="co">#SBATCH --cpus-per-task=2</span></span>
-<span id="cb47-5"><a href="module-5.html#cb47-5" tabindex="-1"></a><span class="co">#SBATCH --mem=4000M</span></span>
-<span id="cb47-6"><a href="module-5.html#cb47-6" tabindex="-1"></a><span class="co">#SBATCH --time=0:15:00</span></span>
-<span id="cb47-7"><a href="module-5.html#cb47-7" tabindex="-1"></a><span class="co">#SBATCH --output=/scratch/%u/yeast_workshop/logs/%x_%j.out</span></span>
-<span id="cb47-8"><a href="module-5.html#cb47-8" tabindex="-1"></a><span class="co">#SBATCH --error=/scratch/%u/yeast_workshop/logs/%x_%j.err</span></span>
-<span id="cb47-9"><a href="module-5.html#cb47-9" tabindex="-1"></a><span class="bu">set</span> <span class="at">-e</span></span>
-<span id="cb47-10"><a href="module-5.html#cb47-10" tabindex="-1"></a><span class="va">WORK</span><span class="op">=</span>/scratch/<span class="va">$USER</span>/yeast_workshop</span>
-<span id="cb47-11"><a href="module-5.html#cb47-11" tabindex="-1"></a><span class="co"># snpEff writes snpEff_summary.html and snpEff_genes.txt into the current folder,</span></span>
-<span id="cb47-12"><a href="module-5.html#cb47-12" tabindex="-1"></a><span class="co"># so we go to $WORK first</span></span>
-<span id="cb47-13"><a href="module-5.html#cb47-13" tabindex="-1"></a><span class="bu">cd</span> <span class="st">&quot;</span><span class="va">$WORK</span><span class="st">&quot;</span></span>
-<span id="cb47-14"><a href="module-5.html#cb47-14" tabindex="-1"></a></span>
-<span id="cb47-15"><a href="module-5.html#cb47-15" tabindex="-1"></a><span class="co"># snpEff is a cluster module</span></span>
-<span id="cb47-16"><a href="module-5.html#cb47-16" tabindex="-1"></a><span class="ex">module</span> purge</span>
-<span id="cb47-17"><a href="module-5.html#cb47-17" tabindex="-1"></a><span class="ex">module</span> load StdEnv/2023 snpeff/5.2</span>
-<span id="cb47-18"><a href="module-5.html#cb47-18" tabindex="-1"></a></span>
-<span id="cb47-19"><a href="module-5.html#cb47-19" tabindex="-1"></a><span class="va">VARDIR</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$WORK</span><span class="st">/results/ERR8562432/variants&quot;</span></span>
-<span id="cb47-20"><a href="module-5.html#cb47-20" tabindex="-1"></a></span>
-<span id="cb47-21"><a href="module-5.html#cb47-21" tabindex="-1"></a><span class="co"># java -jar snpEff.jar : run snpEff</span></span>
-<span id="cb47-22"><a href="module-5.html#cb47-22" tabindex="-1"></a><span class="co"># -c : the configuration file (tells snpEff where the databases are)</span></span>
-<span id="cb47-23"><a href="module-5.html#cb47-23" tabindex="-1"></a><span class="co"># R64-1-1.105 : the database (S288C annotation, Ensembl release 105)</span></span>
-<span id="cb47-24"><a href="module-5.html#cb47-24" tabindex="-1"></a><span class="co"># last item : the filtered variants</span></span>
-<span id="cb47-25"><a href="module-5.html#cb47-25" tabindex="-1"></a><span class="co"># &gt; : save the annotated VCF (snpEff prints it to the screen otherwise)</span></span>
-<span id="cb47-26"><a href="module-5.html#cb47-26" tabindex="-1"></a><span class="ex">java</span> <span class="at">-jar</span> <span class="va">$EBROOTSNPEFF</span>/snpEff.jar <span class="dt">\</span></span>
-<span id="cb47-27"><a href="module-5.html#cb47-27" tabindex="-1"></a>  <span class="at">-c</span> /project/60004/shared/databases/snpEff/snpEff.config <span class="dt">\</span></span>
-<span id="cb47-28"><a href="module-5.html#cb47-28" tabindex="-1"></a>  R64-1-1.105 <span class="dt">\</span></span>
-<span id="cb47-29"><a href="module-5.html#cb47-29" tabindex="-1"></a>  <span class="st">&quot;</span><span class="va">$VARDIR</span><span class="st">/filtered.vcf&quot;</span> <span class="op">&gt;</span> <span class="st">&quot;</span><span class="va">$VARDIR</span><span class="st">/annotated.vcf&quot;</span></span>
-<span id="cb47-30"><a href="module-5.html#cb47-30" tabindex="-1"></a></span>
-<span id="cb47-31"><a href="module-5.html#cb47-31" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;snpEff finished. Main outputs:&quot;</span></span>
-<span id="cb47-32"><a href="module-5.html#cb47-32" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$VARDIR</span><span class="st">/annotated.vcf&quot;</span></span>
-<span id="cb47-33"><a href="module-5.html#cb47-33" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$WORK</span><span class="st">/snpEff_summary.html&quot;</span></span>
-<span id="cb47-34"><a href="module-5.html#cb47-34" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$WORK</span><span class="st">/snpEff_genes.txt&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb48-1"><a href="module-5.html#cb48-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb48-2"><a href="module-5.html#cb48-2" tabindex="-1"></a><span class="co">#SBATCH --job-name=snpeff</span></span>
+<span id="cb48-3"><a href="module-5.html#cb48-3" tabindex="-1"></a><span class="co">#SBATCH --account=def-sponsor00</span></span>
+<span id="cb48-4"><a href="module-5.html#cb48-4" tabindex="-1"></a><span class="co">#SBATCH --cpus-per-task=2</span></span>
+<span id="cb48-5"><a href="module-5.html#cb48-5" tabindex="-1"></a><span class="co">#SBATCH --mem=4000M</span></span>
+<span id="cb48-6"><a href="module-5.html#cb48-6" tabindex="-1"></a><span class="co">#SBATCH --time=0:15:00</span></span>
+<span id="cb48-7"><a href="module-5.html#cb48-7" tabindex="-1"></a><span class="co">#SBATCH --output=/scratch/%u/yeast_workshop/logs/%x_%j.out</span></span>
+<span id="cb48-8"><a href="module-5.html#cb48-8" tabindex="-1"></a><span class="co">#SBATCH --error=/scratch/%u/yeast_workshop/logs/%x_%j.err</span></span>
+<span id="cb48-9"><a href="module-5.html#cb48-9" tabindex="-1"></a><span class="bu">set</span> <span class="at">-e</span></span>
+<span id="cb48-10"><a href="module-5.html#cb48-10" tabindex="-1"></a><span class="va">WORK</span><span class="op">=</span>/scratch/<span class="va">$USER</span>/yeast_workshop</span>
+<span id="cb48-11"><a href="module-5.html#cb48-11" tabindex="-1"></a><span class="co"># snpEff writes snpEff_summary.html and snpEff_genes.txt into the current folder,</span></span>
+<span id="cb48-12"><a href="module-5.html#cb48-12" tabindex="-1"></a><span class="co"># so we go to $WORK first</span></span>
+<span id="cb48-13"><a href="module-5.html#cb48-13" tabindex="-1"></a><span class="bu">cd</span> <span class="st">&quot;</span><span class="va">$WORK</span><span class="st">&quot;</span></span>
+<span id="cb48-14"><a href="module-5.html#cb48-14" tabindex="-1"></a></span>
+<span id="cb48-15"><a href="module-5.html#cb48-15" tabindex="-1"></a><span class="co"># snpEff is a cluster module</span></span>
+<span id="cb48-16"><a href="module-5.html#cb48-16" tabindex="-1"></a><span class="ex">module</span> purge</span>
+<span id="cb48-17"><a href="module-5.html#cb48-17" tabindex="-1"></a><span class="ex">module</span> load StdEnv/2023 snpeff/5.2</span>
+<span id="cb48-18"><a href="module-5.html#cb48-18" tabindex="-1"></a></span>
+<span id="cb48-19"><a href="module-5.html#cb48-19" tabindex="-1"></a><span class="va">VARDIR</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$WORK</span><span class="st">/results/ERR8562432/variants&quot;</span></span>
+<span id="cb48-20"><a href="module-5.html#cb48-20" tabindex="-1"></a></span>
+<span id="cb48-21"><a href="module-5.html#cb48-21" tabindex="-1"></a><span class="co"># java -jar snpEff.jar : run snpEff</span></span>
+<span id="cb48-22"><a href="module-5.html#cb48-22" tabindex="-1"></a><span class="co"># -c : the configuration file (tells snpEff where the databases are)</span></span>
+<span id="cb48-23"><a href="module-5.html#cb48-23" tabindex="-1"></a><span class="co"># R64-1-1.105 : the database (S288C annotation, Ensembl release 105)</span></span>
+<span id="cb48-24"><a href="module-5.html#cb48-24" tabindex="-1"></a><span class="co"># last item : the filtered variants</span></span>
+<span id="cb48-25"><a href="module-5.html#cb48-25" tabindex="-1"></a><span class="co"># &gt; : save the annotated VCF (snpEff prints it to the screen otherwise)</span></span>
+<span id="cb48-26"><a href="module-5.html#cb48-26" tabindex="-1"></a><span class="ex">java</span> <span class="at">-jar</span> <span class="va">$EBROOTSNPEFF</span>/snpEff.jar <span class="dt">\</span></span>
+<span id="cb48-27"><a href="module-5.html#cb48-27" tabindex="-1"></a>  <span class="at">-c</span> /project/60004/shared/databases/snpEff/snpEff.config <span class="dt">\</span></span>
+<span id="cb48-28"><a href="module-5.html#cb48-28" tabindex="-1"></a>  R64-1-1.105 <span class="dt">\</span></span>
+<span id="cb48-29"><a href="module-5.html#cb48-29" tabindex="-1"></a>  <span class="st">&quot;</span><span class="va">$VARDIR</span><span class="st">/filtered.vcf&quot;</span> <span class="op">&gt;</span> <span class="st">&quot;</span><span class="va">$VARDIR</span><span class="st">/annotated.vcf&quot;</span></span>
+<span id="cb48-30"><a href="module-5.html#cb48-30" tabindex="-1"></a></span>
+<span id="cb48-31"><a href="module-5.html#cb48-31" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;snpEff finished. Main outputs:&quot;</span></span>
+<span id="cb48-32"><a href="module-5.html#cb48-32" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$VARDIR</span><span class="st">/annotated.vcf&quot;</span></span>
+<span id="cb48-33"><a href="module-5.html#cb48-33" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$WORK</span><span class="st">/snpEff_summary.html&quot;</span></span>
+<span id="cb48-34"><a href="module-5.html#cb48-34" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$WORK</span><span class="st">/snpEff_genes.txt&quot;</span></span></code></pre></div>
 <details class="callout-dropdown callout-blue"><summary class="callout-dropdown-summary"><span class="callout-icon"><i class="fas fa-circle-info" aria-hidden="true"></i></span><span class="callout-dropdown-title">What each argument does</span> <span class="callout-dropdown-caret"><i class="fas fa-chevron-right" aria-hidden="true"></i></span></summary><div class="callout-dropdown-content"><p><code>#SBATCH</code> lines and set-up: see Lab 3, script 04. Only new
 arguments are listed here.</p>
 <table>
@@ -1084,9 +1084,9 @@ of statistics per gene, in the directory where snpEff is run.</td>
 </tbody>
 </table></div></details>
 <p><strong><code>submit and check (type in the terminal)</code></strong></p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb48-1"><a href="module-5.html#cb48-1" tabindex="-1"></a><span class="bu">cd</span> /scratch/<span class="va">$USER</span>/yeast_workshop/scripts</span>
-<span id="cb48-2"><a href="module-5.html#cb48-2" tabindex="-1"></a><span class="ex">sbatch</span> 12_snpeff.sh</span>
-<span id="cb48-3"><a href="module-5.html#cb48-3" tabindex="-1"></a><span class="ex">squeue</span> <span class="at">-u</span> <span class="va">$USER</span></span></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb49-1"><a href="module-5.html#cb49-1" tabindex="-1"></a><span class="bu">cd</span> /scratch/<span class="va">$USER</span>/yeast_workshop/scripts</span>
+<span id="cb49-2"><a href="module-5.html#cb49-2" tabindex="-1"></a><span class="ex">sbatch</span> 12_snpeff.sh</span>
+<span id="cb49-3"><a href="module-5.html#cb49-3" tabindex="-1"></a><span class="ex">squeue</span> <span class="at">-u</span> <span class="va">$USER</span></span></code></pre></div>
 <div class="callout-red">
 <span class="callout-icon"><i class="fas fa-triangle-exclamation" aria-hidden="true"></i></span>
 <div class="callout-content">
@@ -1095,8 +1095,8 @@ of statistics per gene, in the directory where snpEff is run.</td>
 </div>
 <p>Tell an instructor, then copy the finished files from the fallback location (the workshop’s shared project folder):</p>
 <p><strong><code>copy the fallback snpEff results</code></strong></p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb49-1"><a href="module-5.html#cb49-1" tabindex="-1"></a><span class="fu">cp</span> /project/60004/shared/fallback/variants/annotated.vcf /scratch/<span class="va">$USER</span>/yeast_workshop/results/ERR8562432/variants/</span>
-<span id="cb49-2"><a href="module-5.html#cb49-2" tabindex="-1"></a><span class="fu">cp</span> /project/60004/shared/fallback/snpEff_summary.html /project/60004/shared/fallback/snpEff_genes.txt /scratch/<span class="va">$USER</span>/yeast_workshop/</span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb50-1"><a href="module-5.html#cb50-1" tabindex="-1"></a><span class="fu">cp</span> /project/60004/shared/fallback/variants/annotated.vcf /scratch/<span class="va">$USER</span>/yeast_workshop/results/ERR8562432/variants/</span>
+<span id="cb50-2"><a href="module-5.html#cb50-2" tabindex="-1"></a><span class="fu">cp</span> /project/60004/shared/fallback/snpEff_summary.html /project/60004/shared/fallback/snpEff_genes.txt /scratch/<span class="va">$USER</span>/yeast_workshop/</span></code></pre></div>
 </div>
 </div>
 </div>
@@ -1104,17 +1104,17 @@ of statistics per gene, in the directory where snpEff is run.</td>
 <h4>Step 2: Read one annotated record<a href="module-5.html#step-2-read-one-annotated-record" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>When the job has finished, look at one record. <code>cut -f8</code> keeps the INFO column (column 8), where snpEff put its <code>ANN</code> field. The fields of <code>ANN</code> are separated by <code>|</code>: the changed allele, the effect, the impact, the gene name, the gene ID, and so on. A variant that touches several genes has several <code>ANN</code> entries separated by commas.</p>
 <p><strong><code>look at one annotated record (type in the terminal)</code></strong></p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb50-1"><a href="module-5.html#cb50-1" tabindex="-1"></a><span class="co"># the first 3 variants that snpEff calls a premature stop (stop_gained)</span></span>
-<span id="cb50-2"><a href="module-5.html#cb50-2" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-v</span> <span class="st">&#39;^#&#39;</span> /scratch/<span class="va">$USER</span>/yeast_workshop/results/ERR8562432/variants/annotated.vcf <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-m</span> 3 <span class="st">&#39;stop_gained&#39;</span> <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-f1,2,4,5,6</span></span>
-<span id="cb50-3"><a href="module-5.html#cb50-3" tabindex="-1"></a></span>
-<span id="cb50-4"><a href="module-5.html#cb50-4" tabindex="-1"></a><span class="co"># the first 5 HIGH-impact variants: chromosome, position and the first ANN entry</span></span>
-<span id="cb50-5"><a href="module-5.html#cb50-5" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-v</span> <span class="st">&#39;^#&#39;</span> /scratch/<span class="va">$USER</span>/yeast_workshop/results/ERR8562432/variants/annotated.vcf <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-m</span> 5 <span class="st">&#39;|HIGH|&#39;</span> <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-f1,2,8</span> <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-c1-200</span></span></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb51-1"><a href="module-5.html#cb51-1" tabindex="-1"></a><span class="co"># the first 3 variants that snpEff calls a premature stop (stop_gained)</span></span>
+<span id="cb51-2"><a href="module-5.html#cb51-2" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-v</span> <span class="st">&#39;^#&#39;</span> /scratch/<span class="va">$USER</span>/yeast_workshop/results/ERR8562432/variants/annotated.vcf <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-m</span> 3 <span class="st">&#39;stop_gained&#39;</span> <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-f1,2,4,5,6</span></span>
+<span id="cb51-3"><a href="module-5.html#cb51-3" tabindex="-1"></a></span>
+<span id="cb51-4"><a href="module-5.html#cb51-4" tabindex="-1"></a><span class="co"># the first 5 HIGH-impact variants: chromosome, position and the first ANN entry</span></span>
+<span id="cb51-5"><a href="module-5.html#cb51-5" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-v</span> <span class="st">&#39;^#&#39;</span> /scratch/<span class="va">$USER</span>/yeast_workshop/results/ERR8562432/variants/annotated.vcf <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-m</span> 5 <span class="st">&#39;|HIGH|&#39;</span> <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-f1,2,8</span> <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-c1-200</span></span></code></pre></div>
 </div>
 <div id="step-3-copy-the-summary-report-to-your-laptop" class="section level4 hasAnchor">
 <h4>Step 3: Copy the summary report to your laptop<a href="module-5.html#step-3-copy-the-summary-report-to-your-laptop" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>snpEff also wrote an HTML report. Run <code>scp</code> on your <strong>laptop</strong>, as before (<code>YOUR_USER</code> is the same placeholder as before and the host is <code>cbw.c3.ca</code>; Windows users can use MobaXterm or WinSCP).</p>
 <p><strong><code>scp_example (run on your laptop)</code></strong></p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb51-1"><a href="module-5.html#cb51-1" tabindex="-1"></a><span class="fu">scp</span> YOUR_USER@cbw.c3.ca:/scratch/YOUR_USER/yeast_workshop/snpEff_summary.html .</span></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb52-1"><a href="module-5.html#cb52-1" tabindex="-1"></a><span class="fu">scp</span> YOUR_USER@cbw.c3.ca:/scratch/YOUR_USER/yeast_workshop/snpEff_summary.html .</span></code></pre></div>
 <p>Open <code>snpEff_summary.html</code> in your browser. Look at the tables “Number of effects by impact” (or “Count by impact”) and “Number of effects by type and region”.</p>
 <p><strong>Question 6:</strong> How many HIGH-impact variants are there? Compare with MODERATE, LOW and MODIFIER. Why is the HIGH group the one to look at first?</p>
 <details class="callout-dropdown callout-blue"><summary class="callout-dropdown-summary"><span class="callout-icon"><i class="fas fa-circle-info" aria-hidden="true"></i></span><span class="callout-dropdown-title">Answer</span> <span class="callout-dropdown-caret"><i class="fas fa-chevron-right" aria-hidden="true"></i></span></summary><div class="callout-dropdown-content"><p>Counting each variant once, by its first (most severe listed) effect,
@@ -1198,48 +1198,48 @@ test run): the function of each must be read from SGD.</p></div></details>
 </ul>
 <p>We use the <strong>supplied</strong> assembly rather than your own from Lab 4, because the annotation belongs to it. The variants were called against the reference, so they are the same whichever assembly you lift them onto. The script first copies the supplied assembly into your own folder, because CrossMap writes an index file (<code>.fai</code>) next to the assembly it reads, and you cannot write into the workshop’s shared project folder.</p>
 <p><strong><code>13_liftover.sh</code></strong></p>
-<div class="sourceCode" id="cb52"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb52-1"><a href="module-5.html#cb52-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb52-2"><a href="module-5.html#cb52-2" tabindex="-1"></a><span class="co">#SBATCH --job-name=liftover</span></span>
-<span id="cb52-3"><a href="module-5.html#cb52-3" tabindex="-1"></a><span class="co">#SBATCH --account=def-sponsor00</span></span>
-<span id="cb52-4"><a href="module-5.html#cb52-4" tabindex="-1"></a><span class="co">#SBATCH --cpus-per-task=2</span></span>
-<span id="cb52-5"><a href="module-5.html#cb52-5" tabindex="-1"></a><span class="co">#SBATCH --mem=4000M</span></span>
-<span id="cb52-6"><a href="module-5.html#cb52-6" tabindex="-1"></a><span class="co">#SBATCH --time=0:10:00</span></span>
-<span id="cb52-7"><a href="module-5.html#cb52-7" tabindex="-1"></a><span class="co">#SBATCH --output=/scratch/%u/yeast_workshop/logs/%x_%j.out</span></span>
-<span id="cb52-8"><a href="module-5.html#cb52-8" tabindex="-1"></a><span class="co">#SBATCH --error=/scratch/%u/yeast_workshop/logs/%x_%j.err</span></span>
-<span id="cb52-9"><a href="module-5.html#cb52-9" tabindex="-1"></a><span class="bu">set</span> <span class="at">-e</span></span>
-<span id="cb52-10"><a href="module-5.html#cb52-10" tabindex="-1"></a><span class="va">WORK</span><span class="op">=</span>/scratch/<span class="va">$USER</span>/yeast_workshop</span>
-<span id="cb52-11"><a href="module-5.html#cb52-11" tabindex="-1"></a><span class="bu">cd</span> <span class="st">&quot;</span><span class="va">$WORK</span><span class="st">&quot;</span></span>
-<span id="cb52-12"><a href="module-5.html#cb52-12" tabindex="-1"></a></span>
-<span id="cb52-13"><a href="module-5.html#cb52-13" tabindex="-1"></a><span class="co"># Conda environment with minimap2, paf2chain and CrossMap</span></span>
-<span id="cb52-14"><a href="module-5.html#cb52-14" tabindex="-1"></a><span class="bu">source</span> /project/60004/shared/conda/bin/activate crossmap_env</span>
-<span id="cb52-15"><a href="module-5.html#cb52-15" tabindex="-1"></a></span>
-<span id="cb52-16"><a href="module-5.html#cb52-16" tabindex="-1"></a><span class="va">REF</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$WORK</span><span class="st">/data/Saccharomyces_cerevisiae.R64-1-1.dna.toplevel.fa&quot;</span></span>
-<span id="cb52-17"><a href="module-5.html#cb52-17" tabindex="-1"></a><span class="va">VARDIR</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$WORK</span><span class="st">/results/ERR8562432/variants&quot;</span></span>
-<span id="cb52-18"><a href="module-5.html#cb52-18" tabindex="-1"></a><span class="va">OUT</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$VARDIR</span><span class="st">/liftover&quot;</span></span>
-<span id="cb52-19"><a href="module-5.html#cb52-19" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> <span class="st">&quot;</span><span class="va">$OUT</span><span class="st">&quot;</span></span>
-<span id="cb52-20"><a href="module-5.html#cb52-20" tabindex="-1"></a></span>
-<span id="cb52-21"><a href="module-5.html#cb52-21" tabindex="-1"></a><span class="co"># Copy the supplied assembly into your folder (CrossMap writes an index file next to it)</span></span>
-<span id="cb52-22"><a href="module-5.html#cb52-22" tabindex="-1"></a><span class="fu">cp</span> /project/60004/shared/supplied/polished/ERR8562432_consensus.fasta <span class="st">&quot;</span><span class="va">$OUT</span><span class="st">/&quot;</span></span>
-<span id="cb52-23"><a href="module-5.html#cb52-23" tabindex="-1"></a><span class="va">ASM</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$OUT</span><span class="st">/ERR8562432_consensus.fasta&quot;</span></span>
-<span id="cb52-24"><a href="module-5.html#cb52-24" tabindex="-1"></a></span>
-<span id="cb52-25"><a href="module-5.html#cb52-25" tabindex="-1"></a><span class="co"># 1. minimap2 : align the assembly to the reference</span></span>
-<span id="cb52-26"><a href="module-5.html#cb52-26" tabindex="-1"></a><span class="co"># -c       : compute the detailed alignment</span></span>
-<span id="cb52-27"><a href="module-5.html#cb52-27" tabindex="-1"></a><span class="co"># -x asm5  : preset for two genomes that are very similar</span></span>
-<span id="cb52-28"><a href="module-5.html#cb52-28" tabindex="-1"></a><span class="ex">minimap2</span> <span class="at">-cx</span> asm5 <span class="st">&quot;</span><span class="va">$REF</span><span class="st">&quot;</span> <span class="st">&quot;</span><span class="va">$ASM</span><span class="st">&quot;</span> <span class="op">&gt;</span> <span class="st">&quot;</span><span class="va">$OUT</span><span class="st">/ref_vs_denovo.paf&quot;</span></span>
-<span id="cb52-29"><a href="module-5.html#cb52-29" tabindex="-1"></a></span>
-<span id="cb52-30"><a href="module-5.html#cb52-30" tabindex="-1"></a><span class="co"># 2. paf2chain : turn the PAF into a chain file (the coordinate dictionary)</span></span>
-<span id="cb52-31"><a href="module-5.html#cb52-31" tabindex="-1"></a><span class="ex">paf2chain</span> <span class="at">-i</span> <span class="st">&quot;</span><span class="va">$OUT</span><span class="st">/ref_vs_denovo.paf&quot;</span> <span class="op">&gt;</span> <span class="st">&quot;</span><span class="va">$OUT</span><span class="st">/ref_to_denovo.chain&quot;</span></span>
-<span id="cb52-32"><a href="module-5.html#cb52-32" tabindex="-1"></a></span>
-<span id="cb52-33"><a href="module-5.html#cb52-33" tabindex="-1"></a><span class="co"># 3. CrossMap vcf : move every variant to its position on the assembly</span></span>
-<span id="cb52-34"><a href="module-5.html#cb52-34" tabindex="-1"></a><span class="co"># inputs, in order: the chain file, the VCF to convert, the new assembly, the output</span></span>
-<span id="cb52-35"><a href="module-5.html#cb52-35" tabindex="-1"></a><span class="ex">CrossMap</span> vcf <span class="st">&quot;</span><span class="va">$OUT</span><span class="st">/ref_to_denovo.chain&quot;</span> <span class="dt">\</span></span>
-<span id="cb52-36"><a href="module-5.html#cb52-36" tabindex="-1"></a>  <span class="st">&quot;</span><span class="va">$VARDIR</span><span class="st">/annotated.vcf&quot;</span> <span class="dt">\</span></span>
-<span id="cb52-37"><a href="module-5.html#cb52-37" tabindex="-1"></a>  <span class="st">&quot;</span><span class="va">$ASM</span><span class="st">&quot;</span> <span class="dt">\</span></span>
-<span id="cb52-38"><a href="module-5.html#cb52-38" tabindex="-1"></a>  <span class="st">&quot;</span><span class="va">$OUT</span><span class="st">/lifted.vcf&quot;</span></span>
-<span id="cb52-39"><a href="module-5.html#cb52-39" tabindex="-1"></a></span>
-<span id="cb52-40"><a href="module-5.html#cb52-40" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Liftover finished. Main outputs:&quot;</span></span>
-<span id="cb52-41"><a href="module-5.html#cb52-41" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$OUT</span><span class="st">/lifted.vcf&quot;</span></span>
-<span id="cb52-42"><a href="module-5.html#cb52-42" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$OUT</span><span class="st">/lifted.vcf.unmap&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb53-1"><a href="module-5.html#cb53-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb53-2"><a href="module-5.html#cb53-2" tabindex="-1"></a><span class="co">#SBATCH --job-name=liftover</span></span>
+<span id="cb53-3"><a href="module-5.html#cb53-3" tabindex="-1"></a><span class="co">#SBATCH --account=def-sponsor00</span></span>
+<span id="cb53-4"><a href="module-5.html#cb53-4" tabindex="-1"></a><span class="co">#SBATCH --cpus-per-task=2</span></span>
+<span id="cb53-5"><a href="module-5.html#cb53-5" tabindex="-1"></a><span class="co">#SBATCH --mem=4000M</span></span>
+<span id="cb53-6"><a href="module-5.html#cb53-6" tabindex="-1"></a><span class="co">#SBATCH --time=0:10:00</span></span>
+<span id="cb53-7"><a href="module-5.html#cb53-7" tabindex="-1"></a><span class="co">#SBATCH --output=/scratch/%u/yeast_workshop/logs/%x_%j.out</span></span>
+<span id="cb53-8"><a href="module-5.html#cb53-8" tabindex="-1"></a><span class="co">#SBATCH --error=/scratch/%u/yeast_workshop/logs/%x_%j.err</span></span>
+<span id="cb53-9"><a href="module-5.html#cb53-9" tabindex="-1"></a><span class="bu">set</span> <span class="at">-e</span></span>
+<span id="cb53-10"><a href="module-5.html#cb53-10" tabindex="-1"></a><span class="va">WORK</span><span class="op">=</span>/scratch/<span class="va">$USER</span>/yeast_workshop</span>
+<span id="cb53-11"><a href="module-5.html#cb53-11" tabindex="-1"></a><span class="bu">cd</span> <span class="st">&quot;</span><span class="va">$WORK</span><span class="st">&quot;</span></span>
+<span id="cb53-12"><a href="module-5.html#cb53-12" tabindex="-1"></a></span>
+<span id="cb53-13"><a href="module-5.html#cb53-13" tabindex="-1"></a><span class="co"># Conda environment with minimap2, paf2chain and CrossMap</span></span>
+<span id="cb53-14"><a href="module-5.html#cb53-14" tabindex="-1"></a><span class="bu">source</span> /project/60004/shared/conda/bin/activate crossmap_env</span>
+<span id="cb53-15"><a href="module-5.html#cb53-15" tabindex="-1"></a></span>
+<span id="cb53-16"><a href="module-5.html#cb53-16" tabindex="-1"></a><span class="va">REF</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$WORK</span><span class="st">/data/Saccharomyces_cerevisiae.R64-1-1.dna.toplevel.fa&quot;</span></span>
+<span id="cb53-17"><a href="module-5.html#cb53-17" tabindex="-1"></a><span class="va">VARDIR</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$WORK</span><span class="st">/results/ERR8562432/variants&quot;</span></span>
+<span id="cb53-18"><a href="module-5.html#cb53-18" tabindex="-1"></a><span class="va">OUT</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$VARDIR</span><span class="st">/liftover&quot;</span></span>
+<span id="cb53-19"><a href="module-5.html#cb53-19" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> <span class="st">&quot;</span><span class="va">$OUT</span><span class="st">&quot;</span></span>
+<span id="cb53-20"><a href="module-5.html#cb53-20" tabindex="-1"></a></span>
+<span id="cb53-21"><a href="module-5.html#cb53-21" tabindex="-1"></a><span class="co"># Copy the supplied assembly into your folder (CrossMap writes an index file next to it)</span></span>
+<span id="cb53-22"><a href="module-5.html#cb53-22" tabindex="-1"></a><span class="fu">cp</span> /project/60004/shared/supplied/polished/ERR8562432_consensus.fasta <span class="st">&quot;</span><span class="va">$OUT</span><span class="st">/&quot;</span></span>
+<span id="cb53-23"><a href="module-5.html#cb53-23" tabindex="-1"></a><span class="va">ASM</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$OUT</span><span class="st">/ERR8562432_consensus.fasta&quot;</span></span>
+<span id="cb53-24"><a href="module-5.html#cb53-24" tabindex="-1"></a></span>
+<span id="cb53-25"><a href="module-5.html#cb53-25" tabindex="-1"></a><span class="co"># 1. minimap2 : align the assembly to the reference</span></span>
+<span id="cb53-26"><a href="module-5.html#cb53-26" tabindex="-1"></a><span class="co"># -c       : compute the detailed alignment</span></span>
+<span id="cb53-27"><a href="module-5.html#cb53-27" tabindex="-1"></a><span class="co"># -x asm5  : preset for two genomes that are very similar</span></span>
+<span id="cb53-28"><a href="module-5.html#cb53-28" tabindex="-1"></a><span class="ex">minimap2</span> <span class="at">-cx</span> asm5 <span class="st">&quot;</span><span class="va">$REF</span><span class="st">&quot;</span> <span class="st">&quot;</span><span class="va">$ASM</span><span class="st">&quot;</span> <span class="op">&gt;</span> <span class="st">&quot;</span><span class="va">$OUT</span><span class="st">/ref_vs_denovo.paf&quot;</span></span>
+<span id="cb53-29"><a href="module-5.html#cb53-29" tabindex="-1"></a></span>
+<span id="cb53-30"><a href="module-5.html#cb53-30" tabindex="-1"></a><span class="co"># 2. paf2chain : turn the PAF into a chain file (the coordinate dictionary)</span></span>
+<span id="cb53-31"><a href="module-5.html#cb53-31" tabindex="-1"></a><span class="ex">paf2chain</span> <span class="at">-i</span> <span class="st">&quot;</span><span class="va">$OUT</span><span class="st">/ref_vs_denovo.paf&quot;</span> <span class="op">&gt;</span> <span class="st">&quot;</span><span class="va">$OUT</span><span class="st">/ref_to_denovo.chain&quot;</span></span>
+<span id="cb53-32"><a href="module-5.html#cb53-32" tabindex="-1"></a></span>
+<span id="cb53-33"><a href="module-5.html#cb53-33" tabindex="-1"></a><span class="co"># 3. CrossMap vcf : move every variant to its position on the assembly</span></span>
+<span id="cb53-34"><a href="module-5.html#cb53-34" tabindex="-1"></a><span class="co"># inputs, in order: the chain file, the VCF to convert, the new assembly, the output</span></span>
+<span id="cb53-35"><a href="module-5.html#cb53-35" tabindex="-1"></a><span class="ex">CrossMap</span> vcf <span class="st">&quot;</span><span class="va">$OUT</span><span class="st">/ref_to_denovo.chain&quot;</span> <span class="dt">\</span></span>
+<span id="cb53-36"><a href="module-5.html#cb53-36" tabindex="-1"></a>  <span class="st">&quot;</span><span class="va">$VARDIR</span><span class="st">/annotated.vcf&quot;</span> <span class="dt">\</span></span>
+<span id="cb53-37"><a href="module-5.html#cb53-37" tabindex="-1"></a>  <span class="st">&quot;</span><span class="va">$ASM</span><span class="st">&quot;</span> <span class="dt">\</span></span>
+<span id="cb53-38"><a href="module-5.html#cb53-38" tabindex="-1"></a>  <span class="st">&quot;</span><span class="va">$OUT</span><span class="st">/lifted.vcf&quot;</span></span>
+<span id="cb53-39"><a href="module-5.html#cb53-39" tabindex="-1"></a></span>
+<span id="cb53-40"><a href="module-5.html#cb53-40" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Liftover finished. Main outputs:&quot;</span></span>
+<span id="cb53-41"><a href="module-5.html#cb53-41" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$OUT</span><span class="st">/lifted.vcf&quot;</span></span>
+<span id="cb53-42"><a href="module-5.html#cb53-42" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$OUT</span><span class="st">/lifted.vcf.unmap&quot;</span></span></code></pre></div>
 <details class="callout-dropdown callout-blue"><summary class="callout-dropdown-summary"><span class="callout-icon"><i class="fas fa-circle-info" aria-hidden="true"></i></span><span class="callout-dropdown-title">What each argument does</span> <span class="callout-dropdown-caret"><i class="fas fa-chevron-right" aria-hidden="true"></i></span></summary><div class="callout-dropdown-content"><p><code>#SBATCH</code> lines and set-up: see Lab 3, script 04. Only new
 arguments are listed here.</p>
 <table>
@@ -1344,20 +1344,20 @@ records it could not convert to a file with the ending
 </tbody>
 </table></div></details>
 <p><strong><code>submit and check (type in the terminal)</code></strong></p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb53-1"><a href="module-5.html#cb53-1" tabindex="-1"></a><span class="bu">cd</span> /scratch/<span class="va">$USER</span>/yeast_workshop/scripts</span>
-<span id="cb53-2"><a href="module-5.html#cb53-2" tabindex="-1"></a><span class="ex">sbatch</span> 13_liftover.sh</span>
-<span id="cb53-3"><a href="module-5.html#cb53-3" tabindex="-1"></a><span class="ex">squeue</span> <span class="at">-u</span> <span class="va">$USER</span></span></code></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb54-1"><a href="module-5.html#cb54-1" tabindex="-1"></a><span class="bu">cd</span> /scratch/<span class="va">$USER</span>/yeast_workshop/scripts</span>
+<span id="cb54-2"><a href="module-5.html#cb54-2" tabindex="-1"></a><span class="ex">sbatch</span> 13_liftover.sh</span>
+<span id="cb54-3"><a href="module-5.html#cb54-3" tabindex="-1"></a><span class="ex">squeue</span> <span class="at">-u</span> <span class="va">$USER</span></span></code></pre></div>
 </div>
 <div id="step-2-count-the-lifted-variants-and-look-at-them" class="section level4 hasAnchor">
 <h4>Step 2: Count the lifted variants and look at them<a href="module-5.html#step-2-count-the-lifted-variants-and-look-at-them" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>When it has finished, count the variants that were lifted and the ones that were not (<code>grep -vc '^#'</code> counts the lines that do not start with <code>#</code>; <code>wc -l</code> counts all lines):</p>
 <p><strong><code>count the lifted variants (type in the terminal)</code></strong></p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb54-1"><a href="module-5.html#cb54-1" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-vc</span> <span class="st">&#39;^#&#39;</span> /scratch/<span class="va">$USER</span>/yeast_workshop/results/ERR8562432/variants/liftover/lifted.vcf</span>
-<span id="cb54-2"><a href="module-5.html#cb54-2" tabindex="-1"></a><span class="fu">wc</span> <span class="at">-l</span> /scratch/<span class="va">$USER</span>/yeast_workshop/results/ERR8562432/variants/liftover/lifted.vcf.unmap</span>
-<span id="cb54-3"><a href="module-5.html#cb54-3" tabindex="-1"></a><span class="fu">tail</span> <span class="at">-n</span> 5 /scratch/<span class="va">$USER</span>/yeast_workshop/logs/liftover_<span class="pp">*</span>.out</span>
-<span id="cb54-4"><a href="module-5.html#cb54-4" tabindex="-1"></a></span>
-<span id="cb54-5"><a href="module-5.html#cb54-5" tabindex="-1"></a><span class="co"># the first five lifted records: columns 1-6 (chromosome, position, ID, REF, ALT, QUAL)</span></span>
-<span id="cb54-6"><a href="module-5.html#cb54-6" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-v</span> <span class="st">&#39;^#&#39;</span> /scratch/<span class="va">$USER</span>/yeast_workshop/results/ERR8562432/variants/liftover/lifted.vcf <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 5 <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-f1-6</span></span></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb55-1"><a href="module-5.html#cb55-1" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-vc</span> <span class="st">&#39;^#&#39;</span> /scratch/<span class="va">$USER</span>/yeast_workshop/results/ERR8562432/variants/liftover/lifted.vcf</span>
+<span id="cb55-2"><a href="module-5.html#cb55-2" tabindex="-1"></a><span class="fu">wc</span> <span class="at">-l</span> /scratch/<span class="va">$USER</span>/yeast_workshop/results/ERR8562432/variants/liftover/lifted.vcf.unmap</span>
+<span id="cb55-3"><a href="module-5.html#cb55-3" tabindex="-1"></a><span class="fu">tail</span> <span class="at">-n</span> 5 /scratch/<span class="va">$USER</span>/yeast_workshop/logs/liftover_<span class="pp">*</span>.out</span>
+<span id="cb55-4"><a href="module-5.html#cb55-4" tabindex="-1"></a></span>
+<span id="cb55-5"><a href="module-5.html#cb55-5" tabindex="-1"></a><span class="co"># the first five lifted records: columns 1-6 (chromosome, position, ID, REF, ALT, QUAL)</span></span>
+<span id="cb55-6"><a href="module-5.html#cb55-6" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-v</span> <span class="st">&#39;^#&#39;</span> /scratch/<span class="va">$USER</span>/yeast_workshop/results/ERR8562432/variants/liftover/lifted.vcf <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 5 <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-f1-6</span></span></code></pre></div>
 <div class="callout-red">
 <span class="callout-icon"><i class="fas fa-triangle-exclamation" aria-hidden="true"></i></span>
 <div class="callout-content">
@@ -1366,7 +1366,7 @@ records it could not convert to a file with the ending
 </div>
 <p>Tell an instructor, then copy the finished liftover folder from the fallback location (the workshop’s shared project folder):</p>
 <p><strong><code>copy the fallback liftover results</code></strong></p>
-<div class="sourceCode" id="cb55"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb55-1"><a href="module-5.html#cb55-1" tabindex="-1"></a><span class="fu">cp</span> <span class="at">-r</span> /project/60004/shared/fallback/liftover /scratch/<span class="va">$USER</span>/yeast_workshop/results/ERR8562432/variants/</span></code></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb56-1"><a href="module-5.html#cb56-1" tabindex="-1"></a><span class="fu">cp</span> <span class="at">-r</span> /project/60004/shared/fallback/liftover /scratch/<span class="va">$USER</span>/yeast_workshop/results/ERR8562432/variants/</span></code></pre></div>
 </div>
 </div>
 <p><strong>Question 9:</strong> What percentage of the 135,199 variants was lifted? Is that a good result? Then look at the last command’s output: most records have nothing in the ALT column. Why? What would a lifted SNV that still has an ALT base mean?</p>
@@ -1464,20 +1464,20 @@ aligned blocks.</p></div></details>
 </div>
 </div>
 <p><strong><code>14a_download_gff3.sh</code></strong></p>
-<div class="sourceCode" id="cb56"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb56-1"><a href="module-5.html#cb56-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb56-2"><a href="module-5.html#cb56-2" tabindex="-1"></a><span class="co"># Downloads the Ensembl R64-1-1 (release 113) gene annotation. Run on the login node with: bash 14a_download_gff3.sh</span></span>
-<span id="cb56-3"><a href="module-5.html#cb56-3" tabindex="-1"></a><span class="bu">set</span> <span class="at">-e</span></span>
-<span id="cb56-4"><a href="module-5.html#cb56-4" tabindex="-1"></a><span class="va">WORK</span><span class="op">=</span>/scratch/<span class="va">$USER</span>/yeast_workshop</span>
-<span id="cb56-5"><a href="module-5.html#cb56-5" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> <span class="st">&quot;</span><span class="va">$WORK</span><span class="st">/data&quot;</span></span>
-<span id="cb56-6"><a href="module-5.html#cb56-6" tabindex="-1"></a></span>
-<span id="cb56-7"><a href="module-5.html#cb56-7" tabindex="-1"></a><span class="co"># wget: download a file; -nc: do not download it again if it is already there</span></span>
-<span id="cb56-8"><a href="module-5.html#cb56-8" tabindex="-1"></a><span class="fu">wget</span> <span class="at">-nc</span> <span class="at">-P</span> <span class="st">&quot;</span><span class="va">$WORK</span><span class="st">/data/&quot;</span> https://ftp.ensembl.org/pub/release-113/gff3/saccharomyces_cerevisiae/Saccharomyces_cerevisiae.R64-1-1.113.gff3.gz</span>
-<span id="cb56-9"><a href="module-5.html#cb56-9" tabindex="-1"></a></span>
-<span id="cb56-10"><a href="module-5.html#cb56-10" tabindex="-1"></a><span class="co"># gunzip -f: unpack it (-f lets you rerun the script)</span></span>
-<span id="cb56-11"><a href="module-5.html#cb56-11" tabindex="-1"></a><span class="fu">gunzip</span> <span class="at">-f</span> <span class="st">&quot;</span><span class="va">$WORK</span><span class="st">/data/Saccharomyces_cerevisiae.R64-1-1.113.gff3.gz&quot;</span></span>
-<span id="cb56-12"><a href="module-5.html#cb56-12" tabindex="-1"></a></span>
-<span id="cb56-13"><a href="module-5.html#cb56-13" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Downloaded:&quot;</span></span>
-<span id="cb56-14"><a href="module-5.html#cb56-14" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> <span class="st">&quot;</span><span class="va">$WORK</span><span class="st">/data/Saccharomyces_cerevisiae.R64-1-1.113.gff3&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb57-1"><a href="module-5.html#cb57-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb57-2"><a href="module-5.html#cb57-2" tabindex="-1"></a><span class="co"># Downloads the Ensembl R64-1-1 (release 113) gene annotation. Run on the login node with: bash 14a_download_gff3.sh</span></span>
+<span id="cb57-3"><a href="module-5.html#cb57-3" tabindex="-1"></a><span class="bu">set</span> <span class="at">-e</span></span>
+<span id="cb57-4"><a href="module-5.html#cb57-4" tabindex="-1"></a><span class="va">WORK</span><span class="op">=</span>/scratch/<span class="va">$USER</span>/yeast_workshop</span>
+<span id="cb57-5"><a href="module-5.html#cb57-5" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> <span class="st">&quot;</span><span class="va">$WORK</span><span class="st">/data&quot;</span></span>
+<span id="cb57-6"><a href="module-5.html#cb57-6" tabindex="-1"></a></span>
+<span id="cb57-7"><a href="module-5.html#cb57-7" tabindex="-1"></a><span class="co"># wget: download a file; -nc: do not download it again if it is already there</span></span>
+<span id="cb57-8"><a href="module-5.html#cb57-8" tabindex="-1"></a><span class="fu">wget</span> <span class="at">-nc</span> <span class="at">-P</span> <span class="st">&quot;</span><span class="va">$WORK</span><span class="st">/data/&quot;</span> https://ftp.ensembl.org/pub/release-113/gff3/saccharomyces_cerevisiae/Saccharomyces_cerevisiae.R64-1-1.113.gff3.gz</span>
+<span id="cb57-9"><a href="module-5.html#cb57-9" tabindex="-1"></a></span>
+<span id="cb57-10"><a href="module-5.html#cb57-10" tabindex="-1"></a><span class="co"># gunzip -f: unpack it (-f lets you rerun the script)</span></span>
+<span id="cb57-11"><a href="module-5.html#cb57-11" tabindex="-1"></a><span class="fu">gunzip</span> <span class="at">-f</span> <span class="st">&quot;</span><span class="va">$WORK</span><span class="st">/data/Saccharomyces_cerevisiae.R64-1-1.113.gff3.gz&quot;</span></span>
+<span id="cb57-12"><a href="module-5.html#cb57-12" tabindex="-1"></a></span>
+<span id="cb57-13"><a href="module-5.html#cb57-13" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Downloaded:&quot;</span></span>
+<span id="cb57-14"><a href="module-5.html#cb57-14" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> <span class="st">&quot;</span><span class="va">$WORK</span><span class="st">/data/Saccharomyces_cerevisiae.R64-1-1.113.gff3&quot;</span></span></code></pre></div>
 <details class="callout-dropdown callout-blue"><summary class="callout-dropdown-summary"><span class="callout-icon"><i class="fas fa-circle-info" aria-hidden="true"></i></span><span class="callout-dropdown-title">What each argument does</span> <span class="callout-dropdown-caret"><i class="fas fa-chevron-right" aria-hidden="true"></i></span></summary><div class="callout-dropdown-content"><p>Set-up lines (<code>set -e</code>, <code>WORK=</code>,
 <code>mkdir -p</code>): see Lab 3, script 04. This script has no
 <code>#SBATCH</code> lines because it runs on the login node, with
@@ -1518,8 +1518,8 @@ script 02).</td>
 </tbody>
 </table></div></details>
 <p><strong><code>run on the login node</code></strong></p>
-<div class="sourceCode" id="cb57"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb57-1"><a href="module-5.html#cb57-1" tabindex="-1"></a><span class="bu">cd</span> /scratch/<span class="va">$USER</span>/yeast_workshop/scripts</span>
-<span id="cb57-2"><a href="module-5.html#cb57-2" tabindex="-1"></a><span class="fu">bash</span> 14a_download_gff3.sh</span></code></pre></div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb58-1"><a href="module-5.html#cb58-1" tabindex="-1"></a><span class="bu">cd</span> /scratch/<span class="va">$USER</span>/yeast_workshop/scripts</span>
+<span id="cb58-2"><a href="module-5.html#cb58-2" tabindex="-1"></a><span class="fu">bash</span> 14a_download_gff3.sh</span></code></pre></div>
 </div>
 <div id="step-2-cut-out-the-region-and-the-files-for-your-laptop" class="section level4 hasAnchor">
 <h4>Step 2: Cut out the region and the files for your laptop<a href="module-5.html#step-2-cut-out-the-region-and-the-files-for-your-laptop" class="anchor-section" aria-label="Anchor link to header"></a></h4>
@@ -1531,55 +1531,55 @@ script 02).</td>
 </ul>
 <p>The lifted region is <code>contig_10:840,000-920,000</code> of the supplied assembly, where both genes are lifted to (Part 5, Step 5). The script also makes the <code>.fai</code> index of the reference FASTA that IGV needs (if you did the bonus of Lab 4, this just refreshes the file).</p>
 <p><strong><code>14b_prepare_igv.sh</code></strong></p>
-<div class="sourceCode" id="cb58"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb58-1"><a href="module-5.html#cb58-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb58-2"><a href="module-5.html#cb58-2" tabindex="-1"></a><span class="co">#SBATCH --job-name=prepare_igv</span></span>
-<span id="cb58-3"><a href="module-5.html#cb58-3" tabindex="-1"></a><span class="co">#SBATCH --account=def-sponsor00</span></span>
-<span id="cb58-4"><a href="module-5.html#cb58-4" tabindex="-1"></a><span class="co">#SBATCH --cpus-per-task=2</span></span>
-<span id="cb58-5"><a href="module-5.html#cb58-5" tabindex="-1"></a><span class="co">#SBATCH --mem=4000M</span></span>
-<span id="cb58-6"><a href="module-5.html#cb58-6" tabindex="-1"></a><span class="co">#SBATCH --time=0:10:00</span></span>
-<span id="cb58-7"><a href="module-5.html#cb58-7" tabindex="-1"></a><span class="co">#SBATCH --output=/scratch/%u/yeast_workshop/logs/%x_%j.out</span></span>
-<span id="cb58-8"><a href="module-5.html#cb58-8" tabindex="-1"></a><span class="co">#SBATCH --error=/scratch/%u/yeast_workshop/logs/%x_%j.err</span></span>
-<span id="cb58-9"><a href="module-5.html#cb58-9" tabindex="-1"></a><span class="bu">set</span> <span class="at">-e</span></span>
-<span id="cb58-10"><a href="module-5.html#cb58-10" tabindex="-1"></a><span class="va">WORK</span><span class="op">=</span>/scratch/<span class="va">$USER</span>/yeast_workshop</span>
-<span id="cb58-11"><a href="module-5.html#cb58-11" tabindex="-1"></a><span class="bu">cd</span> <span class="st">&quot;</span><span class="va">$WORK</span><span class="st">&quot;</span></span>
-<span id="cb58-12"><a href="module-5.html#cb58-12" tabindex="-1"></a></span>
-<span id="cb58-13"><a href="module-5.html#cb58-13" tabindex="-1"></a><span class="co"># samtools is a cluster module</span></span>
-<span id="cb58-14"><a href="module-5.html#cb58-14" tabindex="-1"></a><span class="ex">module</span> purge</span>
-<span id="cb58-15"><a href="module-5.html#cb58-15" tabindex="-1"></a><span class="ex">module</span> load StdEnv/2023 gcc/12.3 samtools/1.22.1</span>
-<span id="cb58-16"><a href="module-5.html#cb58-16" tabindex="-1"></a></span>
-<span id="cb58-17"><a href="module-5.html#cb58-17" tabindex="-1"></a><span class="va">VARDIR</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$WORK</span><span class="st">/results/ERR8562432/variants&quot;</span></span>
-<span id="cb58-18"><a href="module-5.html#cb58-18" tabindex="-1"></a><span class="va">OUT</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$WORK</span><span class="st">/results/ERR8562432/igv&quot;</span></span>
-<span id="cb58-19"><a href="module-5.html#cb58-19" tabindex="-1"></a><span class="va">REF</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$WORK</span><span class="st">/data/Saccharomyces_cerevisiae.R64-1-1.dna.toplevel.fa&quot;</span></span>
-<span id="cb58-20"><a href="module-5.html#cb58-20" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> <span class="st">&quot;</span><span class="va">$OUT</span><span class="st">&quot;</span></span>
-<span id="cb58-21"><a href="module-5.html#cb58-21" tabindex="-1"></a></span>
-<span id="cb58-22"><a href="module-5.html#cb58-22" tabindex="-1"></a><span class="co"># 1. samtools index: the index lets us pull out one region (written next to the BAM)</span></span>
-<span id="cb58-23"><a href="module-5.html#cb58-23" tabindex="-1"></a><span class="ex">samtools</span> index <span class="st">&quot;</span><span class="va">$VARDIR</span><span class="st">/calls_to_ref.bam&quot;</span></span>
-<span id="cb58-24"><a href="module-5.html#cb58-24" tabindex="-1"></a></span>
-<span id="cb58-25"><a href="module-5.html#cb58-25" tabindex="-1"></a><span class="co"># 2. samtools view -b : write the reads of one region into a new BAM file</span></span>
-<span id="cb58-26"><a href="module-5.html#cb58-26" tabindex="-1"></a><span class="co">#    region XV:150000-230000 holds both GPD2 and ADH1</span></span>
-<span id="cb58-27"><a href="module-5.html#cb58-27" tabindex="-1"></a><span class="ex">samtools</span> view <span class="at">-b</span> <span class="at">-o</span> <span class="st">&quot;</span><span class="va">$OUT</span><span class="st">/XV_150000_230000.bam&quot;</span> <span class="st">&quot;</span><span class="va">$VARDIR</span><span class="st">/calls_to_ref.bam&quot;</span> XV:150000-230000</span>
-<span id="cb58-28"><a href="module-5.html#cb58-28" tabindex="-1"></a><span class="ex">samtools</span> index <span class="st">&quot;</span><span class="va">$OUT</span><span class="st">/XV_150000_230000.bam&quot;</span></span>
-<span id="cb58-29"><a href="module-5.html#cb58-29" tabindex="-1"></a></span>
-<span id="cb58-30"><a href="module-5.html#cb58-30" tabindex="-1"></a><span class="co"># 3. awk: keep the header lines (starting with #) and the variants of one region</span></span>
-<span id="cb58-31"><a href="module-5.html#cb58-31" tabindex="-1"></a><span class="co">#    $1 is the chromosome column, $2 the position column</span></span>
-<span id="cb58-32"><a href="module-5.html#cb58-32" tabindex="-1"></a><span class="fu">awk</span> <span class="st">&#39;/^#/ || ($1==&quot;XV&quot; &amp;&amp; $2&gt;=150000 &amp;&amp; $2&lt;=230000)&#39;</span> <span class="dt">\</span></span>
-<span id="cb58-33"><a href="module-5.html#cb58-33" tabindex="-1"></a>  <span class="st">&quot;</span><span class="va">$VARDIR</span><span class="st">/annotated.vcf&quot;</span> <span class="op">&gt;</span> <span class="st">&quot;</span><span class="va">$OUT</span><span class="st">/annotated_XV_150000_230000.vcf&quot;</span></span>
-<span id="cb58-34"><a href="module-5.html#cb58-34" tabindex="-1"></a><span class="co"># 3b. awk: the lifted variants of the contig_10 region, made readable for IGV</span></span>
-<span id="cb58-35"><a href="module-5.html#cb58-35" tabindex="-1"></a><span class="co">#     CrossMap leaves ALT empty where the assembly already has the sample&#39;s base;</span></span>
-<span id="cb58-36"><a href="module-5.html#cb58-36" tabindex="-1"></a><span class="co">#     we write &quot;.&quot; there (no alternate base) and keep the first 8 columns only</span></span>
-<span id="cb58-37"><a href="module-5.html#cb58-37" tabindex="-1"></a><span class="fu">awk</span> <span class="st">&#39;BEGIN{FS=OFS=&quot;\t&quot;} /^##/{print; next} /^#CHROM/{print $1,$2,$3,$4,$5,$6,$7,$8; next}</span></span>
-<span id="cb58-38"><a href="module-5.html#cb58-38" tabindex="-1"></a><span class="st">     $1==&quot;contig_10&quot; &amp;&amp; $2&gt;=840000 &amp;&amp; $2&lt;=920000 {if ($5==&quot;&quot;) $5=&quot;.&quot;; print $1,$2,$3,$4,$5,$6,$7,$8}&#39;</span> <span class="dt">\</span></span>
-<span id="cb58-39"><a href="module-5.html#cb58-39" tabindex="-1"></a>  <span class="st">&quot;</span><span class="va">$VARDIR</span><span class="st">/liftover/lifted.vcf&quot;</span> <span class="op">&gt;</span> <span class="st">&quot;</span><span class="va">$OUT</span><span class="st">/lifted_tmp.vcf&quot;</span></span>
-<span id="cb58-40"><a href="module-5.html#cb58-40" tabindex="-1"></a><span class="co"># sort: put the records in position order (the contig is reversed relative to chromosome XV)</span></span>
-<span id="cb58-41"><a href="module-5.html#cb58-41" tabindex="-1"></a><span class="fu">grep</span> <span class="st">&#39;^#&#39;</span> <span class="st">&quot;</span><span class="va">$OUT</span><span class="st">/lifted_tmp.vcf&quot;</span> <span class="op">&gt;</span> <span class="st">&quot;</span><span class="va">$OUT</span><span class="st">/lifted_contig_10_region.vcf&quot;</span></span>
-<span id="cb58-42"><a href="module-5.html#cb58-42" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-v</span> <span class="st">&#39;^#&#39;</span> <span class="st">&quot;</span><span class="va">$OUT</span><span class="st">/lifted_tmp.vcf&quot;</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-k2,2n</span> <span class="op">&gt;&gt;</span> <span class="st">&quot;</span><span class="va">$OUT</span><span class="st">/lifted_contig_10_region.vcf&quot;</span></span>
-<span id="cb58-43"><a href="module-5.html#cb58-43" tabindex="-1"></a><span class="fu">rm</span> <span class="st">&quot;</span><span class="va">$OUT</span><span class="st">/lifted_tmp.vcf&quot;</span></span>
-<span id="cb58-44"><a href="module-5.html#cb58-44" tabindex="-1"></a></span>
-<span id="cb58-45"><a href="module-5.html#cb58-45" tabindex="-1"></a><span class="co"># 4. samtools faidx : the index of the reference FASTA, which IGV needs</span></span>
-<span id="cb58-46"><a href="module-5.html#cb58-46" tabindex="-1"></a><span class="ex">samtools</span> faidx <span class="st">&quot;</span><span class="va">$REF</span><span class="st">&quot;</span></span>
-<span id="cb58-47"><a href="module-5.html#cb58-47" tabindex="-1"></a></span>
-<span id="cb58-48"><a href="module-5.html#cb58-48" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;IGV files ready. Main outputs:&quot;</span></span>
-<span id="cb58-49"><a href="module-5.html#cb58-49" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> <span class="st">&quot;</span><span class="va">$OUT</span><span class="st">&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb59"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb59-1"><a href="module-5.html#cb59-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb59-2"><a href="module-5.html#cb59-2" tabindex="-1"></a><span class="co">#SBATCH --job-name=prepare_igv</span></span>
+<span id="cb59-3"><a href="module-5.html#cb59-3" tabindex="-1"></a><span class="co">#SBATCH --account=def-sponsor00</span></span>
+<span id="cb59-4"><a href="module-5.html#cb59-4" tabindex="-1"></a><span class="co">#SBATCH --cpus-per-task=2</span></span>
+<span id="cb59-5"><a href="module-5.html#cb59-5" tabindex="-1"></a><span class="co">#SBATCH --mem=4000M</span></span>
+<span id="cb59-6"><a href="module-5.html#cb59-6" tabindex="-1"></a><span class="co">#SBATCH --time=0:10:00</span></span>
+<span id="cb59-7"><a href="module-5.html#cb59-7" tabindex="-1"></a><span class="co">#SBATCH --output=/scratch/%u/yeast_workshop/logs/%x_%j.out</span></span>
+<span id="cb59-8"><a href="module-5.html#cb59-8" tabindex="-1"></a><span class="co">#SBATCH --error=/scratch/%u/yeast_workshop/logs/%x_%j.err</span></span>
+<span id="cb59-9"><a href="module-5.html#cb59-9" tabindex="-1"></a><span class="bu">set</span> <span class="at">-e</span></span>
+<span id="cb59-10"><a href="module-5.html#cb59-10" tabindex="-1"></a><span class="va">WORK</span><span class="op">=</span>/scratch/<span class="va">$USER</span>/yeast_workshop</span>
+<span id="cb59-11"><a href="module-5.html#cb59-11" tabindex="-1"></a><span class="bu">cd</span> <span class="st">&quot;</span><span class="va">$WORK</span><span class="st">&quot;</span></span>
+<span id="cb59-12"><a href="module-5.html#cb59-12" tabindex="-1"></a></span>
+<span id="cb59-13"><a href="module-5.html#cb59-13" tabindex="-1"></a><span class="co"># samtools is a cluster module</span></span>
+<span id="cb59-14"><a href="module-5.html#cb59-14" tabindex="-1"></a><span class="ex">module</span> purge</span>
+<span id="cb59-15"><a href="module-5.html#cb59-15" tabindex="-1"></a><span class="ex">module</span> load StdEnv/2023 gcc/12.3 samtools/1.22.1</span>
+<span id="cb59-16"><a href="module-5.html#cb59-16" tabindex="-1"></a></span>
+<span id="cb59-17"><a href="module-5.html#cb59-17" tabindex="-1"></a><span class="va">VARDIR</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$WORK</span><span class="st">/results/ERR8562432/variants&quot;</span></span>
+<span id="cb59-18"><a href="module-5.html#cb59-18" tabindex="-1"></a><span class="va">OUT</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$WORK</span><span class="st">/results/ERR8562432/igv&quot;</span></span>
+<span id="cb59-19"><a href="module-5.html#cb59-19" tabindex="-1"></a><span class="va">REF</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$WORK</span><span class="st">/data/Saccharomyces_cerevisiae.R64-1-1.dna.toplevel.fa&quot;</span></span>
+<span id="cb59-20"><a href="module-5.html#cb59-20" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> <span class="st">&quot;</span><span class="va">$OUT</span><span class="st">&quot;</span></span>
+<span id="cb59-21"><a href="module-5.html#cb59-21" tabindex="-1"></a></span>
+<span id="cb59-22"><a href="module-5.html#cb59-22" tabindex="-1"></a><span class="co"># 1. samtools index: the index lets us pull out one region (written next to the BAM)</span></span>
+<span id="cb59-23"><a href="module-5.html#cb59-23" tabindex="-1"></a><span class="ex">samtools</span> index <span class="st">&quot;</span><span class="va">$VARDIR</span><span class="st">/calls_to_ref.bam&quot;</span></span>
+<span id="cb59-24"><a href="module-5.html#cb59-24" tabindex="-1"></a></span>
+<span id="cb59-25"><a href="module-5.html#cb59-25" tabindex="-1"></a><span class="co"># 2. samtools view -b : write the reads of one region into a new BAM file</span></span>
+<span id="cb59-26"><a href="module-5.html#cb59-26" tabindex="-1"></a><span class="co">#    region XV:150000-230000 holds both GPD2 and ADH1</span></span>
+<span id="cb59-27"><a href="module-5.html#cb59-27" tabindex="-1"></a><span class="ex">samtools</span> view <span class="at">-b</span> <span class="at">-o</span> <span class="st">&quot;</span><span class="va">$OUT</span><span class="st">/XV_150000_230000.bam&quot;</span> <span class="st">&quot;</span><span class="va">$VARDIR</span><span class="st">/calls_to_ref.bam&quot;</span> XV:150000-230000</span>
+<span id="cb59-28"><a href="module-5.html#cb59-28" tabindex="-1"></a><span class="ex">samtools</span> index <span class="st">&quot;</span><span class="va">$OUT</span><span class="st">/XV_150000_230000.bam&quot;</span></span>
+<span id="cb59-29"><a href="module-5.html#cb59-29" tabindex="-1"></a></span>
+<span id="cb59-30"><a href="module-5.html#cb59-30" tabindex="-1"></a><span class="co"># 3. awk: keep the header lines (starting with #) and the variants of one region</span></span>
+<span id="cb59-31"><a href="module-5.html#cb59-31" tabindex="-1"></a><span class="co">#    $1 is the chromosome column, $2 the position column</span></span>
+<span id="cb59-32"><a href="module-5.html#cb59-32" tabindex="-1"></a><span class="fu">awk</span> <span class="st">&#39;/^#/ || ($1==&quot;XV&quot; &amp;&amp; $2&gt;=150000 &amp;&amp; $2&lt;=230000)&#39;</span> <span class="dt">\</span></span>
+<span id="cb59-33"><a href="module-5.html#cb59-33" tabindex="-1"></a>  <span class="st">&quot;</span><span class="va">$VARDIR</span><span class="st">/annotated.vcf&quot;</span> <span class="op">&gt;</span> <span class="st">&quot;</span><span class="va">$OUT</span><span class="st">/annotated_XV_150000_230000.vcf&quot;</span></span>
+<span id="cb59-34"><a href="module-5.html#cb59-34" tabindex="-1"></a><span class="co"># 3b. awk: the lifted variants of the contig_10 region, made readable for IGV</span></span>
+<span id="cb59-35"><a href="module-5.html#cb59-35" tabindex="-1"></a><span class="co">#     CrossMap leaves ALT empty where the assembly already has the sample&#39;s base;</span></span>
+<span id="cb59-36"><a href="module-5.html#cb59-36" tabindex="-1"></a><span class="co">#     we write &quot;.&quot; there (no alternate base) and keep the first 8 columns only</span></span>
+<span id="cb59-37"><a href="module-5.html#cb59-37" tabindex="-1"></a><span class="fu">awk</span> <span class="st">&#39;BEGIN{FS=OFS=&quot;\t&quot;} /^##/{print; next} /^#CHROM/{print $1,$2,$3,$4,$5,$6,$7,$8; next}</span></span>
+<span id="cb59-38"><a href="module-5.html#cb59-38" tabindex="-1"></a><span class="st">     $1==&quot;contig_10&quot; &amp;&amp; $2&gt;=840000 &amp;&amp; $2&lt;=920000 {if ($5==&quot;&quot;) $5=&quot;.&quot;; print $1,$2,$3,$4,$5,$6,$7,$8}&#39;</span> <span class="dt">\</span></span>
+<span id="cb59-39"><a href="module-5.html#cb59-39" tabindex="-1"></a>  <span class="st">&quot;</span><span class="va">$VARDIR</span><span class="st">/liftover/lifted.vcf&quot;</span> <span class="op">&gt;</span> <span class="st">&quot;</span><span class="va">$OUT</span><span class="st">/lifted_tmp.vcf&quot;</span></span>
+<span id="cb59-40"><a href="module-5.html#cb59-40" tabindex="-1"></a><span class="co"># sort: put the records in position order (the contig is reversed relative to chromosome XV)</span></span>
+<span id="cb59-41"><a href="module-5.html#cb59-41" tabindex="-1"></a><span class="fu">grep</span> <span class="st">&#39;^#&#39;</span> <span class="st">&quot;</span><span class="va">$OUT</span><span class="st">/lifted_tmp.vcf&quot;</span> <span class="op">&gt;</span> <span class="st">&quot;</span><span class="va">$OUT</span><span class="st">/lifted_contig_10_region.vcf&quot;</span></span>
+<span id="cb59-42"><a href="module-5.html#cb59-42" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-v</span> <span class="st">&#39;^#&#39;</span> <span class="st">&quot;</span><span class="va">$OUT</span><span class="st">/lifted_tmp.vcf&quot;</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-k2,2n</span> <span class="op">&gt;&gt;</span> <span class="st">&quot;</span><span class="va">$OUT</span><span class="st">/lifted_contig_10_region.vcf&quot;</span></span>
+<span id="cb59-43"><a href="module-5.html#cb59-43" tabindex="-1"></a><span class="fu">rm</span> <span class="st">&quot;</span><span class="va">$OUT</span><span class="st">/lifted_tmp.vcf&quot;</span></span>
+<span id="cb59-44"><a href="module-5.html#cb59-44" tabindex="-1"></a></span>
+<span id="cb59-45"><a href="module-5.html#cb59-45" tabindex="-1"></a><span class="co"># 4. samtools faidx : the index of the reference FASTA, which IGV needs</span></span>
+<span id="cb59-46"><a href="module-5.html#cb59-46" tabindex="-1"></a><span class="ex">samtools</span> faidx <span class="st">&quot;</span><span class="va">$REF</span><span class="st">&quot;</span></span>
+<span id="cb59-47"><a href="module-5.html#cb59-47" tabindex="-1"></a></span>
+<span id="cb59-48"><a href="module-5.html#cb59-48" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;IGV files ready. Main outputs:&quot;</span></span>
+<span id="cb59-49"><a href="module-5.html#cb59-49" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> <span class="st">&quot;</span><span class="va">$OUT</span><span class="st">&quot;</span></span></code></pre></div>
 <details class="callout-dropdown callout-blue"><summary class="callout-dropdown-summary"><span class="callout-icon"><i class="fas fa-circle-info" aria-hidden="true"></i></span><span class="callout-dropdown-title">What each argument does</span> <span class="callout-dropdown-caret"><i class="fas fa-chevron-right" aria-hidden="true"></i></span></summary><div class="callout-dropdown-content"><p><code>#SBATCH</code> lines and set-up: see Lab 3, script 04. Only new
 arguments are listed here.</p>
 <table>
@@ -1691,9 +1691,9 @@ text).</td>
 </tbody>
 </table></div></details>
 <p><strong><code>submit and check (type in the terminal)</code></strong></p>
-<div class="sourceCode" id="cb59"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb59-1"><a href="module-5.html#cb59-1" tabindex="-1"></a><span class="bu">cd</span> /scratch/<span class="va">$USER</span>/yeast_workshop/scripts</span>
-<span id="cb59-2"><a href="module-5.html#cb59-2" tabindex="-1"></a><span class="ex">sbatch</span> 14b_prepare_igv.sh</span>
-<span id="cb59-3"><a href="module-5.html#cb59-3" tabindex="-1"></a><span class="ex">squeue</span> <span class="at">-u</span> <span class="va">$USER</span></span></code></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb60-1"><a href="module-5.html#cb60-1" tabindex="-1"></a><span class="bu">cd</span> /scratch/<span class="va">$USER</span>/yeast_workshop/scripts</span>
+<span id="cb60-2"><a href="module-5.html#cb60-2" tabindex="-1"></a><span class="ex">sbatch</span> 14b_prepare_igv.sh</span>
+<span id="cb60-3"><a href="module-5.html#cb60-3" tabindex="-1"></a><span class="ex">squeue</span> <span class="at">-u</span> <span class="va">$USER</span></span></code></pre></div>
 <div class="callout-red">
 <span class="callout-icon"><i class="fas fa-triangle-exclamation" aria-hidden="true"></i></span>
 <div class="callout-content">
@@ -1702,22 +1702,26 @@ text).</td>
 </div>
 <p>Tell an instructor, then copy the finished files from the fallback location (the workshop’s shared project folder):</p>
 <p><strong><code>copy the fallback IGV files</code></strong></p>
-<div class="sourceCode" id="cb60"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb60-1"><a href="module-5.html#cb60-1" tabindex="-1"></a><span class="fu">cp</span> <span class="at">-r</span> /project/60004/shared/fallback/igv /scratch/<span class="va">$USER</span>/yeast_workshop/results/ERR8562432/</span></code></pre></div>
+<div class="sourceCode" id="cb61"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb61-1"><a href="module-5.html#cb61-1" tabindex="-1"></a><span class="fu">cp</span> <span class="at">-r</span> /project/60004/shared/fallback/igv /scratch/<span class="va">$USER</span>/yeast_workshop/results/ERR8562432/</span></code></pre></div>
 </div>
 </div>
 </div>
 <div id="step-3-copy-the-files-to-your-laptop" class="section level4 hasAnchor">
 <h4>Step 3: Copy the files to your laptop<a href="module-5.html#step-3-copy-the-files-to-your-laptop" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>From a <strong>laptop</strong> terminal, copy the region files, the reference and its index, the Ensembl GFF3, the supplied assembly and the supplied annotation into one folder (IGV finds an index only if it sits next to the file; <code>YOUR_USER</code> is the same placeholder as before and the host is <code>cbw.c3.ca</code>).</p>
+<p>First gather the files into one folder on the cluster, then copy that folder to your laptop in one go, so you type your password once. The folder holds the region files, the reference and its index, the Ensembl GFF3, the supplied assembly and the supplied annotation (IGV finds an index only if it sits next to the file).</p>
+<p>On the <strong>cluster</strong> (login node):</p>
+<p><strong><code>gather the IGV files (type in the cluster terminal)</code></strong></p>
+<div class="sourceCode" id="cb62"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb62-1"><a href="module-5.html#cb62-1" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> /scratch/<span class="va">$USER</span>/yeast_workshop/igv_lab5</span>
+<span id="cb62-2"><a href="module-5.html#cb62-2" tabindex="-1"></a><span class="fu">cp</span> <span class="at">-r</span> /scratch/<span class="va">$USER</span>/yeast_workshop/results/ERR8562432/igv/<span class="pp">*</span> /scratch/<span class="va">$USER</span>/yeast_workshop/igv_lab5/</span>
+<span id="cb62-3"><a href="module-5.html#cb62-3" tabindex="-1"></a><span class="fu">cp</span> /scratch/<span class="va">$USER</span>/yeast_workshop/data/Saccharomyces_cerevisiae.R64-1-1.dna.toplevel.fa<span class="pp">*</span> /scratch/<span class="va">$USER</span>/yeast_workshop/igv_lab5/</span>
+<span id="cb62-4"><a href="module-5.html#cb62-4" tabindex="-1"></a><span class="fu">cp</span> /scratch/<span class="va">$USER</span>/yeast_workshop/data/Saccharomyces_cerevisiae.R64-1-1.113.gff3 /scratch/<span class="va">$USER</span>/yeast_workshop/igv_lab5/</span>
+<span id="cb62-5"><a href="module-5.html#cb62-5" tabindex="-1"></a><span class="fu">cp</span> /project/60004/shared/supplied/polished/ERR8562432_consensus.fasta /scratch/<span class="va">$USER</span>/yeast_workshop/igv_lab5/</span>
+<span id="cb62-6"><a href="module-5.html#cb62-6" tabindex="-1"></a><span class="fu">cp</span> /project/60004/shared/supplied/annotations/ERR8562432_funannotate.gff3 /scratch/<span class="va">$USER</span>/yeast_workshop/igv_lab5/</span>
+<span id="cb62-7"><a href="module-5.html#cb62-7" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> /scratch/<span class="va">$USER</span>/yeast_workshop/igv_lab5</span></code></pre></div>
+<p>Then, from a <strong>laptop</strong> terminal (<code>YOUR_USER</code> is the same placeholder as before and the host is <code>cbw.c3.ca</code>):</p>
 <p><strong><code>scp_example (run on your laptop)</code></strong></p>
-<div class="sourceCode" id="cb61"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb61-1"><a href="module-5.html#cb61-1" tabindex="-1"></a><span class="fu">mkdir</span> igv_lab5</span>
-<span id="cb61-2"><a href="module-5.html#cb61-2" tabindex="-1"></a><span class="bu">cd</span> igv_lab5</span>
-<span id="cb61-3"><a href="module-5.html#cb61-3" tabindex="-1"></a><span class="co"># the quotes stop your laptop (zsh on a Mac) from trying to expand the *</span></span>
-<span id="cb61-4"><a href="module-5.html#cb61-4" tabindex="-1"></a><span class="fu">scp</span> <span class="st">&#39;YOUR_USER@cbw.c3.ca:/scratch/YOUR_USER/yeast_workshop/results/ERR8562432/igv/*&#39;</span> .</span>
-<span id="cb61-5"><a href="module-5.html#cb61-5" tabindex="-1"></a><span class="fu">scp</span> <span class="st">&#39;YOUR_USER@cbw.c3.ca:/scratch/YOUR_USER/yeast_workshop/data/Saccharomyces_cerevisiae.R64-1-1.dna.toplevel.fa*&#39;</span> .</span>
-<span id="cb61-6"><a href="module-5.html#cb61-6" tabindex="-1"></a><span class="fu">scp</span> <span class="st">&#39;YOUR_USER@cbw.c3.ca:/scratch/YOUR_USER/yeast_workshop/data/Saccharomyces_cerevisiae.R64-1-1.113.gff3&#39;</span> .</span>
-<span id="cb61-7"><a href="module-5.html#cb61-7" tabindex="-1"></a><span class="fu">scp</span> <span class="st">&#39;YOUR_USER@cbw.c3.ca:/project/60004/shared/supplied/polished/ERR8562432_consensus.fasta&#39;</span> .</span>
-<span id="cb61-8"><a href="module-5.html#cb61-8" tabindex="-1"></a><span class="fu">scp</span> <span class="st">&#39;YOUR_USER@cbw.c3.ca:/project/60004/shared/supplied/annotations/ERR8562432_funannotate.gff3&#39;</span> .</span></code></pre></div>
+<div class="sourceCode" id="cb63"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb63-1"><a href="module-5.html#cb63-1" tabindex="-1"></a><span class="co"># -r copies a whole folder, so you type your password once</span></span>
+<span id="cb63-2"><a href="module-5.html#cb63-2" tabindex="-1"></a><span class="fu">scp</span> <span class="at">-r</span> YOUR_USER@cbw.c3.ca:/scratch/YOUR_USER/yeast_workshop/igv_lab5 .</span></code></pre></div>
 </div>
 <div id="step-4-the-reference-view-gpd2-and-adh1" class="section level4 hasAnchor">
 <h4>Step 4: The reference view, GPD2 and ADH1<a href="module-5.html#step-4-the-reference-view-gpd2-and-adh1" class="anchor-section" aria-label="Anchor link to header"></a></h4>

@@ -790,19 +790,29 @@ cp -r /project/60004/shared/fallback/igv /scratch/$USER/yeast_workshop/results/E
 
 #### Step 3: Copy the files to your laptop
 
-From a **laptop** terminal, copy the region files, the reference and its index, the Ensembl GFF3, the supplied assembly and the supplied annotation into one folder (IGV finds an index only if it sits next to the file; `YOUR_USER` is the same placeholder as before and the host is `cbw.c3.ca`).
+First gather the files into one folder on the cluster, then copy that folder to your laptop in one go, so you type your password once. The folder holds the region files, the reference and its index, the Ensembl GFF3, the supplied assembly and the supplied annotation (IGV finds an index only if it sits next to the file).
+
+On the **cluster** (login node):
+
+**`gather the IGV files (type in the cluster terminal)`**
+
+```bash
+mkdir -p /scratch/$USER/yeast_workshop/igv_lab5
+cp -r /scratch/$USER/yeast_workshop/results/ERR8562432/igv/* /scratch/$USER/yeast_workshop/igv_lab5/
+cp /scratch/$USER/yeast_workshop/data/Saccharomyces_cerevisiae.R64-1-1.dna.toplevel.fa* /scratch/$USER/yeast_workshop/igv_lab5/
+cp /scratch/$USER/yeast_workshop/data/Saccharomyces_cerevisiae.R64-1-1.113.gff3 /scratch/$USER/yeast_workshop/igv_lab5/
+cp /project/60004/shared/supplied/polished/ERR8562432_consensus.fasta /scratch/$USER/yeast_workshop/igv_lab5/
+cp /project/60004/shared/supplied/annotations/ERR8562432_funannotate.gff3 /scratch/$USER/yeast_workshop/igv_lab5/
+ls -lh /scratch/$USER/yeast_workshop/igv_lab5
+```
+
+Then, from a **laptop** terminal (`YOUR_USER` is the same placeholder as before and the host is `cbw.c3.ca`):
 
 **`scp_example (run on your laptop)`**
 
 ```bash
-mkdir igv_lab5
-cd igv_lab5
-# the quotes stop your laptop (zsh on a Mac) from trying to expand the *
-scp 'YOUR_USER@cbw.c3.ca:/scratch/YOUR_USER/yeast_workshop/results/ERR8562432/igv/*' .
-scp 'YOUR_USER@cbw.c3.ca:/scratch/YOUR_USER/yeast_workshop/data/Saccharomyces_cerevisiae.R64-1-1.dna.toplevel.fa*' .
-scp 'YOUR_USER@cbw.c3.ca:/scratch/YOUR_USER/yeast_workshop/data/Saccharomyces_cerevisiae.R64-1-1.113.gff3' .
-scp 'YOUR_USER@cbw.c3.ca:/project/60004/shared/supplied/polished/ERR8562432_consensus.fasta' .
-scp 'YOUR_USER@cbw.c3.ca:/project/60004/shared/supplied/annotations/ERR8562432_funannotate.gff3' .
+# -r copies a whole folder, so you type your password once
+scp -r YOUR_USER@cbw.c3.ca:/scratch/YOUR_USER/yeast_workshop/igv_lab5 .
 ```
 
 #### Step 4: The reference view, GPD2 and ADH1

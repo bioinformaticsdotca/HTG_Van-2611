@@ -537,20 +537,30 @@ squeue -u $USER
 
 #### Step 2: Copy the files to your laptop
 
-From a **laptop** terminal, copy the assembly BAM and its index, the deletions VCF, the reference and its index, the Ensembl GFF3 and (optional) the reads region into one folder (the host is `cbw.c3.ca`; `YOUR_USER` is the same placeholder as before).
+First gather the files into one folder on the cluster, then copy that folder to your laptop in one go, so you type your password once. The folder holds the assembly BAM and its index, the deletions VCF, the reference and its index, the Ensembl GFF3 and (optional) the reads region (IGV finds an index only if it sits next to the file).
+
+On the **cluster** (login node):
+
+**`gather the IGV files (type in the cluster terminal)`**
+
+```bash
+mkdir -p /scratch/$USER/yeast_workshop/igv_lab6
+cp /scratch/$USER/yeast_workshop/results/ERR8562432/asm_vs_ref/asm_vs_ref.sorted.bam* /scratch/$USER/yeast_workshop/igv_lab6/
+cp /scratch/$USER/yeast_workshop/results/ERR8562432/sv/deletions.vcf /scratch/$USER/yeast_workshop/igv_lab6/
+cp /scratch/$USER/yeast_workshop/data/Saccharomyces_cerevisiae.R64-1-1.dna.toplevel.fa* /scratch/$USER/yeast_workshop/igv_lab6/
+cp /scratch/$USER/yeast_workshop/data/Saccharomyces_cerevisiae.R64-1-1.113.gff3 /scratch/$USER/yeast_workshop/igv_lab6/
+# optional (needs script 17; if you skipped it, this line prints "No such file or directory", which you can ignore):
+cp /scratch/$USER/yeast_workshop/results/ERR8562432/igv_sv/VIII_205000_225000.bam* /scratch/$USER/yeast_workshop/igv_lab6/
+ls -lh /scratch/$USER/yeast_workshop/igv_lab6
+```
+
+Then, from a **laptop** terminal (the host is `cbw.c3.ca`; `YOUR_USER` is the same placeholder as before):
 
 **`scp_example (run on your laptop)`**
 
 ```bash
-mkdir -p igv_lab6
-cd igv_lab6
-# the quotes stop your laptop (zsh on a Mac) from trying to expand the *
-scp 'YOUR_USER@cbw.c3.ca:/scratch/YOUR_USER/yeast_workshop/results/ERR8562432/asm_vs_ref/asm_vs_ref.sorted.bam*' .
-scp 'YOUR_USER@cbw.c3.ca:/scratch/YOUR_USER/yeast_workshop/results/ERR8562432/sv/deletions.vcf' .
-scp 'YOUR_USER@cbw.c3.ca:/scratch/YOUR_USER/yeast_workshop/data/Saccharomyces_cerevisiae.R64-1-1.dna.toplevel.fa*' .
-scp 'YOUR_USER@cbw.c3.ca:/scratch/YOUR_USER/yeast_workshop/data/Saccharomyces_cerevisiae.R64-1-1.113.gff3' .
-# optional (needs script 17):
-scp 'YOUR_USER@cbw.c3.ca:/scratch/YOUR_USER/yeast_workshop/results/ERR8562432/igv_sv/VIII_205000_225000.bam*' .
+# -r copies a whole folder, so you type your password once
+scp -r YOUR_USER@cbw.c3.ca:/scratch/YOUR_USER/yeast_workshop/igv_lab6 .
 ```
 
 #### Step 3: The assembly view

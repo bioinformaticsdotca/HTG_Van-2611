@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Module 4 | High-Throughput Genomics 2026</title>
   <meta name="description" content="Workshop website for the 2026 High-Throughput Genomics 2026 Canadian Bioinformatics Workshop" />
-  <meta name="generator" content="bookdown 0.45 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.48 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Module 4 | High-Throughput Genomics 2026" />
   <meta property="og:type" content="book" />
@@ -1473,13 +1473,17 @@ input.</td>
 <span id="cb35-3"><a href="module-4.html#cb35-3" tabindex="-1"></a><span class="ex">squeue</span> <span class="at">-u</span> <span class="va">$USER</span></span></code></pre></div>
 <div id="copy-the-files-to-your-laptop-and-open-igv" class="section level4 hasAnchor">
 <h4>Copy the files to your laptop and open IGV<a href="module-4.html#copy-the-files-to-your-laptop-and-open-igv" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>From a <strong>laptop</strong> terminal, copy the BAM, its index, the reference and its index into one folder (IGV finds the index only if it sits next to the file; <code>YOUR_USER</code> is the same placeholder as before and the host is <code>cbw.c3.ca</code>).</p>
+<p>First gather the files into one folder on the cluster, then copy that folder to your laptop in one go, so you type your password once. The folder holds the BAM, its index, the reference and its index (IGV finds the index only if it sits next to the file).</p>
+<p>On the <strong>cluster</strong> (login node):</p>
+<p><strong><code>gather the IGV files (type in the cluster terminal)</code></strong></p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb36-1"><a href="module-4.html#cb36-1" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> /scratch/<span class="va">$USER</span>/yeast_workshop/igv_lab4</span>
+<span id="cb36-2"><a href="module-4.html#cb36-2" tabindex="-1"></a><span class="fu">cp</span> /scratch/<span class="va">$USER</span>/yeast_workshop/results/ERR8562432/asm_vs_ref/asm_vs_ref.sorted.bam<span class="pp">*</span> /scratch/<span class="va">$USER</span>/yeast_workshop/igv_lab4/</span>
+<span id="cb36-3"><a href="module-4.html#cb36-3" tabindex="-1"></a><span class="fu">cp</span> /scratch/<span class="va">$USER</span>/yeast_workshop/data/Saccharomyces_cerevisiae.R64-1-1.dna.toplevel.fa<span class="pp">*</span> /scratch/<span class="va">$USER</span>/yeast_workshop/igv_lab4/</span>
+<span id="cb36-4"><a href="module-4.html#cb36-4" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> /scratch/<span class="va">$USER</span>/yeast_workshop/igv_lab4</span></code></pre></div>
+<p>Then, from a <strong>laptop</strong> terminal (<code>YOUR_USER</code> is the same placeholder as before and the host is <code>cbw.c3.ca</code>):</p>
 <p><strong><code>scp_example (run on your laptop)</code></strong></p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb36-1"><a href="module-4.html#cb36-1" tabindex="-1"></a><span class="fu">mkdir</span> igv_lab4</span>
-<span id="cb36-2"><a href="module-4.html#cb36-2" tabindex="-1"></a><span class="bu">cd</span> igv_lab4</span>
-<span id="cb36-3"><a href="module-4.html#cb36-3" tabindex="-1"></a><span class="co"># the quotes stop your laptop (zsh on a Mac) from trying to expand the *</span></span>
-<span id="cb36-4"><a href="module-4.html#cb36-4" tabindex="-1"></a><span class="fu">scp</span> <span class="st">&#39;YOUR_USER@cbw.c3.ca:/scratch/YOUR_USER/yeast_workshop/results/ERR8562432/asm_vs_ref/asm_vs_ref.sorted.bam*&#39;</span> .</span>
-<span id="cb36-5"><a href="module-4.html#cb36-5" tabindex="-1"></a><span class="fu">scp</span> <span class="st">&#39;YOUR_USER@cbw.c3.ca:/scratch/YOUR_USER/yeast_workshop/data/Saccharomyces_cerevisiae.R64-1-1.dna.toplevel.fa*&#39;</span> .</span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb37-1"><a href="module-4.html#cb37-1" tabindex="-1"></a><span class="co"># -r copies a whole folder, so you type your password once</span></span>
+<span id="cb37-2"><a href="module-4.html#cb37-2" tabindex="-1"></a><span class="fu">scp</span> <span class="at">-r</span> YOUR_USER@cbw.c3.ca:/scratch/YOUR_USER/yeast_workshop/igv_lab4 .</span></code></pre></div>
 <p>In IGV: <strong>Genomes &gt; Load Genome from File</strong> and choose the reference <code>.fa</code>; then <strong>File &gt; Load from File</strong> and choose <code>asm_vs_ref.sorted.bam</code>. IGV hides alignments when you view a very wide region. Before you start, open <strong>View &gt; Preferences &gt; Alignments</strong>, set <strong>Visibility range threshold (kb)</strong> to <code>2000</code> and click Save (the file holds only about 160 alignments, so this is fast). Then pick a chromosome in the drop-down (<code>IV</code>, <code>XII</code>). Each contig appears as a long “read” aligned to the chromosome. A contig broken into several blocks (a primary alignment plus supplementary ones, which are the other parts of the same contig) appears as several separate blocks along the chromosome.</p>
 <p><strong>Question 13:</strong> Go to chromosome <strong>IV</strong>. How many contigs cover it? Does it extend over the whole chromosome?</p>
 <details class="callout-dropdown callout-blue"><summary class="callout-dropdown-summary"><span class="callout-icon"><i class="fas fa-circle-info" aria-hidden="true"></i></span><span class="callout-dropdown-title">Answer</span> <span class="callout-dropdown-caret"><i class="fas fa-chevron-right" aria-hidden="true"></i></span></summary><div class="callout-dropdown-content"><p><strong>One</strong> contig, in both assemblies we aligned:

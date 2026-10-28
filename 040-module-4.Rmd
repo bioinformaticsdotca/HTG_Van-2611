@@ -685,16 +685,26 @@ squeue -u $USER
 
 #### Copy the files to your laptop and open IGV
 
-From a **laptop** terminal, copy the BAM, its index, the reference and its index into one folder (IGV finds the index only if it sits next to the file; `YOUR_USER` is the same placeholder as before and the host is `cbw.c3.ca`).
+First gather the files into one folder on the cluster, then copy that folder to your laptop in one go, so you type your password once. The folder holds the BAM, its index, the reference and its index (IGV finds the index only if it sits next to the file).
+
+On the **cluster** (login node):
+
+**`gather the IGV files (type in the cluster terminal)`**
+
+```bash
+mkdir -p /scratch/$USER/yeast_workshop/igv_lab4
+cp /scratch/$USER/yeast_workshop/results/ERR8562432/asm_vs_ref/asm_vs_ref.sorted.bam* /scratch/$USER/yeast_workshop/igv_lab4/
+cp /scratch/$USER/yeast_workshop/data/Saccharomyces_cerevisiae.R64-1-1.dna.toplevel.fa* /scratch/$USER/yeast_workshop/igv_lab4/
+ls -lh /scratch/$USER/yeast_workshop/igv_lab4
+```
+
+Then, from a **laptop** terminal (`YOUR_USER` is the same placeholder as before and the host is `cbw.c3.ca`):
 
 **`scp_example (run on your laptop)`**
 
 ```bash
-mkdir igv_lab4
-cd igv_lab4
-# the quotes stop your laptop (zsh on a Mac) from trying to expand the *
-scp 'YOUR_USER@cbw.c3.ca:/scratch/YOUR_USER/yeast_workshop/results/ERR8562432/asm_vs_ref/asm_vs_ref.sorted.bam*' .
-scp 'YOUR_USER@cbw.c3.ca:/scratch/YOUR_USER/yeast_workshop/data/Saccharomyces_cerevisiae.R64-1-1.dna.toplevel.fa*' .
+# -r copies a whole folder, so you type your password once
+scp -r YOUR_USER@cbw.c3.ca:/scratch/YOUR_USER/yeast_workshop/igv_lab4 .
 ```
 
 In IGV: **Genomes > Load Genome from File** and choose the reference `.fa`; then **File > Load from File** and choose `asm_vs_ref.sorted.bam`. IGV hides alignments when you view a very wide region. Before you start, open **View > Preferences > Alignments**, set **Visibility range threshold (kb)** to `2000` and click Save (the file holds only about 160 alignments, so this is fast). Then pick a chromosome in the drop-down (`IV`, `XII`). Each contig appears as a long "read" aligned to the chromosome. A contig broken into several blocks (a primary alignment plus supplementary ones, which are the other parts of the same contig) appears as several separate blocks along the chromosome.

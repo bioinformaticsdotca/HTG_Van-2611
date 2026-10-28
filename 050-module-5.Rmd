@@ -12,7 +12,7 @@
 
 *From Reads to Variants, and What They Do to Genes*
 
-### **Introduction: Which Positions Differ from the Reference?**
+### Introduction: Which Positions Differ from the Reference?
 
 In Labs 3 and 4 you built a genome from scratch (**de novo**). In this lab you ask a different question about the same wild yeast isolate (*BAL_1a*, run **ERR8562432**): at which positions does it differ from the lab reference strain S288C? A single-base difference is a **single-nucleotide variant (SNV)**. You will:
 
@@ -34,13 +34,13 @@ The lab has these parts:
 - **Part 5:** prepare the files and look at two real variants in IGV
 - **Part 6:** wrap-up
 
-#### **Where we are in the workflow**
+#### Where we are in the workflow
 
 <img src="./img/lab5_workflow.png" width="1000" alt="Workflow chart from library preparation and sequencing through read QC, assembly, polishing, assembly QC and annotation, with SNV calling, SV calling and the reference genome feeding into analysis. The highlighted stages are SNV calling (reads against the reference) and analysis of the variants.">
 
 This lab covers the highlighted stages: **SNV calling** (reads against the reference) and **analysis** of the variants.
 
-### **Your Paths**
+### Your Paths
 
 The same table as in Labs 3 and 4, with the locations this lab uses. Everything under `WORK` is yours alone. Everything else belongs to the instructor and is shared read-only.
 
@@ -60,7 +60,7 @@ The same table as in Labs 3 and 4, with the locations this lab uses. Everything 
 As before: scripts marked **login node** run with `bash <script>.sh`, and compute jobs are submitted with `sbatch`. Save each script with `nano` in `/scratch/$USER/yeast_workshop/scripts/`, exactly as in Lab 3 (paste, Ctrl+O, Enter, Ctrl+X).
 :::
 
-### **Part 0: Recap, Which Reads and Which Reference?**
+### Part 0: Recap, Which Reads and Which Reference?
 
 Variant calling needs two inputs:
 
@@ -89,9 +89,9 @@ ls -lh /scratch/$USER/yeast_workshop/data/
 If a file is missing, ask an instructor.
 :::
 
-### **Part 1: Calling Variants with medaka**
+### Part 1: Calling Variants with medaka
 
-#### **Step 1: Run medaka_variant**
+#### Step 1: Run medaka_variant
 
 **medaka** was your polisher in Lab 4. Its `medaka_variant` command does something different with the same kind of neural network: it aligns the reads to a reference and calls the **variants**. A variant is a difference from the reference. `medaka_variant` is a **haploid** caller: it assumes one copy of each chromosome, so it cannot report a position as heterozygous. That suits *BAL_1a*, a monosporic isolate (grown from a single spore) that is a **homozygous diploid** (ScRAP strain table: ploidy 2n, homozygous): its two genome copies carry the same base at almost every site, so a one-allele model fits (see Part 5). 
 
@@ -180,7 +180,7 @@ cp -r /project/60004/shared/fallback/variants /scratch/$USER/yeast_workshop/resu
 ```
 :::
 
-#### **Step 2: Read a VCF record (while medaka runs)**
+#### Step 2: Read a VCF record (while medaka runs)
 
 A **VCF** (Variant Call Format) file is a tab-separated text file with one line per variant. Lines starting with `##` describe the file (the header), the line starting with `#CHROM` names the columns, and every other line is a variant:
 
@@ -224,9 +224,9 @@ Your values are read from your screen. As an example, the first variant under th
 
 :::
 
-### **Part 2: Filtering and Counting the Variants**
+### Part 2: Filtering and Counting the Variants
 
-#### **Step 1: Filter with bcftools**
+#### Step 1: Filter with bcftools
 
 Check that medaka finished before you continue: `squeue -u $USER` is empty, and this lists `medaka.vcf` and `calls_to_ref.bam`:
 
@@ -318,7 +318,7 @@ sbatch 11_filter_variants.sh
 squeue -u $USER
 ```
 
-#### **Step 2: Read the counts and the stats**
+#### Step 2: Read the counts and the stats
 
 When it finishes, read the two counts at the end of the log, and the summary lines of the stats file (`grep '^SN'` keeps the summary-number lines; the `grep -A1 '^# TSTV'` command prints the transition/transversion section, whose last line holds the numbers):
 
@@ -360,7 +360,7 @@ Before filtering: **226,529** records. After filtering: **135,199** records, so 
 **Ts/Tv = 2.98**: 84,059 transitions and 28,210 transversions (`bcftools stats` on `filtered.vcf`, workshop cluster test run; the two add up to the 112,269 SNVs). For random changes, each base can change into one transition and two transversions, so the ratio would be about **0.5**. A ratio far above 0.5 is the signature of real variants, because mutations that are transitions are biologically more frequent than transversions. A set of calls made up mostly of random sequencing errors would drift towards 0.5. So 2.98 supports the claim that most filtered SNVs are real. 
 :::
 
-### **Part 3: snpEff, What Does Each Variant Do?**
+### Part 3: snpEff, What Does Each Variant Do?
 
 A list of positions does not say what the variants *do*. **snpEff** compares each variant with the **gene annotation** of the reference (where the genes are) and predicts its **effect**, such as a changed amino acid or a premature stop. It labels each effect with an **impact**:
 
@@ -373,7 +373,7 @@ A list of positions does not say what the variants *do*. **snpEff** compares eac
 
 These are *predictions* from the sequence alone. They do not say that the protein is really damaged. This is where the case gets specific: which of the wolf's differences touch genes?
 
-#### **Step 1: Run snpEff**
+#### Step 1: Run snpEff
 
 - **What:** annotates the filtered variants with snpEff, using the database `R64-1-1.105` (the S288C annotation, Ensembl release 105).
 - **Why:** to know which variants fall in genes and what they change.
@@ -454,7 +454,7 @@ cp /project/60004/shared/fallback/snpEff_summary.html /project/60004/shared/fall
 ```
 :::
 
-#### **Step 2: Read one annotated record**
+#### Step 2: Read one annotated record
 
 When the job has finished, look at one record. `cut -f8` keeps the INFO column (column 8), where snpEff put its `ANN` field. The fields of `ANN` are separated by `|`: the changed allele, the effect, the impact, the gene name, the gene ID, and so on. A variant that touches several genes has several `ANN` entries separated by commas.
 
@@ -468,7 +468,7 @@ grep -v '^#' /scratch/$USER/yeast_workshop/results/ERR8562432/variants/annotated
 grep -v '^#' /scratch/$USER/yeast_workshop/results/ERR8562432/variants/annotated.vcf | grep -m 5 '|HIGH|' | cut -f1,2,8 | cut -c1-200
 ```
 
-#### **Step 3: Copy the summary report to your laptop**
+#### Step 3: Copy the summary report to your laptop
 
 snpEff also wrote an HTML report. Run `scp` on your **laptop**, as before (`YOUR_USER` is the same placeholder as before and the host is `cbw.c3.ca`; Windows users can use MobaXterm or WinSCP).
 
@@ -498,7 +498,7 @@ By first effect (your `annotated.vcf`, workshop cluster test run), the largest g
 The answer depends on the gene you chose. What the answer should contain: the gene's function in one line from the SGD summary, the variant effect from the `ANN` field (for example `p.Arg6*`, meaning that the amino acid at position 6 is replaced by a stop), and a judgement. A stop very near the start of the protein would remove almost all of it; a stop near the end may leave most of the protein intact. A frameshift in a homopolymer is a candidate for a sequencing error. Worked example: **GPD2** (YOL059W), which you will look at in Part 5. [SGD S000005420](https://www.yeastgenome.org/locus/S000005420): "NAD-dependent glycerol 3-phosphate dehydrogenase"; gpd2Δ mutants show impaired anaerobic growth. Our variant is `stop_gained`, p.Glu339*: the stop falls at codon 339 of 440, so the last ~100 amino acids are lost. That could reduce GPD2 function; it is not proof of an effect. For instance, your annotated VCF has `stop_gained` calls at `I:36,524` (ECM1, YAL059W, p.Arg6*) and `I:118,305` (FUN30, YAL019W, p.Lys1130*) (workshop cluster test run): the function of each must be read from SGD.
 :::
 
-### **Part 4: Liftover onto the Supplied Assembly**
+### Part 4: Liftover onto the Supplied Assembly
 
 So far, every coordinate is on the **reference** (S288C, chromosomes `I` to `XVI`). The annotation that we supplied (Lab 4) describes the **instructor's assembly**, with contigs named `contig_1`, `contig_2`, and so on. To see a variant together with the annotation of the assembly, you must convert its position from the reference to the assembly. This is called **liftover**. It places each call, with its snpEff annotation, on the coordinates of the isolate's own assembly, so you can see it next to the gene models made on that assembly. On its own assembly a true SNV is no longer a difference: the assembly was built from the same reads, so it already carries the variant base. The VCF describes the wolf in the corgi's coordinates. Liftover moves each difference onto the wolf's own map, its assembly. Three tools work together:
 
@@ -506,7 +506,7 @@ So far, every coordinate is on the **reference** (S288C, chromosomes `I` to `XVI
 2. **paf2chain** turns the PAF into a **chain file**, the "coordinate dictionary": for each block it says "reference position X is assembly position Y".
 3. **CrossMap** reads the chain file and rewrites every variant at its new position.
 
-#### **Step 1: Run the liftover**
+#### Step 1: Run the liftover
 
 - **What:** lifts the annotated VCF from the reference onto the supplied assembly.
 - **Why:** to place the variants and their snpEff annotation on the coordinates of the assembly that has the gene annotation.
@@ -590,7 +590,7 @@ sbatch 13_liftover.sh
 squeue -u $USER
 ```
 
-#### **Step 2: Count the lifted variants and look at them**
+#### Step 2: Count the lifted variants and look at them
 
 When it has finished, count the variants that were lifted and the ones that were not (`grep -vc '^#'` counts the lines that do not start with `#`; `wc -l` counts all lines):
 
@@ -631,7 +631,7 @@ The chain file only has entries for the blocks where the assembly **aligned** to
 In the workshop cluster test run, `lifted.vcf.unmap` has 24,458 lines: 25 header lines and 24,433 records. Of these records, 23,857 are `Fail(Unmap)` (no aligned block covers the position) and 576 are `Fail(Multiple_hits)`. So multiple hits are a small share (about 2%); most failures are positions outside the aligned blocks. 
 :::
 
-### **Part 5: Looking at Real Variants in IGV**
+### Part 5: Looking at Real Variants in IGV
 
 Two of the 135,199 variants are in genes that students of fermentation and stress know well. Both sit on chromosome XV, about 58 kb apart. You will check each with your own eyes: the predicted effect, and the reads behind it.
 
@@ -640,7 +640,7 @@ Two of the 135,199 variants are in genes that students of fermentation and stres
 | GPD2 (YOL059W) | `XV:218,140` | G > T | `stop_gained` (HIGH), p.Glu339* |
 | ADH1 (YOL086C) | `XV:159,763` | A > G | `missense_variant` (MODERATE), p.Cys278Arg |
 
-#### **Step 1: Download the annotation of the reference (login node)**
+#### Step 1: Download the annotation of the reference (login node)
 
 Reference annotation (where the genes are, on S288C coordinates) comes from **Ensembl**, as a GFF3 file. It is the same kind of file as in Lab 4. The snpEff database uses Ensembl release 105, and this GFF3 is release 113; the genome is the same and the gene models differ little, so you may see small differences.
 
@@ -685,7 +685,7 @@ cd /scratch/$USER/yeast_workshop/scripts
 bash 14a_download_gff3.sh
 ```
 
-#### **Step 2: Cut out the region and the files for your laptop**
+#### Step 2: Cut out the region and the files for your laptop
 
 The reads-to-reference BAM is about 0.5-1 GB, and the annotated VCF about 90 MB, too much to copy to a laptop over Wi-Fi. We cut out the region of chromosome XV that holds both genes, **XV:150,000-230,000** (80 kb). **samtools** is the standard toolkit for BAM files: `samtools view -b` writes the reads in a region into a new BAM, and `samtools index` writes the `.bai` index. The same script uses `awk` (a text-processing tool) to keep only the VCF lines in the region of interest, in the same way as a filter.
 
@@ -788,7 +788,7 @@ cp -r /project/60004/shared/fallback/igv /scratch/$USER/yeast_workshop/results/E
 ```
 :::
 
-#### **Step 3: Copy the files to your laptop**
+#### Step 3: Copy the files to your laptop
 
 From a **laptop** terminal, copy the region files, the reference and its index, the Ensembl GFF3, the supplied assembly and the supplied annotation into one folder (IGV finds an index only if it sits next to the file; `YOUR_USER` is the same placeholder as before and the host is `cbw.c3.ca`).
 
@@ -805,7 +805,7 @@ scp 'YOUR_USER@cbw.c3.ca:/project/60004/shared/supplied/polished/ERR8562432_cons
 scp 'YOUR_USER@cbw.c3.ca:/project/60004/shared/supplied/annotations/ERR8562432_funannotate.gff3' .
 ```
 
-#### **Step 4: The reference view, GPD2 and ADH1**
+#### Step 4: The reference view, GPD2 and ADH1
 
 In **IGV**:
 
@@ -839,7 +839,7 @@ Counted in `calls_to_ref.bam` (workshop cluster test run; the instructor's separ
 **For the case:** the wolf carries a predicted stop in *GPD2* and a missense change in *ADH1*. These are differences in genes associated with fermentation. Whether they change how the wolf ferments is a hypothesis; measuring ethanol and glycerol would test it.
 :::
 
-#### **Step 5: The assembly view, with the supplied annotation**
+#### Step 5: The assembly view, with the supplied annotation
 
 Now look at the same two variants on the **assembly**, together with the annotation that was made on it. Open a **new IGV session** (File > New Session), then:
 
@@ -854,7 +854,7 @@ Two things to notice:
 - **ADH1 is split in two.** The funannotate model `FUN_003391-T1` has two CDS pieces, `contig_10:910,903-911,054` and `911,252-912,284`, drawn as two blocks joined by a thin line (an "intron"). ADH1 is not expected to contain an intron (Lab 4, Question 5). The lifted ADH1 variant is in the second piece.
 - **GPD2: look closely.** The variant at `contig_10:854,047` does **not** fall in a coding block of the funannotate model `FUN_003357` (`contig_10:853,739-854,388`, reverse strand). It falls in the thin line between its two pieces, a predicted 44-bp "intron". GPD2 has no intron in S288C. The gene predictor most likely invented this intron to step over the premature stop codon and a nearby one-base error in the assembly (a missing base in a run of T), because gene finders avoid stop codons in the middle of a gene. eggNOG matched this model, and a second one, `FUN_003358`, to YOL059W (GPD2's systematic name), and gave them the preferred name GPD1, the paralog. The whole gene, 1,323 bp in S288C, is cut into pieces. On this assembly, the annotation hides exactly the variant we are studying: an annotation is only as good as the assembly under it (Lab 4).
 
-### **Part 6: Wrap-Up**
+### Part 6: Wrap-Up
 
 ::: {.callout type="red" title="**Checklist**"}
 1. `10_medaka_variant.sh` finished: `variants/medaka.vcf` and `calls_to_ref.bam` exist.
@@ -866,6 +866,6 @@ Two things to notice:
 
 What you learned: variant calling compares **reads** with a **reference**. The raw list needs filtering (QUAL), the Ts/Tv ratio is a quick check, and snpEff turns positions into predicted effects. About 2% of the calls (HIGH impact) are predicted to break a protein, but many of them are frameshifts that nanopore reads can make by error. Liftover places the variants and their annotation on the isolate's own assembly, where a true SNV is no longer a difference, and the reads in IGV are the final check: look at the reads before you trust a variant.
 
-### **What's Next**
+### What's Next
 
 In **Lab 6** we look for larger differences, **structural variants** (SVs), by aligning the assembly to the reference. This is where the second line of questioning, stress response, comes in: does the wolf lack, or carry, large pieces of DNA that the corgi does not?

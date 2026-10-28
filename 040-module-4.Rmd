@@ -12,7 +12,7 @@
 
 *From Draft Contigs to a Genome You Can Trust*
 
-### **Introduction: From a Draft to a Genome You Can Trust**
+### Introduction: From a Draft to a Genome You Can Trust
 
 At the end of Lab 3 you submitted **Flye**, which assembled your reads into a draft genome. This lab picks up from that job. You will:
 
@@ -36,13 +36,13 @@ The lab has these parts:
 - **Part 6:** wrap-up
 - **Bonus:** align your assembly to the reference and look at it in IGV (optional)
 
-#### **Where we are in the workflow**
+#### Where we are in the workflow
 
 <img src="./img/lab4_workflow.png" width="1000" alt="Workflow chart from library preparation and sequencing through read QC, assembly, polishing, assembly QC and annotation, with SNV calling, SV calling and the reference genome feeding into analysis. The highlighted stages are assembly (your Flye result), polishing, assembly QC and annotation (supplied, not run).">
 
 This lab covers the highlighted stages: **assembly** (your Flye result), **polishing**, **assembly QC** and **annotation** (supplied, not run).
 
-### **Your Paths**
+### Your Paths
 
 The same table as in Lab 3, with the extra locations this lab uses. Everything under `WORK` is yours alone. Everything else is in the workshop's shared project folder and is read-only.
 
@@ -61,7 +61,7 @@ The same table as in Lab 3, with the extra locations this lab uses. Everything u
 As in Lab 3: scripts and commands marked **login node** run with `bash` (or are typed directly), and compute jobs are submitted with `sbatch`. Save each script with `nano` in `/scratch/$USER/yeast_workshop/scripts/`, exactly as in Lab 3 (paste, Ctrl+O, Enter, Ctrl+X).
 :::
 
-### **Part 0: Did Your Assembly Finish?**
+### Part 0: Did Your Assembly Finish?
 
 Flye was submitted at the end of Lab 3 and usually takes about 20 minutes (20 min 29 s in the workshop cluster test run, alone on the node; longer when the whole class runs at once). These commands only look at files, so they are safe on the login node. Type them in the terminal.
 
@@ -87,7 +87,7 @@ cp -r /project/60004/shared/fallback/assembly /scratch/$USER/yeast_workshop/resu
 ```
 :::
 
-### **Part 1: Reading the Flye Report**
+### Part 1: Reading the Flye Report
 
 Flye ends its log with a summary of the assembly, and writes a table with one line per contig. A **contig** is one continuous stretch of assembled sequence with no gaps. Look at both. Type these in the terminal.
 
@@ -136,9 +136,9 @@ The yeast reference genome has 17 sequences: 16 chromosomes plus the mitochondri
 **37×** (`flye.log`, "Mean coverage") (workshop cluster test run, 2026-10-18, Flye 2.9.6-b1802, 8 CPUs; yours may differ slightly). Benchmark expectation: about 37×, the same as the Lab 3 calculation (448 Mb of reads ÷ about 12 Mb; ENA ERR8562432). Flye needs every position covered by several overlapping reads: coverage lets the reads outvote each other's errors (systematic errors, such as those in homopolymers, can survive the vote, which is why we polish) and bridge the gaps between neighbouring pieces. With long reads, 30-50× is a good depth for a small genome like yeast (Module 4 lecture). **Repeating the run:** when the instructors ran the same script twice on the same node, the second assembly was 11,893,241 bp instead of 11,928,913 bp (35,672 bp, or 0.3%, shorter), with an N50 of 791,818 instead of 791,821 bp; both had 18 contigs and 37× coverage (workshop cluster test run, 2026-10-23).
 :::
 
-### **Part 2: Polishing with medaka**
+### Part 2: Polishing with medaka
 
-#### **Why polish?**
+#### Why polish?
 
 Flye's assembly is built from reads that are only about 87% accurate (Lab 3, Question 5). Flye's own three internal polishing rounds (`--iterations 3`) fix many errors, but some remain, mostly **indels** (small insertions or deletions) in **homopolymers** (runs of the same base). **Polishing** corrects them with the reads: the reads are aligned to the draft, and at each position the reads "vote" for the base that most of them support (the **consensus**). **medaka** does the voting with a trained neural-network model instead of a simple majority, because it has learned how nanopore errors look.
 
@@ -235,7 +235,7 @@ cp -r /project/60004/shared/fallback/polishing /scratch/$USER/yeast_workshop/res
 ```
 :::
 
-### **Part 3: Exploring the Supplied Annotation (While Medaka Runs)**
+### Part 3: Exploring the Supplied Annotation (While Medaka Runs)
 
 Annotation takes hours, so we do not run it here. **Annotation** has two parts:
 
@@ -312,13 +312,13 @@ grep -v '^#' /project/60004/shared/supplied/annotations/ERR8562432_eggnog.annota
 `FUN_000001-T1` is **ARR3**, an arsenite transporter of the plasma membrane required for resistance to arsenic compounds. Its seed ortholog is `4932.YPR201W`: the best match in the eggNOG database is the *S. cerevisiae* gene YPR201W (4932 is the taxonomy number of *S. cerevisiae*), and eggNOG-mapper copies that gene's name and description to our protein. The function is thus **inferred from orthology**, not shown experimentally in this isolate. The file has **6,092** rows, of which **4,302** have a gene name (targeted counts, `ERR8562432_eggnog.annotations`). Many genes have a description but no name (1,790 rows have a description but no name; 29 have neither). The 99 proteins that are in the GFF3 but not in this file (6,191 − 6,092) found no match in eggNOG, so they get no row and stay unannotated.
 :::
 
-### **Part 4: QUAST, the Accountant**
+### Part 4: QUAST, the Accountant
 
 Check that medaka finished (`squeue -u $USER` is empty and `ls -lh /scratch/$USER/yeast_workshop/results/ERR8562432/polishing/` shows `consensus.fasta`) before you continue.
 
 **QUAST** (QUality ASsessment Tool) counts: how many contigs, how long, what N50. Because we also give it the **reference genome**, it can compare the assembly with S288C and report **misassemblies**: places where the assembly disagrees with the reference in the order or orientation of sequence. A misassembly is either an assembly error or a *real* structural difference of this isolate; QUAST cannot tell which.
 
-#### **Step 1: Run QUAST**
+#### Step 1: Run QUAST
 
 - **What:** runs QUAST on the polished assembly, with the reference.
 - **Why:** to measure contiguity (N50, number of contigs) and agreement with the reference.
@@ -398,7 +398,7 @@ cp -r /project/60004/shared/fallback/quast /scratch/$USER/yeast_workshop/results
 ```
 :::
 
-#### **Step 2: Copy the report to your laptop**
+#### Step 2: Copy the report to your laptop
 
 Read the numbers in the terminal with `less /scratch/$USER/yeast_workshop/results/ERR8562432/quast/report.txt` (press `q` to quit), or copy the whole report folder and open `report.html` in your browser. Run `scp` on your **laptop**, as in Lab 3 (`YOUR_USER` is the same placeholder as in Lab 3 and the host is `cbw.c3.ca`; Windows users can use MobaXterm or WinSCP).
 
@@ -423,7 +423,7 @@ Then open `quast/report.html`. The table has the same numbers as `report.txt`.
 **137 misassemblies**, with all 18 contigs flagged, plus 138 local misassemblies; genome fraction 94.9% (QUAST 5.2.0 with `-r`, workshop cluster test run, 2026-10-18; the benchmark assembly gives 132). That many is expected for a wild isolate about 1% different from S288C: QUAST cannot tell an assembly error from a real structural difference (Lab 6 looks at real SVs). A misassembly means that parts of one contig align to the reference in a different order, orientation or chromosome. It may be a true assembly error, for example two repeats joined wrongly. It may equally be a **real structural variant**: this wild isolate really can differ from the lab strain S288C. QUAST only compares with the reference and cannot decide which. To decide, you would check whether individual reads span the junction (Lab 6 returns to this). Some of these "misassemblies" may be places where the wolf's genome really differs from the corgi's (S288C, the reference). Lab 6 checks one such place.
 :::
 
-### **Part 5: BUSCO, the Biologist**
+### Part 5: BUSCO, the Biologist
 
 QUAST says how contiguous the assembly is. It does not say whether the *content* is right. **BUSCO** (Benchmarking Universal Single-Copy Orthologs) looks for a fixed set of genes that nearly every member of a lineage has exactly once. Here the lineage is `saccharomycetes_odb12`, with 2,319 genes. Each gene is reported as:
 
@@ -568,7 +568,7 @@ Workshop cluster test run: D = 4.6%, which is 107 genes (`short_summary`). Two k
 Workshop cluster test run: **155 of the 2,311 complete BUSCOs (E = 6.7%)** contain an internal stop codon (`short_summary`). A real gene should not have a stop codon in the middle. The likely cause is a residual error from the nanopore reads, mostly an insertion or deletion in a homopolymer, which shifts the reading frame and creates a stop. So even after Flye and medaka, a small number of base errors remain, which BUSCO exposes although N50 and the gene count cannot. Polishing with accurate short reads (a **hybrid** approach) would fix many of them. Be careful, though: BUSCO's own gene alignments are imperfect, and a few flagged genes may be real pseudogenes.  Also, the June benchmark assembly (the supplied one) was polished without `-m`, so with medaka's default model (`r1041_e82_400bps_sup_v5.2.0` in medaka 2.2.2) for newer R10.4.1 flow cells; part of the remaining errors may come from that mismatch.
 :::
 
-### **Part 6: Wrap-Up**
+### Part 6: Wrap-Up
 
 ::: {.callout type="red" title="**Checklist**"}
 1. Flye finished and you read its report (Part 1).
@@ -581,7 +581,7 @@ What you learned: the assembly is **contiguous** (QUAST: few contigs, high N50),
 
 Day 3 builds on this lab. In **Lab 5** we find SNVs by comparing reads with the reference. In **Lab 6** we look for structural differences between this assembly and the reference, which is where QUAST's misassemblies come back.
 
-### **What's Next**
+### What's Next
 
 You now have a polished, evaluated and annotated genome. Day 3: base by base, where does the wolf differ from the corgi? It starts with variant calling (Module 5), which compares reads with the reference.
 
@@ -595,7 +595,7 @@ Illumina short reads of this same isolate exist: ENA run **ERR8603864** (HiSeq 2
 The cluster stays open for two weeks after the workshop, and you can move the data to a DRAC cluster. The commands for this exercise are not provided here.
 :::
 
-### **Bonus: Align Your Assembly to the Reference and Look at It in IGV**
+### Bonus: Align Your Assembly to the Reference and Look at It in IGV
 
 ::: {.callout type="green" title="**Optional, outside the lab time**"}
 You keep access to the cluster for two weeks after the workshop, so you can do this later. Lab 6 reuses its output (the script is the same), so doing it now saves a step tomorrow.
@@ -683,7 +683,7 @@ sbatch align_assembly_to_reference.sh
 squeue -u $USER
 ```
 
-#### **Copy the files to your laptop and open IGV**
+#### Copy the files to your laptop and open IGV
 
 From a **laptop** terminal, copy the BAM, its index, the reference and its index into one folder (IGV finds the index only if it sits next to the file; `YOUR_USER` is the same placeholder as before and the host is `cbw.c3.ca`).
 

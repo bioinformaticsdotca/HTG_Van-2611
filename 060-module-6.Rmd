@@ -12,7 +12,7 @@
 
 *Big Differences Between the Assembly and the Reference*
 
-### **Introduction: What Is Different at the Scale of Genes?**
+### Introduction: What Is Different at the Scale of Genes?
 
 In Lab 5 you found **single-nucleotide variants (SNVs)**, one-base differences between your reads and the reference. In this lab you look for much bigger differences between the wild yeast isolate (*BAL_1a*, run **ERR8562432**) and the lab reference strain S288C: **structural variants (SVs)**, differences of **50 bp or more**. The main types are **deletions** (DEL: sequence in the reference that the sample lacks), **insertions** (INS: extra sequence in the sample), **inversions** (INV: a segment flipped around) and **duplications** (DUP).
 
@@ -34,13 +34,13 @@ The lab has these parts:
 - **Part 4:** prepare the files and look at one deletion in IGV
 - **Part 5:** wrap-up of the whole pipeline
 
-#### **Where we are in the workflow**
+#### Where we are in the workflow
 
 <img src="./img/lab6_workflow.png" width="1000" alt="Workflow chart from library preparation and sequencing through read QC, assembly, polishing, assembly QC and annotation, with SNV calling, SV calling and the reference genome feeding into analysis. The highlighted stages are SV calling (here, the polished assembly against the reference) and analysis of the SVs.">
 
 This lab covers the highlighted stages: **SV calling** (here, the polished assembly against the reference) and **analysis** of the SVs.
 
-### **Your Paths**
+### Your Paths
 
 The same table as in Labs 3 to 5, with the locations this lab uses. Everything under `WORK` is yours alone. Everything else is in the workshop's shared project folder and is read-only.
 
@@ -59,7 +59,7 @@ The same table as in Labs 3 to 5, with the locations this lab uses. Everything u
 As before: scripts marked **login node** run with `bash <script>.sh`, and compute jobs are submitted with `sbatch`. Save each script with `nano` in `/scratch/$USER/yeast_workshop/scripts/`, exactly as in Lab 3 (paste, Ctrl+O, Enter, Ctrl+X).
 :::
 
-### **Part 0: Recap, Why the Assembly This Time?**
+### Part 0: Recap, Why the Assembly This Time?
 
 In Lab 5 we avoided the assembly, because an error left in it would look like a variant. For SVs the situation is reversed. A nanopore read is on average about 19 kb long (448 Mb in 22,964 reads, Lab 3), and half of the bases are in reads over 30 kb; and an SV caller that works on reads needs several reads that each carry the difference. A contig is hundreds of kb long, and it carries the whole difference in one piece. **SVIM-asm** reads the alignment of a contig to the reference and reports where the contig has extra or missing sequence. The price: if the assembler got something wrong, the "SV" is an assembly error. That is why we later check the reads (Part 4).
 
@@ -76,9 +76,9 @@ ls -lh /scratch/$USER/yeast_workshop/data/
 If a file is missing, ask an instructor.
 :::
 
-### **Part 1: Align the Assembly to the Reference**
+### Part 1: Align the Assembly to the Reference
 
-#### **Step 1: Do you already have the alignment?**
+#### Step 1: Do you already have the alignment?
 
 SVIM-asm needs the assembly aligned to the reference, as a sorted and indexed **BAM**. This is script **A**, the same script as the bonus at the end of Lab 4. Check whether you made it:
 
@@ -180,7 +180,7 @@ cp -r /project/60004/shared/fallback/asm_vs_ref /scratch/$USER/yeast_workshop/re
 ```
 :::
 
-#### **Step 2: What is in the alignment?**
+#### Step 2: What is in the alignment?
 
 An assembly-to-reference BAM has one record per aligned *piece* of a contig, not one per read. A contig that matches the reference in several blocks gives several records: one **primary** alignment and, for the other blocks, **supplementary** alignments. **Secondary** alignments are the alternative places where a stretch of a contig also matches (repeats). `samtools flagstat` counts them. It only reads a file, so it is safe on the login node.
 
@@ -197,9 +197,9 @@ samtools flagstat /scratch/$USER/yeast_workshop/results/ERR8562432/asm_vs_ref/as
 In the workshop cluster test run (2026-10-18; minimap2 2.30, `-a -x asm10 --cs -r2k`, `samtools flagstat`) the BAM has **146** records: **18 primary**, **108 supplementary** and **20 secondary**. The 18 primary records match the 18 contigs of the assembly in the cluster test run, one per contig. Your numbers will differ a little, because your own assembly is not identical. The 108 supplementary records mean that most contigs do not align in one block: they are chains of blocks, each separated from the next by a break where the alignment stops (for example where the isolate has extra or missing sequence, or where the two genomes are too different to align). These breaks are the places where SVIM-asm looks for SVs. (You saw them as blocks on chromosome IV in the Lab 4 bonus.)
 :::
 
-### **Part 2: Calling SVs with SVIM-asm**
+### Part 2: Calling SVs with SVIM-asm
 
-#### **Step 1: Run SVIM-asm**
+#### Step 1: Run SVIM-asm
 
 **SVIM-asm** is a tool that finds SVs from an assembly aligned to a reference. It reads the CIGAR strings (the record of matches, insertions and deletions inside each alignment) and the breaks between blocks, and writes a **VCF** file, the same text format as in Lab 5. We use its **haploid** mode, the mode for a single assembly. *BAL_1a* is a homozygous diploid (ScRAP strain table: ploidy 2n, homozygous), so its two copies are the same and one consensus assembly loses nothing. (A diploid mode exists, but it needs two separate, phased assemblies, one per haplotype; ours is a single consensus.)
 
@@ -285,7 +285,7 @@ cp -r /project/60004/shared/fallback/sv/svimasm_out /scratch/$USER/yeast_worksho
 ```
 :::
 
-#### **Step 2: Read one SV record**
+#### Step 2: Read one SV record
 
 The VCF has the same layout as in Lab 5 (`CHROM`, `POS`, `ID`, `REF`, `ALT`, `QUAL`, `FILTER`, `INFO`, then `FORMAT` and the sample). For an SV, the `INFO` column carries three fields:
 
@@ -309,9 +309,9 @@ grep -v '^#' /scratch/$USER/yeast_workshop/results/ERR8562432/sv/svimasm_out/var
 Record in the workshop cluster test run, 2026-10-18: `VIII  213953  svim_asm.DEL.95  .  PASS  SVTYPE=DEL;END=215953;SVLEN=-2000  GT  1/1`. It is a **deletion** (`SVTYPE=DEL`) on chromosome VIII, from position 213,953 to `END=215,953`. `SVLEN=-2000`: the sample has **2,000 bp less** than the reference (the minus sign means a deletion); 215,953 − 213,953 = 2,000. `QUAL` is `.`: SVIM-asm gives no quality score, so (unlike Lab 5) you cannot filter on QUAL; `FILTER=PASS` is the quality flag here. In haploid mode SVIM-asm writes `1/1` for every call: it is a fixed placeholder, not a measurement, and it does not mean a diploid homozygous genotype (compare `GT=1` in Lab 5). Your coordinates should be the same or very close, because the reference is the same and the assembly is similar, but the ID number (`DEL.95` here) can differ in your run, which is why the command above finds the record by position.
 :::
 
-### **Part 3: Filtering and Counting the SVs**
+### Part 3: Filtering and Counting the SVs
 
-#### **Step 1: Filter the deletions and count by type**
+#### Step 1: Filter the deletions and count by type
 
 SVIM-asm labels every SV with its type. The chosen SV for this lab is a deletion, so we keep only the records with `SVTYPE="DEL"` using **bcftools** (`bcftools view -i` *includes* the records that match a test), and count all records by type: `bcftools query -f '%INFO/SVTYPE\n'` prints one SV type per record, `sort` groups them and `uniq -c` counts each group.
 
@@ -419,7 +419,7 @@ cp /project/60004/shared/fallback/sv/deletions.vcf /project/60004/shared/fallbac
 **296 SVs: 152 deletions, 143 insertions and 1 inversion** (`bcftools query | sort | uniq -c` on `variants.vcf` from the workshop cluster test run, 2026-10-18; there are no duplications). Your numbers should be close; counts can differ by a few between assemblies (the instructor's benchmark assembly, built with different Flye and medaka settings, gave 297: 155 deletions, 141 insertions and 1 inversion). Deletions and insertions are about equally common, and inversions are rare (the one inversion has `FILTER=incomplete_inversion`, not `PASS`: only one of its two breakpoints is supported, so treat it with caution). There are more than 450 times fewer SV records than variant records (296 against 135,199), but they are much bigger. In the instructor's analysis of the benchmark assembly (297 calls), the deletions and insertions add up to about **354,000 bp** (200,798 bp deleted and 153,606 bp inserted; summed from `SVLEN`; the inversion has no `SVLEN`), against 112,269 single-base SNVs in Lab 5. Most of those bases (about 292,000 of 354,000, 82%) lie in the 43 SVs of 5 kb or more, which are mostly Ty elements (Question 4), not genes. So a few events affect many bases. 
 :::
 
-#### **Step 2: Count by size**
+#### Step 2: Count by size
 
 The sizes are in the `SVLEN` field. The next command prints the type and the size of every SV, and `awk` (a text-processing tool) sorts them into size classes. It uses the absolute length, so deletions and insertions are comparable. The one inversion has no `SVLEN`, so it is not counted here. Load bcftools first, as in the earlier login-node commands.
 
@@ -450,7 +450,7 @@ grep -v '^#' /scratch/$USER/yeast_workshop/results/ERR8562432/sv/svimasm_out/var
 In the workshop cluster test run, the SVs in this window are `DEL.19` (IV:384,443, 90 bp), `DEL.20` (384,850, 180 bp), `DEL.21` (434,417, 322 bp), `DEL.22` (437,143, 375 bp), `DEL.23` (476,362, 489 bp), `INS.23` (488,882, 5,423 bp), `DEL.24` and `DEL.25` (505,554 and 513,253, about 335 bp each), `DEL.26` (519,950, 67 bp) and `DEL.27` (520,470, 334 bp). The ID numbers can differ in your run. These are differences *inside* aligned blocks of the contig. **None of the four breaks is itself an SV call.** At each break the contig carries its own stretch of sequence (about 0.4 to 5 kb) that does not align to the reference. SVIM-asm reports a deletion between two blocks only when the contig continues with almost nothing in between (50 bp or less by default), so it skips places where the two genomes simply have different sequence. Two of the breaks (about 514-519 kb and 645-651 kb) sit on Ty elements annotated in S288C. In the benchmark assembly, over the whole of chromosome IV, SVIM-asm lists 28 deletions (30,175 bp) and 4 insertions (6,488 bp), a net loss of about **23.7 kb**: roughly half of the 51 kb shortfall. From the alignment, about 9.7 kb more is net small indels under 50 bp (possibly leftover nanopore homopolymer errors, an inference) and about 18.7 kb lies in the uncalled breaks. (The SV IDs are from the workshop cluster test run; the break positions and the chromosome-IV totals are from the benchmark assembly (`variants.vcf` and `asm_vs_ref.sorted.bam`); your assembly's breaks may differ.) 
 :::
 
-### **Part 4: Looking at One Real Deletion in IGV**
+### Part 4: Looking at One Real Deletion in IGV
 
 Copper is a stress clue. The corgi carries two CUP1 units; how many does the wolf carry? One of the 152 deletions is in a region that yeast biologists know well: the **CUP1** locus on chromosome VIII. The reference S288C has two tandem copies of an about 2 kb unit that contains the gene *CUP1* (**CUP1-1** and **CUP1-2**). SVIM-asm reports a **2,000 bp deletion** at VIII:213,953-215,953, which overlaps CUP1-2. We say "a deletion in a gene associated with copper and cadmium resistance". We do not say that it is the cause of anything.
 
@@ -460,7 +460,7 @@ Copper is a stress clue. The corgi carries two CUP1 units; how many does the wol
 | Region to view | `VIII:205,000-225,000` |
 | Gene | CUP1-2 (YHR055C), [SGD S000001097](https://www.yeastgenome.org/locus/S000001097) |
 
-#### **Step 1: Prepare the files for your laptop (optional: the reads)**
+#### Step 1: Prepare the files for your laptop (optional: the reads)
 
 Your assembly BAM is small, because it holds only a few hundred alignments, so you can copy it whole. The deletion VCF is small too. The Ensembl GFF3 and the reference come from Lab 5 and Lab 3. If you did not run Lab 5 script 14a, run it now (on the login node, `bash 14a_download_gff3.sh`, as in Lab 5).
 
@@ -535,7 +535,7 @@ sbatch 17_prepare_igv_sv.sh
 squeue -u $USER
 ```
 
-#### **Step 2: Copy the files to your laptop**
+#### Step 2: Copy the files to your laptop
 
 From a **laptop** terminal, copy the assembly BAM and its index, the deletions VCF, the reference and its index, the Ensembl GFF3 and (optional) the reads region into one folder (the host is `cbw.c3.ca`; `YOUR_USER` is the same placeholder as before).
 
@@ -553,7 +553,7 @@ scp 'YOUR_USER@cbw.c3.ca:/scratch/YOUR_USER/yeast_workshop/data/Saccharomyces_ce
 scp 'YOUR_USER@cbw.c3.ca:/scratch/YOUR_USER/yeast_workshop/results/ERR8562432/igv_sv/VIII_205000_225000.bam*' .
 ```
 
-#### **Step 3: The assembly view**
+#### Step 3: The assembly view
 
 In **IGV**:
 
@@ -587,7 +587,7 @@ The contig covering this region (`contig_24` in the benchmark assembly, `contig_
 **Sniffles2 on the reads** (instructor's run): `Sniffles2.DEL.73S7`, VIII:214,098, a **1,995 bp deletion** (flagged `IMPRECISE`), 145 bp from SVIM-asm's start, so the two callers agree on type and size. It reports 17 supporting reads, VAF 0.47 and genotype 0/1, which looks like half the reads. **The reads themselves show otherwise.** In the instructor's alignment (minimap2 `map-ont`), all 32 reads that span the whole CUP1 repeat carry a gap of about 2 kb, and none lacks it. The gap sits at different places in different reads, anywhere between 212.3 and 214.3 kb. The two repeat units are almost identical, so the aligner can put "the missing unit" at any offset. Sniffles2 counted only the 17 reads whose gap was near 214.1 kb. This is a typical problem for read-based callers in tandem repeats, not evidence that half the cells differ. In IGV you see the same thing: staggered black deletion lines and a coverage dip (to about 6-18 reads) rather than a gap to zero. The isolate is a homozygous diploid (ScRAP: 2n, homozygous), and all spanning reads agree, so the data fit one unit fewer than in S288C. In `calls_to_ref.bam` on the workshop cluster (test run, 2026-10-18), **44** primary reads overlap VIII:212,000-216,500 and **32** of them span it. **All 32** carry deletions totalling at least 1,500 bp in the window (2,085-2,325 bp when all deletions are counted). In **29** reads the gap is one deletion of 1,984-2,010 bp; in **3** reads the aligner splits it into two deletions (`ERR8562432.21030`: 1,330 + 657 bp; `ERR8562432.12487`: 1,935 + 59 bp; `ERR8562432.2969`: 1,558 + 431 bp). So all 32 spanning reads carry the gap, as in the instructor's alignment. The region file `VIII_205000_225000.bam` holds **68** reads. Your numbers may differ a little. **Concordance in general:** in the instructor's run on the benchmark assembly (297 SVIM-asm calls), 274 calls (92.3%) have a Sniffles2 call of the same type within 1,000 bp and similar size. This is a lower bound and a sanity check, not a truth set, and it is not independent evidence: the assembly was built from the same reads. Only a laboratory test (copy number by PCR or sequencing of the locus, and a growth test) would show a real difference in copy number and in phenotype. 
 :::
 
-### **Part 5: Wrap-Up of the Whole Pipeline**
+### Part 5: Wrap-Up of the Whole Pipeline
 
 ::: {.callout type="red" title="**Checklist**"}
 1. `asm_vs_ref.sorted.bam` and its `.bai` exist (script A, or the Lab 4 bonus).
@@ -614,6 +614,6 @@ A model answer, one point per sentence:
 
 What you learned: SVs are differences of 50 bp or more. An assembly-based caller such as SVIM-asm finds them from the alignment of the assembly to the reference, and reports types, sizes and coordinates in a VCF. Most SVs are small (under 500 bp), a cluster near 5.9 kb points to Ty elements, and a deletion in a tandem repeat such as CUP1 changes a gene's copy number. A call is a hypothesis: check it against the reads, and say "a deletion in a gene associated with...", not "the cause of".
 
-### **What's Next**
+### What's Next
 
 That is the end of the pipeline: from raw nanopore reads to a polished, annotated assembly, to SNVs and SVs against the reference. The case review (Question 10) closes the case. Please fill in the workshop survey. You keep access to the cluster for two weeks, so you can repeat any step or try the bonus tasks.

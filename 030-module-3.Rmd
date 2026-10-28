@@ -12,7 +12,7 @@
 
 *Garbage In, Garbage Out: Auditing Your Nanopore Reads*
 
-### **Introduction: Meet Your Dataset**
+### Introduction: Meet Your Dataset
 
 For the next two days you will follow **one real dataset** from raw reads to variants. It is *BAL_1a*, a wild *Saccharomyces cerevisiae* (baker's yeast) isolate sequenced on an Oxford Nanopore MinION (run **ERR8562432**, R9.4.1 flow cell). The sequencing is not subsampled: you work with every read, as in a real project.
 
@@ -37,13 +37,13 @@ The lab has these parts:
 - **Part 7:** submit the assembly, then lunch
 - **Bonus:** short-read QC in R (optional)
 
-#### **Where we are in the workflow**
+#### Where we are in the workflow
 
 <img src="./img/lab3_workflow.png" width="1000" alt="Workflow chart from library preparation and sequencing through read QC, assembly, polishing, assembly QC and annotation, with SNV calling, SV calling and the reference genome feeding into analysis. The highlighted stage is read QC.">
 
 This lab covers the highlighted stage, **read QC**.
 
-### **Your Paths**
+### Your Paths
 
 All scripts use these locations. Everything under `WORK` is yours alone, so nobody can overwrite your files. Everything else belongs to the instructor and is shared read-only.
 
@@ -59,7 +59,7 @@ All scripts use these locations. Everything under `WORK` is yours alone, so nobo
 A **script** (`.sh` file) is a text file of commands. In this lab you copy each script from this page, save it with `nano`, and run it. Some scripts run on the **login node** (the computer you land on when you log in; only quick jobs go here) with `bash`. Others go to a **compute node** (where the real work happens) through **Slurm** with `sbatch`. Every step below tells you which one to use.
 :::
 
-### **Part 0: Where We Are and How a Script Is Built**
+### Part 0: Where We Are and How a Script Is Built
 
 You met Slurm in the orientation. Here is the anatomy once more, using a tiny example. **You do not need to run this one.**
 
@@ -106,9 +106,9 @@ It requests 4000 MB of memory (`--mem=4000M`) and 10 minutes (`--time=0:10:00`),
 Slurm scans the top of the script for lines that start exactly with `#SBATCH` and treats them as resource requests. The shell sees every `#` line as a comment and ignores it, so the `#SBATCH` lines do nothing when you run the script with `bash`; only `sbatch` reads them.
 :::
 
-### **Part 1: The `nano` Routine and Your Project Folders**
+### Part 1: The `nano` Routine and Your Project Folders
 
-#### **Step 1: Save a script with `nano`**
+#### Step 1: Save a script with `nano`
 
 **`nano`** is a simple text editor that runs inside the terminal. You will use the same four moves for every script in this workshop.
 
@@ -131,7 +131,7 @@ After you submit a job, `squeue -u $USER` shows your jobs (`PD` = pending, `R` =
 Work from your home folder for now. Script 01 creates `$WORK/scripts/`, so after you run it, save later scripts there: `cd /scratch/$USER/yeast_workshop/scripts` and then `nano ...`. Every script uses full paths, so it works from any folder.
 :::
 
-#### **Step 2: Create your folders (login node)**
+#### Step 2: Create your folders (login node)
 
 - **What:** makes your project folder and its sub-folders.
 - **Why:** every later script reads and writes in these folders. The `logs/` folder must exist *before* any job is submitted, because Slurm writes its log files there.
@@ -176,9 +176,9 @@ Set-up lines (`set -e`, `WORK=`, `cd`): see Lab 3, script 04.
 
 :::
 
-### **Part 2: Downloading the Data**
+### Part 2: Downloading the Data
 
-#### **Step 1: Download the reads and the reference (login node)**
+#### Step 1: Download the reads and the reference (login node)
 
 - **What:** downloads the ONT reads (ERR8562432) from the European Nucleotide Archive (ENA), then the yeast reference genome (strain S288C, version R64-1-1, from Ensembl release 113), and unpacks the reference.
 - **Why:** the reads are what we sequenced. The **reference genome** is an existing assembly that we use as a coordinate system for later steps and for judging our own assembly.
@@ -248,7 +248,7 @@ The script prints `ERR8562432.fastq.gz: OK` when the reads arrived intact. In a 
 `.gz` means the file is compressed with **gzip**, like a zip file: it is smaller on disk and most QC and assembly tools read it directly. `ls -lh` shows the reads file as about 424M (ENA lists 443.7 MB; `-h` uses 1,024-based units). The reference FASTA is plain text with about one byte per letter, so about 12 MB for a roughly 12 Mb genome. The reads file is far larger because it holds about 448 million bases plus a quality character for each base.
 :::
 
-### **Part 3: Can I Reach My Tools?**
+### Part 3: Can I Reach My Tools?
 
 - **What:** asks the tools you will use in the next labs to report their version. Most cluster modules (samtools, bcftools, minimap2, snpEff) are not checked. QUAST is checked because it needs an older software environment (StdEnv/2020).
 - **Why:** it is much cheaper to find a missing tool now than in the middle of a job. A tool that is reachable prints a version or a help line; a problem shows as `command not found`.
@@ -358,9 +358,9 @@ usage: flye (--pacbio-raw | --pacbio-corr | --pacbio-hifi | --nano-raw |
 Seven tools reply (sequali, Flye, medaka, CrossMap, paf2chain, QUAST, BUSCO). If one fails, raise your hand now; do not wait for the job that needs it. The BUSCO line may first print `WARNING: While bind mounting '/scratch:/scratch': destination is already in the mount point list`. It is harmless: the version number follows it.
 :::
 
-### **Part 4: The Audit with sequali**
+### Part 4: The Audit with sequali
 
-#### **Step 1: Run sequali on the raw reads**
+#### Step 1: Run sequali on the raw reads
 
 - **What:** **sequali** is a QC tool for long reads. It reads the whole FASTQ file and writes an HTML report with read counts, read lengths, quality scores and more.
 - **Why:** this is the audit. Before assembling, we need to know how many reads and bases we have, how long the reads are, and how accurate they are.
@@ -451,7 +451,7 @@ cp -r /project/60004/shared/fallback/sequali /scratch/$USER/yeast_workshop/resul
 ```
 :::
 
-### **Part 5: Copying the Report to Your Laptop and Reading It**
+### Part 5: Copying the Report to Your Laptop and Reading It
 
 The HTML report lives on the cluster; you want to open it in your browser. Do Step 1 first, then the questions in Step 2. **`scp`** (secure copy) copies a file between computers over SSH.
 
@@ -475,7 +475,7 @@ scp YOUR_USER@cbw.c3.ca:/scratch/YOUR_USER/yeast_workshop/results/ERR8562432/seq
 If `scp` is not available, use **MobaXterm** (drag and drop in its left-hand file panel) or **WinSCP** (a two-pane window: the cluster on one side, your laptop on the other). Navigate to `/scratch/YOUR_USER/yeast_workshop/results/ERR8562432/sequali/` and drag the `.html` file across.
 :::
 
-#### **Step 2: Read the report**
+#### Step 2: Read the report
 
 Two QC terms to keep in mind before you look:
 
@@ -526,9 +526,9 @@ Quality is essentially **flat** along the reads, at a mean of about Q8 to Q8.5 (
 The proportions are steady along the reads: A ≈ 31%, T ≈ 31.5%, C ≈ 19%, G ≈ 18% (test run of this lab's script, sequali 1.0.1, 2026-10-11; your numbers should match). A ≈ T and C ≈ G, as expected for a double-stranded genome, at levels set by yeast's GC content (not 25% each). The read GC content is **37.2%**, with a single peak near 37%. That is within about 1% of the assembly's 38.16%, so there is no sign of contamination. Extra peaks, or a peak far from about 38%, would suggest DNA from another organism.
 :::
 
-### **Part 6: Think It Through: Filtering**
+### Part 6: Think It Through: Filtering
 
-#### **Why "filter, don't trim"**
+#### Why "filter, don't trim"
 
 QC tells you what you have. The next question is whether to clean the reads. Two ways to do it:
 
@@ -591,7 +591,7 @@ Gain: a cleaner input, since the worst reads (short and low quality) are removed
 Three reasons: the reads are already adapter-trimmed (Porechop, judging by the file name); coverage is only about 37×, so every base we throw away costs us; and the assembler (Flye) is built to cope with noisy reads, with polishing afterwards to fix errors. Filtering is worth considering when coverage is much higher or when sequali shows a large group of very short or very poor reads. Keeping everything also keeps the lab simple and the data complete, which suits a workshop.
 :::
 
-### **Part 7: Submit the Assembly, Then Lunch**
+### Part 7: Submit the Assembly, Then Lunch
 
 You now have reads you trust enough to use. The next step, **assembly**, rebuilds the genome from the reads. **Flye** is the assembler. It is the slowest job of the workshop (about 20 minutes on its own; longer when the whole class runs at once), so you submit it now and the Module 4 lecture, after lunch, explains what it did.
 
@@ -682,7 +682,7 @@ cp -r /project/60004/shared/fallback/assembly /scratch/$USER/yeast_workshop/resu
 ```
 :::
 
-### **Before You Go to Lunch: Checklist**
+### Before You Go to Lunch: Checklist
 
 ::: {.callout type="red" title="Important"}
 1. `01_setup_folders.sh` and `02_download_data.sh` ran without error, and `data/` holds two files.
@@ -690,11 +690,11 @@ cp -r /project/60004/shared/fallback/assembly /scratch/$USER/yeast_workshop/resu
 3. `06_flye_assembly.sh` is submitted and shows in `squeue -u $USER`.
 :::
 
-### **What's Next**
+### What's Next
 
 You now know how many reads you have, how long and how accurate they are, and what filtering would change. With reads you can trust, the next step is to rebuild the wolf's genome. Flye is assembling your genome while you eat. After lunch, Module 4 explains how assembly works, and in Lab 4 you will polish the assembly, measure its quality with QUAST and BUSCO, and explore its annotation.
 
-### **Bonus: Short-Read QC**
+### Bonus: Short-Read QC
 
 ::: {.callout type="green" title="**Time permitting**"}
 This part is optional. You keep access to the cluster for two weeks after the workshop, so you can come back to it later.

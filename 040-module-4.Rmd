@@ -261,6 +261,27 @@ The structural annotation is a **GFF3** file: a tab-separated text file with one
 
 These commands only read the files, so you can type them on the login node while medaka runs. A `|` (pipe) sends the output of one command into the next. `head -n 12` shows the first 12 lines. `grep -v '^#'` removes the comment lines that start with `#`. `cut -f3` keeps column 3. `sort | uniq -c` counts how many times each different value appears.
 
+::: {.callout type="blue" collapsible="true" title="Reading the grep patterns"}
+`grep` prints the lines of a file that contain a piece of text, called the **pattern**. In this workshop you never write a pattern; you only read the ones you are given. They sit between single quotes.
+
+- **`^` and `$` mark the two ends of a line.** `^` at the start of a pattern means "at the start of the line" and `$` at the end means "at the end of the line".
+
+  | Pattern | Matches the lines that... |
+  |---|---|
+  | `'^#'` | start with `#` (the comment and header lines) |
+  | `'^##'` | start with two `#` characters |
+  | `'^-$'` | are exactly `-` and nothing else (start of line, one `-`, end of line) |
+
+- **Every other character in these patterns matches itself.** `'stop_gained'` finds that exact text. So does `'|HIGH|'`, bars included: in a plain `grep` the `|` is an ordinary character, not "or". Spaces match themselves too, as in `'product=hypothetical protein'`.
+- **The single quotes** hand the pattern to `grep` exactly as typed. Without them the shell (the program that reads what you type) could act on characters such as `$`, `|`, `#` and spaces before `grep` sees them.
+- **`-v` and `-c` change what `grep` shows.** `-v` keeps the lines that do **not** match; `-c` prints only the number of matching lines. Together, `-vc` counts the lines that do not match: `grep -vc '^#'` counts the lines that are not comments.
+
+**To learn more (optional):**
+
+- [The Unix Shell: Finding Things](https://swcarpentry.github.io/shell-novice/07-find.html) (Software Carpentry), a beginner lesson on `grep`. It also uses `grep -E` (extended patterns, in which `|` means "or" and `.` means any character); the patterns in this workshop do not use `-E`.
+- [Regular Expressions](https://www.gnu.org/software/grep/manual/grep.html#Regular-Expressions) in the GNU `grep` manual, the full reference.
+:::
+
 **`explore the structural annotation (type in the terminal)`**
 
 ```bash

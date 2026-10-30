@@ -661,7 +661,7 @@ the log said it failed to detect a model version and used the default
 </tbody>
 </table>
 <p><code>GT</code> is the <strong>genotype</strong>: the alleles that the sample carries. <code>GT=0</code> would mean the reference allele, <code>GT=1</code> the alternate allele. <code>GQ</code> is the confidence in the genotype.</p>
-<p>While your job runs, look at a finished VCF from the fallback location. These commands only read a file, so they are safe on the login node. <code>grep '^##'</code> keeps the header lines; <code>grep -v '^##'</code> removes them; <code>head -n 4</code> shows the first four lines.</p>
+<p>While your job runs, look at a finished VCF from the fallback location. These commands only read a file, so they are safe on the login node. <code>^</code> means the start of a line (see “Reading the grep patterns” in Lab 4). <code>grep '^##'</code> keeps the header lines; <code>grep -v '^##'</code> removes them; <code>head -n 4</code> shows the first four lines.</p>
 <p><strong><code>read the first VCF records (type in the terminal)</code></strong></p>
 <div class="sourceCode" id="cb42"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb42-1"><a href="module-5.html#cb42-1" tabindex="-1"></a><span class="co"># 1. A few header lines (they describe the fields)</span></span>
 <span id="cb42-2"><a href="module-5.html#cb42-2" tabindex="-1"></a><span class="fu">grep</span> <span class="st">&#39;^##&#39;</span> /project/60004/shared/fallback/variants/medaka.vcf <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 6</span>
@@ -863,7 +863,7 @@ of variant records (Part 2 text).</td>
 </div>
 <div id="step-2-read-the-counts-and-the-stats" class="section level4 hasAnchor">
 <h4>Step 2: Read the counts and the stats<a href="module-5.html#step-2-read-the-counts-and-the-stats" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>When it finishes, read the two counts at the end of the log, and the summary lines of the stats file (<code>grep '^SN'</code> keeps the summary-number lines; the <code>grep -A1 '^# TSTV'</code> command prints the transition/transversion section, whose last line holds the numbers):</p>
+<p>When it finishes, read the two counts at the end of the log, and the summary lines of the stats file (<code>grep '^SN'</code> keeps the summary-number lines; the <code>grep -A1 '^# TSTV'</code> command prints the transition/transversion section, whose last line holds the numbers; <code>-A1</code> adds the one line after each match):</p>
 <p><strong><code>read the results (type in the terminal)</code></strong></p>
 <div class="sourceCode" id="cb46"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb46-1"><a href="module-5.html#cb46-1" tabindex="-1"></a><span class="fu">tail</span> <span class="at">-n</span> 6 /scratch/<span class="va">$USER</span>/yeast_workshop/logs/filter_variants_<span class="pp">*</span>.out</span>
 <span id="cb46-2"><a href="module-5.html#cb46-2" tabindex="-1"></a><span class="fu">grep</span> <span class="st">&#39;^SN&#39;</span> /scratch/<span class="va">$USER</span>/yeast_workshop/results/ERR8562432/variants/filtered_stats.txt</span>
@@ -1102,7 +1102,7 @@ of statistics per gene, in the directory where snpEff is run.</td>
 </div>
 <div id="step-2-read-one-annotated-record" class="section level4 hasAnchor">
 <h4>Step 2: Read one annotated record<a href="module-5.html#step-2-read-one-annotated-record" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>When the job has finished, look at one record. <code>cut -f8</code> keeps the INFO column (column 8), where snpEff put its <code>ANN</code> field. The fields of <code>ANN</code> are separated by <code>|</code>: the changed allele, the effect, the impact, the gene name, the gene ID, and so on. A variant that touches several genes has several <code>ANN</code> entries separated by commas.</p>
+<p>When the job has finished, look at one record. <code>cut -f8</code> keeps the INFO column (column 8), where snpEff put its <code>ANN</code> field. The fields of <code>ANN</code> are separated by <code>|</code>: the changed allele, the effect, the impact, the gene name, the gene ID, and so on. A variant that touches several genes has several <code>ANN</code> entries separated by commas. <code>grep -m 3</code> (or <code>-m 5</code>) stops after the first 3 (or 5) matching lines.</p>
 <p><strong><code>look at one annotated record (type in the terminal)</code></strong></p>
 <div class="sourceCode" id="cb51"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb51-1"><a href="module-5.html#cb51-1" tabindex="-1"></a><span class="co"># the first 3 variants that snpEff calls a premature stop (stop_gained)</span></span>
 <span id="cb51-2"><a href="module-5.html#cb51-2" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-v</span> <span class="st">&#39;^#&#39;</span> /scratch/<span class="va">$USER</span>/yeast_workshop/results/ERR8562432/variants/annotated.vcf <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-m</span> 3 <span class="st">&#39;stop_gained&#39;</span> <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-f1,2,4,5,6</span></span>

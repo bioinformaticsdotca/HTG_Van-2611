@@ -744,6 +744,74 @@ reuses existing outputs.</td>
 </tbody>
 </table>
 <p>These commands only read the files, so you can type them on the login node while medaka runs. A <code>|</code> (pipe) sends the output of one command into the next. <code>head -n 12</code> shows the first 12 lines. <code>grep -v '^#'</code> removes the comment lines that start with <code>#</code>. <code>cut -f3</code> keeps column 3. <code>sort | uniq -c</code> counts how many times each different value appears.</p>
+<details class="callout-dropdown callout-blue"><summary class="callout-dropdown-summary"><span class="callout-icon"><i class="fas fa-circle-info" aria-hidden="true"></i></span><span class="callout-dropdown-title">Reading the grep patterns</span> <span class="callout-dropdown-caret"><i class="fas fa-chevron-right" aria-hidden="true"></i></span></summary><div class="callout-dropdown-content"><p><code>grep</code> prints the lines of a file that contain a piece of
+text, called the <strong>pattern</strong>. In this workshop you never
+write a pattern; you only read the ones you are given. They sit between
+single quotes.</p>
+<ul>
+<li><p><strong><code>^</code> and <code>$</code> mark the two ends of a
+line.</strong> <code>^</code> at the start of a pattern means “at the
+start of the line” and <code>$</code> at the end means “at the end of
+the line”.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Pattern</th>
+<th>Matches the lines that…</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>'^#'</code></td>
+<td>start with <code>#</code> (the comment and header lines)</td>
+</tr>
+<tr class="even">
+<td><code>'^##'</code></td>
+<td>start with two <code>#</code> characters</td>
+</tr>
+<tr class="odd">
+<td><code>'^-$'</code></td>
+<td>are exactly <code>-</code> and nothing else (start of line, one
+<code>-</code>, end of line)</td>
+</tr>
+</tbody>
+</table></li>
+<li><p><strong>Every other character in these patterns matches
+itself.</strong> <code>'stop_gained'</code> finds that exact text. So
+does <code>'|HIGH|'</code>, bars included: in a plain <code>grep</code>
+the <code>|</code> is an ordinary character, not “or”. Spaces match
+themselves too, as in
+<code>'product=hypothetical protein'</code>.</p></li>
+<li><p><strong>The single quotes</strong> hand the pattern to
+<code>grep</code> exactly as typed. Without them the shell (the program
+that reads what you type) could act on characters such as
+<code>$</code>, <code>|</code>, <code>#</code> and spaces before
+<code>grep</code> sees them.</p></li>
+<li><p><strong><code>-v</code> and <code>-c</code> change what
+<code>grep</code> shows.</strong> <code>-v</code> keeps the lines that
+do <strong>not</strong> match; <code>-c</code> prints only the number of
+matching lines. Together, <code>-vc</code> counts the lines that do not
+match: <code>grep -vc '^#'</code> counts the lines that are not
+comments.</p></li>
+</ul>
+<p><strong>To learn more (optional):</strong></p>
+<ul>
+<li><a
+href="https://swcarpentry.github.io/shell-novice/07-find.html">The Unix
+Shell: Finding Things</a> (Software Carpentry), a beginner lesson on
+<code>grep</code>. It also uses <code>grep -E</code> (extended patterns,
+in which <code>|</code> means “or” and <code>.</code> means any
+character); the patterns in this workshop do not use
+<code>-E</code>.</li>
+<li><a
+href="https://www.gnu.org/software/grep/manual/grep.html#Regular-Expressions">Regular
+Expressions</a> in the GNU <code>grep</code> manual, the full
+reference.</li>
+</ul></div></details>
 <p><strong><code>explore the structural annotation (type in the terminal)</code></strong></p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb24-1"><a href="module-4.html#cb24-1" tabindex="-1"></a><span class="co"># 1. The first lines of the file</span></span>
 <span id="cb24-2"><a href="module-4.html#cb24-2" tabindex="-1"></a><span class="fu">head</span> <span class="at">-n</span> 12 /project/60004/shared/supplied/annotations/ERR8562432_funannotate.gff3</span>

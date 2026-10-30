@@ -199,7 +199,7 @@ A **VCF** (Variant Call Format) file is a tab-separated text file with one line 
 
 `GT` is the **genotype**: the alleles that the sample carries. `GT=0` would mean the reference allele, `GT=1` the alternate allele. `GQ` is the confidence in the genotype.
 
-While your job runs, look at a finished VCF from the fallback location. These commands only read a file, so they are safe on the login node. `grep '^##'` keeps the header lines; `grep -v '^##'` removes them; `head -n 4` shows the first four lines.
+While your job runs, look at a finished VCF from the fallback location. These commands only read a file, so they are safe on the login node. `^` means the start of a line (see "Reading the grep patterns" in Lab 4). `grep '^##'` keeps the header lines; `grep -v '^##'` removes them; `head -n 4` shows the first four lines.
 
 **`read the first VCF records (type in the terminal)`**
 
@@ -320,7 +320,7 @@ squeue -u $USER
 
 #### Step 2: Read the counts and the stats
 
-When it finishes, read the two counts at the end of the log, and the summary lines of the stats file (`grep '^SN'` keeps the summary-number lines; the `grep -A1 '^# TSTV'` command prints the transition/transversion section, whose last line holds the numbers):
+When it finishes, read the two counts at the end of the log, and the summary lines of the stats file (`grep '^SN'` keeps the summary-number lines; the `grep -A1 '^# TSTV'` command prints the transition/transversion section, whose last line holds the numbers; `-A1` adds the one line after each match):
 
 **`read the results (type in the terminal)`**
 
@@ -456,7 +456,7 @@ cp /project/60004/shared/fallback/snpEff_summary.html /project/60004/shared/fall
 
 #### Step 2: Read one annotated record
 
-When the job has finished, look at one record. `cut -f8` keeps the INFO column (column 8), where snpEff put its `ANN` field. The fields of `ANN` are separated by `|`: the changed allele, the effect, the impact, the gene name, the gene ID, and so on. A variant that touches several genes has several `ANN` entries separated by commas.
+When the job has finished, look at one record. `cut -f8` keeps the INFO column (column 8), where snpEff put its `ANN` field. The fields of `ANN` are separated by `|`: the changed allele, the effect, the impact, the gene name, the gene ID, and so on. A variant that touches several genes has several `ANN` entries separated by commas. `grep -m 3` (or `-m 5`) stops after the first 3 (or 5) matching lines.
 
 **`look at one annotated record (type in the terminal)`**
 

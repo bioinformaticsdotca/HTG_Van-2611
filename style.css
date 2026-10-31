@@ -339,3 +339,62 @@ div.callout-plain {
 .callout-dropdown.callout-plain.callout-gray > .callout-dropdown-summary .callout-dropdown-caret {
     color: #757575 !important;
 }
+
+
+/* === HTG 2026 Modules 3-6: layout fixes (tables, static callouts) === */
+/* Appended 2026-10-30. Nothing above this line was changed. */
+
+/* 1. Static callouts ("If your job failed" etc.). The box is display:flex and
+      .callout-content is a flex item, whose default min-width (auto) made it as
+      wide as its widest code block, so text ran past the border. min-width:0
+      lets it shrink to the box: text wraps and the code block scrolls inside. */
+.callout-content {
+    min-width: 0;
+}
+
+/* 2. Long inline code in table cells (file paths in "Your Paths" and in the
+      "What each argument does" tables) could not wrap, so the table grew wider
+      than the text column and was cut off. Allow a visual line break inside
+      the code. The text itself is unchanged, so copying a path still gives
+      the whole path with no break. Inline code only (not a code block inside
+      a cell). */
+.book .book-body .page-wrapper .page-inner section.normal td code:not(pre > code),
+.book .book-body .page-wrapper .page-inner section.normal th code:not(pre > code) {
+    overflow-wrap: anywhere;
+}
+
+/* 3. Collapsible boxes ("What each argument does", "Independence bonus" etc.).
+      In current Chrome the content of an open <details> is a flex item (the box
+      is display:flex) that is sized to its widest child, so a wide code block
+      stretched the content past the box and overflow:hidden cut it off.
+      Making that content area exactly the width of the box lets text wrap and
+      code blocks scroll inside it. Browsers that do not know this selector
+      ignore the rule and behave as before. */
+.callout-dropdown::details-content {
+    width: 100%;
+    min-width: 0;
+}
+
+/* 4. Fallback for browsers without ::details-content (Chrome/Edge < 131,
+      Firefox < 143, Safari < 18.4): plain block layout gives the open box's
+      content the box width, so nothing is clipped. */
+@supports not selector(::details-content) {
+    .callout-dropdown {
+        display: block;
+    }
+}
+
+/* 5. Last resort: if a table in an open box is still wider than the box
+      (narrow windows, phones), it scrolls sideways inside the box instead
+      of being cut off by the box's overflow:hidden. */
+.callout-dropdown-content {
+    overflow-x: auto;
+}
+
+/* 6. Phones: a body table that is still too wide scrolls sideways. */
+@media (max-width: 600px) {
+    .book .book-body .page-wrapper .page-inner section.normal table {
+        display: block;
+        overflow-x: auto;
+    }
+}

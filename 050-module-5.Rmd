@@ -821,9 +821,8 @@ In **IGV**:
 
 1. **Genomes > Load Genome from File**, and choose `Saccharomyces_cerevisiae.R64-1-1.dna.toplevel.fa`.
 2. **File > Load from File**, and choose, together: `Saccharomyces_cerevisiae.R64-1-1.113.gff3` (the genes), `XV_150000_230000.bam` (the reads), `annotated_XV_150000_230000.vcf` (the variants).
-3. Reads are long, so open **View > Preferences > Alignments**, set **Visibility range threshold (kb)** to `100` and Save.
-4. Type `XV:218,140` in the locus box and press Enter. Zoom in until you see the individual bases (a window of 50-100 bp). You see the gene track, the reads and, above, the variant as a coloured box.
-5. Click the variant box: the pop-up shows the VCF record, including the `ANN` field. Click the grey coverage bar above the reads at the variant position: the pop-up counts the reads that carry each base (A, C, G, T). Then repeat with `XV:159,763`.
+3. Type `XV:218,140` in the locus box and press Enter. Zoom in until you see the individual bases (a window of 50-100 bp). You see the gene track, the reads and, above, the variant as a coloured box.
+4. Click the variant box: the pop-up shows the VCF record, including the `ANN` field. Click the grey coverage bar above the reads at the variant position: the pop-up counts the reads that carry each base (A, C, G, T). Then repeat with `XV:159,763`.
 
 **Question 11:** At each locus, how many reads cover the position, and how many of them carry the alternate base called in the VCF? What do the few reads with a different base look like?
 

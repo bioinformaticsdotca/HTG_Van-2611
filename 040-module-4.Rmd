@@ -728,7 +728,7 @@ Then, from a **laptop** terminal (`YOUR_USER` is the same placeholder as before 
 scp -r YOUR_USER@cbw.c3.ca:/scratch/YOUR_USER/yeast_workshop/igv_lab4 .
 ```
 
-In IGV: **Genomes > Load Genome from File** and choose the reference `.fa`; then **File > Load from File** and choose `asm_vs_ref.sorted.bam`. IGV hides alignments when you view a very wide region. Before you start, open **View > Preferences > Alignments**, set **Visibility range threshold (kb)** to `2000` and click Save (the file holds only about 160 alignments, so this is fast). Then pick a chromosome in the drop-down (`IV`, `XII`). Each contig appears as a long "read" aligned to the chromosome. A contig broken into several blocks (a primary alignment plus supplementary ones, which are the other parts of the same contig) appears as several separate blocks along the chromosome.
+In IGV: **Genomes > Load Genome from File** and choose the reference `.fa`; then **File > Load from File** and choose `asm_vs_ref.sorted.bam`. IGV hides alignments when you view a very wide region. Before you start, open **View > Preferences > Third Gen** (IGV treats the long contigs like long reads, experiment type "3rd Gen", so this setting is on the **Third Gen** tab), set **Visibility range threshold (kb)** to `2000` and click Save (the file holds only about 160 alignments, so this is fast). Then pick a chromosome in the drop-down (`IV`, `XII`). Each contig appears as a long "read" aligned to the chromosome. A contig broken into several blocks (a primary alignment plus supplementary ones, which are the other parts of the same contig) appears as several separate blocks along the chromosome.
 
 **Question 13:** Go to chromosome **IV**. How many contigs cover it? Does it extend over the whole chromosome?
 

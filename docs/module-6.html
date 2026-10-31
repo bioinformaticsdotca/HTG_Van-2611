@@ -437,7 +437,7 @@ Unable to render PDF. <a href="content-files/Module_6_HTG_Van-2611.pdf">Download
 <h3>Part 1: Align the Assembly to the Reference<a href="module-6.html#part-1-align-the-assembly-to-the-reference" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div id="step-1-do-you-already-have-the-alignment" class="section level4 hasAnchor">
 <h4>Step 1: Do you already have the alignment?<a href="module-6.html#step-1-do-you-already-have-the-alignment" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>SVIM-asm needs the assembly aligned to the reference, as a sorted and indexed <strong>BAM</strong>. This is script <strong>A</strong>, the same script as the bonus at the end of Lab 4. Check whether you made it:</p>
+<p>SVIM-asm needs the assembly aligned to the reference, as a sorted and indexed <strong>BAM</strong>. This is <code>align_assembly_to_reference.sh</code>, the same script as the bonus at the end of Lab 4. Check whether you made it:</p>
 <p><strong><code>check for the Lab 4 bonus output (type in the terminal)</code></strong></p>
 <div class="sourceCode" id="cb65"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb65-1"><a href="module-6.html#cb65-1" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> /scratch/<span class="va">$USER</span>/yeast_workshop/results/ERR8562432/asm_vs_ref/</span></code></pre></div>
 <ul>
@@ -1271,9 +1271,8 @@ the region of the CUP1 deletion (Part 4 text).</td>
 <ol style="list-style-type: decimal">
 <li><strong>Genomes &gt; Load Genome from File</strong>, and choose <code>Saccharomyces_cerevisiae.R64-1-1.dna.toplevel.fa</code>.</li>
 <li><strong>File &gt; Load from File</strong>, and choose, together: <code>Saccharomyces_cerevisiae.R64-1-1.113.gff3</code> (the genes), <code>asm_vs_ref.sorted.bam</code> (the assembly) and <code>deletions.vcf</code> (the SVs).</li>
-<li>Contigs are very long “reads”, so open <strong>View &gt; Preferences &gt; Alignments</strong>, set <strong>Visibility range threshold (kb)</strong> to <code>2000</code> and Save, as in the Lab 4 bonus.</li>
 <li>Type <code>VIII:205,000-225,000</code> in the locus box and press Enter. You see the gene track, the contig as one long alignment and, above, the deletion as a coloured box. Gaps in an alignment are drawn as a black line.</li>
-<li>Click the deletion box to read its VCF record, and click the genes to read their names. Zoom in on the genes <code>CUP1-1</code> (YHR053C) and <code>CUP1-2</code> (YHR055C).</li>
+<li>Click the deletion box to read its VCF record, and click the genes to read their names. Zoom in on the genes <code>CUP1-1</code> (YHR053C) and <code>CUP1-2</code> (YHR055C). CUP1-2 is small (186 bp) and overlaps two other genes: to see it on its own row, type <code>VIII:214,400-214,800</code> and right-click the gene track &gt; <strong>Expanded</strong>.</li>
 </ol>
 <p><strong>Question 6:</strong> What does the assembly alignment look like across the region? How long is the gap in the contig, and which genes does it span? Which gene copies lie outside the gap?</p>
 <details class="callout-dropdown callout-blue"><summary class="callout-dropdown-summary"><span class="callout-icon"><i class="fas fa-circle-info" aria-hidden="true"></i></span><span class="callout-dropdown-title">Answer</span> <span class="callout-dropdown-caret"><i class="fas fa-chevron-right" aria-hidden="true"></i></span></summary><div class="callout-dropdown-content"><p>The contig covering this region (<code>contig_24</code> in the
@@ -1386,7 +1385,7 @@ a real difference in copy number and in phenotype.</p></div></details>
 <p><strong>Checklist</strong></p>
 </div>
 <ol style="list-style-type: decimal">
-<li><code>asm_vs_ref.sorted.bam</code> and its <code>.bai</code> exist (script A, or the Lab 4 bonus).</li>
+<li><code>asm_vs_ref.sorted.bam</code> and its <code>.bai</code> exist (<code>align_assembly_to_reference.sh</code>, in this lab or in the Lab 4 bonus).</li>
 <li><code>15_svimasm.sh</code> finished: <code>sv/svimasm_out/variants.vcf</code> has about 296 records.</li>
 <li><code>16_filter_svs.sh</code> finished: <code>deletions.vcf</code> and <code>sv_counts_by_type.txt</code> exist.</li>
 <li>You looked at the CUP1 deletion in IGV, in the assembly and (optional) the reads.</li>

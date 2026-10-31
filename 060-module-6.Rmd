@@ -80,7 +80,7 @@ If a file is missing, ask an instructor.
 
 #### Step 1: Do you already have the alignment?
 
-SVIM-asm needs the assembly aligned to the reference, as a sorted and indexed **BAM**. This is script **A**, the same script as the bonus at the end of Lab 4. Check whether you made it:
+SVIM-asm needs the assembly aligned to the reference, as a sorted and indexed **BAM**. This is `align_assembly_to_reference.sh`, the same script as the bonus at the end of Lab 4. Check whether you made it:
 
 **`check for the Lab 4 bonus output (type in the terminal)`**
 
@@ -569,9 +569,8 @@ In **IGV**:
 
 1. **Genomes > Load Genome from File**, and choose `Saccharomyces_cerevisiae.R64-1-1.dna.toplevel.fa`.
 2. **File > Load from File**, and choose, together: `Saccharomyces_cerevisiae.R64-1-1.113.gff3` (the genes), `asm_vs_ref.sorted.bam` (the assembly) and `deletions.vcf` (the SVs).
-3. Contigs are very long "reads", so open **View > Preferences > Alignments**, set **Visibility range threshold (kb)** to `2000` and Save, as in the Lab 4 bonus.
-4. Type `VIII:205,000-225,000` in the locus box and press Enter. You see the gene track, the contig as one long alignment and, above, the deletion as a coloured box. Gaps in an alignment are drawn as a black line.
-5. Click the deletion box to read its VCF record, and click the genes to read their names. Zoom in on the genes `CUP1-1` (YHR053C) and `CUP1-2` (YHR055C).
+3. Type `VIII:205,000-225,000` in the locus box and press Enter. You see the gene track, the contig as one long alignment and, above, the deletion as a coloured box. Gaps in an alignment are drawn as a black line.
+4. Click the deletion box to read its VCF record, and click the genes to read their names. Zoom in on the genes `CUP1-1` (YHR053C) and `CUP1-2` (YHR055C). CUP1-2 is small (186 bp) and overlaps two other genes: to see it on its own row, type `VIII:214,400-214,800` and right-click the gene track > **Expanded**.
 
 **Question 6:** What does the assembly alignment look like across the region? How long is the gap in the contig, and which genes does it span? Which gene copies lie outside the gap?
 
@@ -600,7 +599,7 @@ The contig covering this region (`contig_24` in the benchmark assembly, `contig_
 ### Part 5: Wrap-Up of the Whole Pipeline
 
 ::: {.callout type="red" title="**Checklist**"}
-1. `asm_vs_ref.sorted.bam` and its `.bai` exist (script A, or the Lab 4 bonus).
+1. `asm_vs_ref.sorted.bam` and its `.bai` exist (`align_assembly_to_reference.sh`, in this lab or in the Lab 4 bonus).
 2. `15_svimasm.sh` finished: `sv/svimasm_out/variants.vcf` has about 296 records.
 3. `16_filter_svs.sh` finished: `deletions.vcf` and `sv_counts_by_type.txt` exist.
 4. You looked at the CUP1 deletion in IGV, in the assembly and (optional) the reads.

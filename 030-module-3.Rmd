@@ -2,7 +2,7 @@
 
 ## Lecture
 
-<object data="content-files/Module_3_HTG_Van-2611.pdf#toolbar=0navpanes=0" type="application/pdf" width="100%" height="600px">
+<object data="content-files/Module_3_HTG_Van-2611.pdf#toolbar=0&amp;navpanes=0" type="application/pdf" width="100%" height="600px">
   <p>Unable to render PDF. <a href="content-files/Module_3_HTG_Van-2611.pdf">Download the PDF</a>.</p>
 </object>
 

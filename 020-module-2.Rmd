@@ -58,7 +58,17 @@ We will also load additional tracks from **Server** *(File -> Load from Server)*
 - Ensembl genes (or your favourite source of gene annotations)
 - GC Percentage
 
+:::: {.callout type="blue" title="Note"}
+
+The tracks available from the IGV server have recently changed. You might have options that match the second of the images below, which does not include GC content or Ensembl. Choose a different gene set (RefSeq) and a different track to experiment with (dbSNP). The GC content is not essential to this lab and an example image for the one related question is given in this guide.
+
+This new set of tracks contains many new resources. Take some time to look through the available lists and if you have time, experiment with adding additional tracks of your choice.
+
+::::
+
 <img src="./img/IGV_server_load2.png" width="1000" alt="IGV server load.">
+
+<img src="./img/IGV_alt_genes_dnsnp.png" width="1000" alt="IGV server load 2.">
 
 ##### Navigation
 
@@ -202,6 +212,7 @@ Navigate to position “chr21:19,611,925-19,631,555” Note that the range conta
 - Use Collapsed view
 - Color alignments by “insert size”
 - Load GC track (if not loaded already; File -> Load from Server -> Annotations -> Sequence and Regulations -> GC Percentage)
+- If your server does not have this track, look at the image below
 
 <img src="./img/IGV_example3.png" width="1000" alt="IGV example 3.">
 
@@ -308,6 +319,22 @@ Navigate to region “chr21:19,089,694-19,095,362”
 - In the case of a translocation, will be reads with pairs on other chromosomes
 
 ::::
+
+##### Bonus: AlphaMissense
+
+Navigate to region “chr21:19,713,789-19,713,840”
+
+This track was recently added to the IGV server options. If you have not already, and have the tracks available under "Load from Server", load:
+
+- Variation -> dbSNP -> all dbSNP
+- Phenotypes, Variants and Literature -> AlphaMissense and check all 4 tracks
+
+<img src="./img/IGV_alt_missense.png" width="1000" alt="IGV AlphaMissense.">
+
+The variant visible in the reads corresponds to a dbSNP variant (known variant). Click on the blue box in the dbSNP track to see population allele frequencies.
+
+The [AlphaMissense](https://pubmed.ncbi.nlm.nih.gov/37733863/) tracks give a score for each possible base change, with 1 being the most impactful and 0 predicting no functional impact. The base with the variant in the reads (C->T) has no predicted impact, but the base beside it (G) is predicted to be impactful. The dbSNP population frequency for the impactful variant is much lower (more rare). 
+
 
 #### A note about automating Tasks in IGV
 

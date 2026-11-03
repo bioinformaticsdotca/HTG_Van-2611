@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Module 2: Data Visualization | High-Throughput Genomics 2026</title>
   <meta name="description" content="Workshop website for the 2026 High-Throughput Genomics 2026 Canadian Bioinformatics Workshop" />
-  <meta name="generator" content="bookdown 0.45 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.48 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Module 2: Data Visualization | High-Throughput Genomics 2026" />
   <meta property="og:type" content="book" />
@@ -77,9 +77,8 @@
 
 
 <style type="text/css">
-html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -89,7 +88,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -369,7 +368,18 @@ Your browser does not support PDFs. <a href="content-files/Module_2_HTG_Van-2611
 <li>Ensembl genes (or your favourite source of gene annotations)</li>
 <li>GC Percentage</li>
 </ul>
+<div class="callout-blue">
+<span class="callout-icon"><i class="fas fa-circle-info" aria-hidden="true"></i></span>
+<div class="callout-content">
+<div class="callout-title-static">
+<p>Note</p>
+</div>
+<p>The tracks available from the IGV server have recently changed. You might have options that match the second of the images below, which does not include GC content or Ensembl. Choose a different gene set (RefSeq) and a different track to experiment with (dbSNP). The GC content is not essential to this lab and an example image for the one related question is given in this guide.</p>
+<p>This new set of tracks contains many new resources. Take some time to look through the available lists and if you have time, experiment with adding additional tracks of your choice.</p>
+</div>
+</div>
 <p><img src="img/IGV_server_load2.png" width="1000" alt="IGV server load."></p>
+<p><img src="img/IGV_alt_genes_dnsnp.png" width="1000" alt="IGV server load 2."></p>
 </div>
 <div id="navigation" class="section level5 hasAnchor">
 <h5>Navigation<a href="module-2-data-visualization.html#navigation" class="anchor-section" aria-label="Anchor link to header"></a></h5>
@@ -514,6 +524,7 @@ Your browser does not support PDFs. <a href="content-files/Module_2_HTG_Van-2611
 <li>Use Collapsed view</li>
 <li>Color alignments by “insert size”</li>
 <li>Load GC track (if not loaded already; File -&gt; Load from Server -&gt; Annotations -&gt; Sequence and Regulations -&gt; GC Percentage)</li>
+<li>If your server does not have this track, look at the image below</li>
 </ul>
 <p><img src="img/IGV_example3.png" width="1000" alt="IGV example 3."></p>
 <div id="question" class="section level6 hasAnchor">
@@ -641,6 +652,18 @@ Your browser does not support PDFs. <a href="content-files/Module_2_HTG_Van-2611
 </ul>
 </div>
 </div>
+</div>
+<div id="bonus-alphamissense" class="section level5 hasAnchor">
+<h5>Bonus: AlphaMissense<a href="module-2-data-visualization.html#bonus-alphamissense" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>Navigate to region “chr21:19,713,789-19,713,840”</p>
+<p>This track was recently added to the IGV server options. If you have not already, and have the tracks available under “Load from Server”, load:</p>
+<ul>
+<li>Variation -&gt; dbSNP -&gt; all dbSNP</li>
+<li>Phenotypes, Variants and Literature -&gt; AlphaMissense and check all 4 tracks</li>
+</ul>
+<p><img src="img/IGV_alt_missense.png" width="1000" alt="IGV AlphaMissense."></p>
+<p>The variant visible in the reads corresponds to a dbSNP variant (known variant). Click on the blue box in the dbSNP track to see population allele frequencies.</p>
+<p>The <a href="https://pubmed.ncbi.nlm.nih.gov/37733863/">AlphaMissense</a> tracks give a score for each possible base change, with 1 being the most impactful and 0 predicting no functional impact. The base with the variant in the reads (C-&gt;T) has no predicted impact, but the base beside it (G) is predicted to be impactful. The dbSNP population frequency for the impactful variant is much lower (more rare).</p>
 </div>
 <div id="a-note-about-automating-tasks-in-igv" class="section level4 hasAnchor">
 <h4>A note about automating Tasks in IGV<a href="module-2-data-visualization.html#a-note-about-automating-tasks-in-igv" class="anchor-section" aria-label="Anchor link to header"></a></h4>

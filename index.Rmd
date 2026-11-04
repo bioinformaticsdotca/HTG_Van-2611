@@ -26,7 +26,8 @@ Before you begin the workshop, you must complete some pre-workshop materials. Yo
 
 ## Class Photo
 
-Coming soon! 
+With Dr. Erin Pleasance  
+<img src="./img/class_photo1.JPG" width="500" alt="Group photo of HTG participants with Dr. Erin Pleasance standing behind a white banner with black text reading 'Canadian Bioinformatics Workshops'.">
 
 ## Schedule
 

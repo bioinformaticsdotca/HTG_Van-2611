@@ -24,10 +24,17 @@ Welcome to the 2026 High-Throughput Genomics 2026 Canadian Bioinformatics Worksh
 
 Before you begin the workshop, you must complete some pre-workshop materials. You can find your pre-work [here.](https://docs.google.com/forms/d/e/1FAIpQLSdosBtCb29BnAgnUxySHbZjMA0Rx1AuTS1hQdd1BRc9_ltNtQ/viewform?usp=sharing&ouid=107546803551319039624)
 
-## Class Photo
+## Class Photos
 
-With Dr. Erin Pleasance  
-<img src="./img/class_photo1.JPG" width="500" alt="Group photo of HTG participants with Dr. Erin Pleasance standing behind a white banner with black text reading 'Canadian Bioinformatics Workshops'.">
+<figure>
+  <figcaption>With Dr. Erin Pleasance</figcaption>
+  <img src="./img/class_photo1.JPG" width="500" alt="Group photo of HTG     participants with Dr. Erin Pleasance standing behind a white banner with black text reading 'Canadian Bioinformatics Workshops'.">
+</figure><br>
+
+<figure>
+  <figcaption>With Dr. Ido Hatam</figcaption>
+  <img src="./img/class_photo2.JPG" width="500" alt="Group photo of HTG participants with Dr. Ido Hatam standing behind a white banner with black text reading 'Canadian Bioinformatics Workshops'.">
+</figure>
 
 ## Schedule
 
